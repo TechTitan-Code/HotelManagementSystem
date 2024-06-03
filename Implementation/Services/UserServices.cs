@@ -22,6 +22,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
             {
                 var user = new User()
                 {
+                    Name = request.Name,
                     UserName = request.UserName,
                     Address = request.Address,
                     Age = request.Age,
@@ -56,7 +57,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
 
 
-        public async Task<BaseResponse<Guid>> DeleteUserAsync(int id)
+        public async Task<BaseResponse<Guid>> DeleteUserAsync(Guid id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
             if (user != null)
@@ -100,7 +101,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
         //    return _dbContext.SaveChanges() > 0 ? true : false;
         //}
 
-        public async Task<BaseResponse<IList<UserDto>>> GetUserByIdAsync(int Id)
+        public async Task<BaseResponse<IList<UserDto>>> GetUserByIdAsync(Guid Id)
         {
             try
             {
@@ -116,7 +117,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     Name = x.Name,
                     Password = x.Password,
                     PhoneNumber = x.PhoneNumber,
-                    UserId = Id,
+                    UserId = x.Id,
                     UserName = x.UserName,
                 }).ToListAsync();
                 if (user != null)
@@ -149,7 +150,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
         }
 
-        public async Task<BaseResponse<UserDto>> GetUserAsync(int Id)
+        public async Task<BaseResponse<UserDto>> GetUserAsync(Guid Id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == Id);
             if (user != null)
@@ -160,6 +161,8 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     Success = true,
                     Data = new UserDto
                     {
+                        
+                        UserId = user.Id,
                         Address = user.Address,
                         Age = user.Age,
                         Email = user.Email,
@@ -222,6 +225,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
             return _dbContext.Users
                 .Select(x => new UserDto()
                 {
+                    
                     Name = x.Name,
                     Address = x.Address,
                     Gender = x.Gender,
@@ -237,7 +241,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
 
 
-        public async Task<BaseResponse<IList<UserDto>>> UpdateUser(int Id, UpdateUser request)
+        public async Task<BaseResponse<IList<UserDto>>> UpdateUser(Guid Id, UpdateUser request)
         {
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == Id);
             if (user == null)

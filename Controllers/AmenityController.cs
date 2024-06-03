@@ -48,7 +48,7 @@ public class AmenityController : Controller
 
 
     [HttpGet("edit-amenity/{id}")]
-    public async Task<IActionResult> EditAmenity([FromRoute] int id)
+    public async Task<IActionResult> EditAmenity([FromRoute] Guid id)
     {
         var booking = await _amenityService.GetAmenityAsync(id);
 
@@ -72,7 +72,7 @@ public class AmenityController : Controller
    
 
     [HttpGet("delete-amenity/{id}")]
-    public async Task<IActionResult> DeleteAmenity([FromRoute] int id)
+    public async Task<IActionResult> DeleteAmenity([FromRoute] Guid id)
     {
         var amenity = await _amenityService.DeleteAmenity(id);
         if (amenity.Success)
@@ -86,7 +86,7 @@ public class AmenityController : Controller
 
 
     [HttpGet("get-all-amenity-created")]
-    public async Task<IActionResult> GetAmenityById(int id) 
+    public async Task<IActionResult> GetAmenityById(Guid id) 
     {
         var amenity = await _amenityService.GetAmenityBYId(id);
         if (amenity.Success == false)

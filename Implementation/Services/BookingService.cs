@@ -21,7 +21,7 @@ namespace HotelManagementSystem.Implementation.Services
         }
 
 
-        public async Task<BaseResponse<Guid>> CreateBooking(CreateBooking request , int Id)
+        public async Task<BaseResponse<Guid>> CreateBooking(CreateBooking request , Guid Id)
         {
             if (request != null)
             {
@@ -131,7 +131,7 @@ namespace HotelManagementSystem.Implementation.Services
 
 
 
-        public async Task<BaseResponse<Guid>> DeleteBookingAsync(int Id)
+        public async Task<BaseResponse<Guid>> DeleteBookingAsync(Guid Id)
         {
             var booking = _dbContext.Bookings.FirstOrDefault();
             if (booking != null)
@@ -159,7 +159,7 @@ namespace HotelManagementSystem.Implementation.Services
 
 
 
-        public async Task<BaseResponse<BookingDto>> GetBookingAsync(int Id)
+        public async Task<BaseResponse<BookingDto>> GetBookingAsync(Guid Id)
         {
             var booking = await _dbContext.Bookings.FirstOrDefaultAsync(x => x.Id == Id);
             if (booking != null)
@@ -186,7 +186,7 @@ namespace HotelManagementSystem.Implementation.Services
         }
 
 
-        public async Task<BaseResponse<IList<BookingDto>>> GetBookingByIdAsync(int Id)
+        public async Task<BaseResponse<IList<BookingDto>>> GetBookingByIdAsync(Guid Id)
         {
             var bookings = await _dbContext.Bookings
              .Where(x => x.Id == Id)
@@ -253,7 +253,7 @@ namespace HotelManagementSystem.Implementation.Services
             }
         }
        
-        public async Task<BaseResponse<BookingDto>> UpdateBooking(int Id, UpdateBooking request)
+        public async Task<BaseResponse<BookingDto>> UpdateBooking(Guid Id, UpdateBooking request)
         {
             var booking = _dbContext.Bookings.FirstOrDefault(x => x.Id == Id);
             if (booking == null)

@@ -35,7 +35,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpPost("create-booking")]
-        public async Task<IActionResult> CreateBooking(CreateBooking request, int Id)
+        public async Task<IActionResult> CreateBooking(CreateBooking request, Guid Id)
         {
             var booking = await _bookService.CreateBooking(request, Id);
             if (booking.Success)
@@ -47,7 +47,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("edit-booking/{id}")]
-        public async Task<IActionResult> EditBooking([FromRoute] int id)
+        public async Task<IActionResult> EditBooking([FromRoute] Guid id)
         {
             var booking = await _bookService.GetBookingAsync(id);
 
@@ -71,7 +71,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("delete-booking/{id}")]
-        public async Task<IActionResult> DeleteBooking([FromRoute] int id)
+        public async Task<IActionResult> DeleteBooking([FromRoute] Guid id)
         {
             var booking = await _bookService.DeleteBookingAsync(id);
             if (booking.Success)
@@ -101,7 +101,7 @@ namespace HotelManagementSystem.Controllers
         }
 
         [HttpGet("get-booking-by-id/{id}")]
-        public async Task<IActionResult> GetBookingByIdAsync(int id)
+        public async Task<IActionResult> GetBookingByIdAsync(Guid id)
         {
             var bookings = await _bookService.GetBookingByIdAsync(id);
             if (bookings.Success == false)

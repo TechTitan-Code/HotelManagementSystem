@@ -51,7 +51,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("edit-order/{id}")]
-        public async Task<IActionResult> EditOrder([FromRoute] int id)
+        public async Task<IActionResult> EditOrder([FromRoute] Guid id)
         {
             var order = await _orderServices.GetOrderAsync(id);
 
@@ -75,7 +75,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("delete-order/{id}")]
-        public async Task<IActionResult> Deleteorder([FromRoute] int id)
+        public async Task<IActionResult> Deleteorder([FromRoute] Guid id)
         {
             var order = await _orderServices.DeleteOrderAsync(id);
             if (order.Success)
@@ -105,7 +105,7 @@ namespace HotelManagementSystem.Controllers
         }
 
         [HttpGet("get-order-by-id/{id}")]
-        public async Task<IActionResult> GetAllOrderById(int Id)
+        public async Task<IActionResult> GetAllOrderById(Guid Id)
         {
             var order = await _orderServices.GetOrderByIdAsync(Id);
             if (order.Success)

@@ -65,7 +65,7 @@ namespace HMS.Implementation.Services
         }
 
 
-        public async Task<BaseResponse<Guid>> DeleteOrderAsync(int Id)
+        public async Task<BaseResponse<Guid>> DeleteOrderAsync(Guid Id)
         {
             var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == Id);
             if (order != null)
@@ -106,7 +106,7 @@ namespace HMS.Implementation.Services
                 .ToListAsync();
         }
 
-        public async Task<BaseResponse<IList<OrderDto>>> GetOrderByIdAsync(int Id)
+        public async Task<BaseResponse<IList<OrderDto>>> GetOrderByIdAsync(Guid Id)
         {
             var order = await _dbContext.Orders
             .Where(x => x.Id == Id)
@@ -140,7 +140,7 @@ namespace HMS.Implementation.Services
         }
 
 
-        public async Task<BaseResponse<OrderDto>> GetOrderAsync(int Id)
+        public async Task<BaseResponse<OrderDto>> GetOrderAsync(Guid Id)
         {
             var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == Id);
             if (order != null)
@@ -201,7 +201,7 @@ namespace HMS.Implementation.Services
         }
 
 
-        public async Task<BaseResponse<IList<OrderDto>>> UpdateOrder(int Id, UpdateOrder request)
+        public async Task<BaseResponse<IList<OrderDto>>> UpdateOrder(Guid Id, UpdateOrder request)
         {
             var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == Id);
             if (order != null)

@@ -5,7 +5,7 @@ namespace HotelManagementSystem.Dto
 {
     public class RoomDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public RoomName RoomName { get; set; }
         public int RoomNumber { get; set; }
         // public int RoomCount { get; set; }

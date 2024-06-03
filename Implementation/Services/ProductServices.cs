@@ -51,9 +51,9 @@ namespace HotelManagementSystem.Implementation.Services
 
         }
 
-        public async Task<BaseResponse<Guid>> DeleteProductAsync(int Id)
+        public async Task<BaseResponse<Guid>> DeleteProductAsync(Guid Id)
         {
-            var item = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == Id);
+            var item = await _dbContext.Products.FirstOrDefaultAsync();
 
             if (item != null)
             {
@@ -77,8 +77,8 @@ namespace HotelManagementSystem.Implementation.Services
                 };
             }
         }
-
-        public async Task<BaseResponse<IList<ProductDto>>> GetAllProductsByIdAsync(int Id)
+        
+        public async Task<BaseResponse<IList<ProductDto>>> GetAllProductsByIdAsync(Guid Id)
         {
 
             var item = await _dbContext.Products
@@ -111,7 +111,7 @@ namespace HotelManagementSystem.Implementation.Services
         }
 
 
-        public async Task<BaseResponse<ProductDto>> GetProductAsync(int Id)
+        public async Task<BaseResponse<ProductDto>> GetProductAsync(Guid Id)
         {
             var product = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == Id);
             if (product != null)
@@ -168,7 +168,7 @@ namespace HotelManagementSystem.Implementation.Services
         }
 
 
-        public async Task<BaseResponse<ProductDto>> UpdateProduct(int Id, UpdateProduct request)
+        public async Task<BaseResponse<ProductDto>> UpdateProduct(Guid Id, UpdateProduct request)
         {
             var item = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == Id);
             if (item == null)
@@ -205,5 +205,8 @@ namespace HotelManagementSystem.Implementation.Services
                 };
             }
         }
+
+     
+       
     }
 }
