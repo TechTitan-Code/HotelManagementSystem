@@ -12,7 +12,7 @@ namespace HotelManagementSystem.Model.Entity
         public decimal RoomRate { get; set; }
         public RoomStatus RoomStatus { get; set; }
        // public Amenity Amenity { get; set; }
-        public bool Availability { get; set; }
+        public bool Availability { get; set; } 
 
         public ICollection<Amenity> Amenities { get; set; }
 
