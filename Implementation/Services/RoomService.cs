@@ -51,9 +51,10 @@ namespace HotelManagementSystem.Implementation.Services
                     RoomRate = request.RoomRate,
                     RoomStatus = request.RoomStatus,
                     BedType = request.BedType,
+                     //RoomId = request.RoomId,
                     RoomType = request.RoomType,
                     MaxOccupancy = request.MaxOccupancy,
-                   // Amenity = request.Amenity
+                    //Amenities = request.AmenityName,
                 };
 
                 await _dbContext.Rooms.AddAsync(room);
@@ -268,16 +269,15 @@ namespace HotelManagementSystem.Implementation.Services
             var result = new List<SelectAmenity>();
             if (amenities.Count > 0)
             {
-
                 result = amenities.Select(x => new SelectAmenity
                 {
-                    Id = x.AmenityId,
-                    // Name = x.Amenity,
+                    Id = x.AmenityId, 
+                    AmenityName = x.Amenity
                 }).ToList();
-
             }
             return result;
         }
+
 
     }
 }

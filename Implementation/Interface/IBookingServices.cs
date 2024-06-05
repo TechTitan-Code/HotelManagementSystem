@@ -13,6 +13,7 @@ namespace HotelManagementSystem.Implementation.Interface
         Task<BaseResponse<BookingDto>> UpdateBooking(Guid Id, UpdateBooking request);
         Task<BaseResponse<BookingDto>> GetBookingAsync(Guid Id);
         Task<List<BookingDto>> GetBooking();
+        List<SelectRoomDto> GetRoomSelect();
 
 
 

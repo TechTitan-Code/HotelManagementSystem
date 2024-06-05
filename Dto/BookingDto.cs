@@ -10,6 +10,7 @@ namespace HotelManagementSystem.Dto
         public DateTime Checkout { get; set; }
         public RoomStatus Status { get; set; } = RoomStatus.Pending;
         public decimal TotalCost { get; set; }
+
         public ICollection<Room> Rooms { get; set; } = new List<Room>();
 
     }

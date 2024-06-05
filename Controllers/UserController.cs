@@ -59,9 +59,9 @@ namespace HotelManagementSystem.Controllers
             return View(user.Data);
         }
 
-
-        [HttpPost("edit-user")]
-        public async Task<IActionResult> UpdateUser(UpdateUser request)
+         
+        [HttpPost("edit-user/{id}")]
+        public async Task<IActionResult> EditUser(UpdateUser request)
         {
            var user = await _userServices.UpdateUser(request.Id, request);
             if (user.Success)

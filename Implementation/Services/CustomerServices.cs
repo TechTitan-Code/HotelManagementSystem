@@ -236,7 +236,7 @@ namespace HMS.Implementation.Services
 
         public async Task<BaseResponse<CustomerDto>> UpdateCustomer(Guid Id, UpdateCustomer request)
         {
-            var customer = await _dbContext.Customers.FirstOrDefaultAsync(x => x.Id == Id);
+            var customer = await _dbContext.Customers.FirstOrDefaultAsync();
             if (customer == null)
             {
                 return new BaseResponse<CustomerDto>

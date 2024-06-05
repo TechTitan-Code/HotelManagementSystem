@@ -19,6 +19,7 @@ namespace HotelManagementSystem.Migrations
                     CheckIn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Checkout = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TotalCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -70,8 +71,7 @@ namespace HotelManagementSystem.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Items = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -85,7 +85,7 @@ namespace HotelManagementSystem.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoomName = table.Column<int>(type: "int", nullable: false),
+                    RoomName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoomNumber = table.Column<int>(type: "int", nullable: false),
                     RoomCount = table.Column<int>(type: "int", nullable: false),
                     RoomType = table.Column<int>(type: "int", nullable: false),
@@ -194,6 +194,30 @@ namespace HotelManagementSystem.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SelectAmenity",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AmenityNameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SelectAmenity", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SelectAmenity_Amenities_AmenityNameId",
+                        column: x => x.AmenityNameId,
+                        principalTable: "Amenities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SelectAmenity_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Amenities_RoomId",
                 table: "Amenities",
@@ -212,6 +236,16 @@ namespace HotelManagementSystem.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_RoomAmenities_RoomId",
                 table: "RoomAmenities",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SelectAmenity_AmenityNameId",
+                table: "SelectAmenity",
+                column: "AmenityNameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SelectAmenity_RoomId",
+                table: "SelectAmenity",
                 column: "RoomId");
         }
 
@@ -232,6 +266,9 @@ namespace HotelManagementSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "RoomAmenities");
+
+            migrationBuilder.DropTable(
+                name: "SelectAmenity");
 
             migrationBuilder.DropTable(
                 name: "Users");

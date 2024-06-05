@@ -3,6 +3,7 @@ using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace HMS.Implementation.Services
@@ -26,8 +27,8 @@ namespace HMS.Implementation.Services
                     {
                         CustomerId = request.CustomerId,
                         OrderDate = request.OrderDate,
-                        Product = request.Product,
-                        TotalAmount = request.TotalAmount,
+                        ProductId = request.ProductId,
+                        TotalAmount = request.TotalAmount
 
                     };
                     _dbContext.Orders.Add(order);
@@ -98,9 +99,8 @@ namespace HMS.Implementation.Services
                 .Select(x => new OrderDto()
                 {
                     CustomerId = x.CustomerId,
-                    //CustomerName = x.CustomerName,
                     OrderDate = x.OrderDate,
-                    Product = x.Product,
+                    ProductId = x.ProductId,
                     TotalAmount = x.TotalAmount
                 })
                 .ToListAsync();
@@ -172,7 +172,6 @@ namespace HMS.Implementation.Services
             var order = await _dbContext.Orders
            .Select(x => new OrderDto
            {
-
                CustomerId = x.CustomerId,
                OrderDate = x.OrderDate,
                Product = x.Product,
@@ -203,7 +202,7 @@ namespace HMS.Implementation.Services
 
         public async Task<BaseResponse<IList<OrderDto>>> UpdateOrder(Guid Id, UpdateOrder request)
         {
-            var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == Id);
+            var order = await _dbContext.Orders.FirstOrDefaultAsync();
             if (order != null)
             {
                 order.CustomerId = request.CustomerId;
@@ -225,7 +224,7 @@ namespace HMS.Implementation.Services
                 return new BaseResponse<IList<OrderDto>>
                 {
                     Success = false,
-                    Message = $"Failed to Update order {request.CustomerName} ,there was an error in the updating process.",
+                    Message = $"Failed to Update order {request.CustomerId} ,there was an error in the updating process.",
                     Hasherror = true
                 };
             }

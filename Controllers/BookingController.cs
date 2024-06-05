@@ -1,16 +1,21 @@
-﻿using HotelManagementSystem.Dto.RequestModel;
+﻿using HotelManagementSystem.Dto;
+using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
+using HotelManagementSystem.Model.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HotelManagementSystem.Controllers
 {
     public class BookingController : Controller
     {
         private readonly IBookingServices _bookService;
+        private readonly IRoomService _roomService;
 
-        public BookingController(IBookingServices bookService)
+        public BookingController(IBookingServices bookService, IRoomService roomService)
         {
             _bookService = bookService;
+            _roomService = roomService;
         }
 
         [HttpGet("get-booking")]
@@ -21,15 +26,17 @@ namespace HotelManagementSystem.Controllers
         }
 
 
-        public async Task<IActionResult> Create()
+
+        [HttpGet("create-booking")]
+        public IActionResult Create()
         {
-            var roomsResponse = await _bookService.GetAllBookingsAsync();
-            if (roomsResponse.Success)
+            var selectRoom = _bookService.GetRoomSelect();
+            if (selectRoom == null)
             {
-                ViewBag.Rooms = roomsResponse.Data;
-                return View();
+                selectRoom = new List<SelectRoomDto>();
             }
-            return BadRequest(roomsResponse.Message);
+            ViewData["SelectRoom"] = new SelectList(selectRoom, "Id", "RoomName");
+            return View();
         }
 
 
@@ -49,14 +56,20 @@ namespace HotelManagementSystem.Controllers
         [HttpGet("edit-booking/{id}")]
         public async Task<IActionResult> EditBooking([FromRoute] Guid id)
         {
-            var booking = await _bookService.GetBookingAsync(id);
-
-            return View(booking.Data);
+            var selectRoom = _bookService.GetRoomSelect();
+            if (selectRoom == null)
+            {
+                selectRoom = new List<SelectRoomDto>();
+            }
+            ViewData["SelectRoom"] = new SelectList(selectRoom, "Id", "RoomName");
+            return View();
         }
 
+       
 
-        [HttpPost("Update-Booking")]
-        public async Task<IActionResult> UpdateBooking(UpdateBooking request)
+
+        [HttpPost("edit-booking/{id}")]
+        public async Task<IActionResult> EditBooking(UpdateBooking request)
         {
 
             var booking = await _bookService.UpdateBooking(request.Id, request);

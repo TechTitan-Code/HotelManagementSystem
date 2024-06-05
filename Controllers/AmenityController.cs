@@ -50,20 +50,20 @@ public class AmenityController : Controller
     [HttpGet("edit-amenity/{id}")]
     public async Task<IActionResult> EditAmenity([FromRoute] Guid id)
     {
-        var booking = await _amenityService.GetAmenityAsync(id);
+        var amenity = await _amenityService.GetAmenityAsync(id);
 
-        return View(booking.Data);
+        return View(amenity.Data);
     }
 
 
-    [HttpPost("update-amenity")]
-    public async Task<IActionResult> UpdateAmenity(UpdateAmenity request)
+    [HttpPost("edit-amenity/{id}")]
+    public async Task<IActionResult> EditAmenity(UpdateAmenity request)
     {
 
         var amenity = await _amenityService.UpdateAmenity(request.Id, request);
         if (amenity.Success)
         {
-            return RedirectToAction("Index");
+            return RedirectToAction("Index" , "Amenity");
         }
         return View(request);
     }

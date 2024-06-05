@@ -6,7 +6,7 @@ namespace HotelManagementSystem.Dto.RequestModel
     public class UpdateRoom
     {
         public Guid Id { get; set; }
-        public RoomName RoomName { get; set; }
+        public string RoomName { get; set; }
         public int RoomNumber { get; set; }
         public RoomType RoomType { get; set; }
         public BedType BedType { get; set; }

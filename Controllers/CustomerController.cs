@@ -55,8 +55,8 @@ namespace HMS.Controllers
             return View(customer.Data);
         }
 
-        [HttpPost("edit-customer")]
-        public async Task<IActionResult> UpdateCustomer(UpdateCustomer request)
+        [HttpPost("edit-customer/{id}")]
+        public async Task<IActionResult> EditCustomer(UpdateCustomer request)
         {
             var customer = await _customerServices.UpdateCustomer(request.Id, request);
             if (customer.Success)

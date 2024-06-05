@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240603152253_Initial_Migration")]
+    [Migration("20240604061055_Initial_Migration")]
     partial class Initial_Migration
     {
         /// <inheritdoc />
@@ -24,6 +24,27 @@ namespace HotelManagementSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("HotelManagementSystem.Dto.RequestModel.SelectAmenity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AmenityNameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AmenityNameId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("SelectAmenity");
+                });
 
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Amenity", b =>
                 {
@@ -69,6 +90,9 @@ namespace HotelManagementSystem.Migrations
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -195,16 +219,12 @@ namespace HotelManagementSystem.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Items")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("datetime2");
@@ -235,8 +255,9 @@ namespace HotelManagementSystem.Migrations
                     b.Property<int>("RoomCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomName")
-                        .HasColumnType("int");
+                    b.Property<string>("RoomName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RoomNumber")
                         .HasColumnType("int");
@@ -326,6 +347,21 @@ namespace HotelManagementSystem.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("HotelManagementSystem.Dto.RequestModel.SelectAmenity", b =>
+                {
+                    b.HasOne("HotelManagementSystem.Model.Entity.Amenity", "AmenityName")
+                        .WithMany()
+                        .HasForeignKey("AmenityNameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelManagementSystem.Model.Entity.Room", null)
+                        .WithMany("Amenity")
+                        .HasForeignKey("RoomId");
+
+                    b.Navigation("AmenityName");
+                });
+
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Amenity", b =>
                 {
                     b.HasOne("HotelManagementSystem.Model.Entity.Room", null)
@@ -336,7 +372,7 @@ namespace HotelManagementSystem.Migrations
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Order", b =>
                 {
                     b.HasOne("HotelManagementSystem.Model.Entity.Product", "Product")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -363,14 +399,11 @@ namespace HotelManagementSystem.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("HotelManagementSystem.Model.Entity.Product", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Room", b =>
                 {
                     b.Navigation("Amenities");
+
+                    b.Navigation("Amenity");
                 });
 #pragma warning restore 612, 618
         }

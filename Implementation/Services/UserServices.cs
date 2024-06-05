@@ -55,8 +55,6 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
         }
 
-
-
         public async Task<BaseResponse<Guid>> DeleteUserAsync(Guid id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -168,7 +166,6 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                         Email = user.Email,
                         Gender = user.Gender,
                         Name = user.Name,
-                        Password = user.Password,
                         PhoneNumber = user.PhoneNumber,
                         UserName = user.UserName,
                     }
