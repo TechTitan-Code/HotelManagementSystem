@@ -1,25 +1,26 @@
-﻿@model HotelManagementSystem.Dto.RoomDto
+﻿@model HotelManagementSystem.Dto.RequestModel.CreateRoom
 
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Edit Room";
+    ViewData["Title"] = "Create room";
 }
+
 
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-12 col-12">
             <div class="bg-secondary rounded h-100 p-4">
-                <h6 class="mb-4">Edit Room</h6>
-                <form asp-controller="Room" asp-action="UpdateRoom">
+                <h6 class="mb-4">Create Room</h6>
+                <form asp-controller="Room" asp-action="CreateRoom">
 
                     <div class="row">
                         <div class="col mb-6">
                             <label class="form-label">Room Name</label>
-                            <input type="text" class="form-control" name="roomName" value="@Model.RoomName" aria-describedby="room name">
+                            <input type="text" class="form-control" name="roomName" aria-describedby="room name">
                         </div>
                         <div class="col mb-6">
                             <label class="form-label">Room Number</label>
-                            <input type="text" class="form-control" name="RoomNumber" value="@Model.RoomNumber">
+                            <input type="text" class="form-control" name="RoomNumber">
                         </div>
                     </div>
                     <div class="row">
@@ -31,7 +32,7 @@
                         </div>
                         <div class="col mb-3">
                             <label class="form-label">Bed Type</label>
-                            <select name="BedType" class="form-select" asp-items="Html.GetEnumSelectList<HotelManagementSystem.Model.Entity.Enum.BedType>()">
+                            <select asp-for="BedType" class="form-select" asp-items="Html.GetEnumSelectList<HotelManagementSystem.Model.Entity.Enum.BedType>()">
                                 <option value="">Select Bed Type</option>
                             </select>
                         </div>
@@ -39,24 +40,24 @@
                     <div class="row">
                         <div class="col mb-3">
                             <label class="form-label">Maximum Occupancy</label>
-                            <input type="text" class="form-control" name="MaxOccupancy" value="@Model.MaxOccupancy">
+                            <input type="text" class="form-control" name="MaxOccupancy">
                         </div>
                         <div class="col mb-3">
                             <label class="form-label">Room Rate</label>
-                            <input type="text" class="form-control" name="RoomRate" value="@Model.RoomRate">
+                            <input type="text" class="form-control" name="RoomRate">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col mb-3">
                             <label class="form-label">Room Amenities</label>
-                            <select name="RoomId" class="form-select" asp-items="@(ViewData["SelectAmenity"] as IEnumerable<SelectListItem>)" required>
+                            <select asp-for="RoomId" class="form-select" asp-items="@(ViewData["SelectAmenity"] as IEnumerable<SelectListItem>)" required>
                                 <option value="">Select RoomAmenity</option>
                             </select>
                         </div>
 
                         <div class="col mb-3">
                             <label class="form-label">Room Status</label>
-                            <select name="RoomStatus" class="form-select" asp-items="Html.GetEnumSelectList<HotelManagementSystem.Model.Entity.Enum.RoomStatus>()">
+                            <select asp-for="RoomStatus" class="form-select" asp-items="Html.GetEnumSelectList<HotelManagementSystem.Model.Entity.Enum.RoomStatus>()">
                                 <option value="">Select Room Status</option>
                             </select>
                         </div>
@@ -65,7 +66,7 @@
                         <input type="checkbox" class="form-check-input" name="availability">
                         <label class="form-check-label">Availability</label>
                     </div>
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
                     <a href="@Url.Action("Rooms","Room")" class="btn btn-dark">Show All</a>
                 </form>
             </div>

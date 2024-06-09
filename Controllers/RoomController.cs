@@ -20,17 +20,17 @@ namespace HotelManagementSystem.Controllers
             _amenityService = amenityService;
         }
 
-        [HttpGet("get-room")]
-        public async Task<IActionResult> Index()
+        [HttpGet("get-rooms")]
+        public async Task<IActionResult> Rooms()
         {
             var room = await _roomService.GetRoom();
             return View(room);
         }
 
-        [HttpGet("select-amenity")]
-        public async Task<IActionResult> Create()
+        [HttpGet("create-room")]
+        public IActionResult CreateRoom()
         {
-            var selectAmenity =  _roomService.GetAmenitySelect();
+            var selectAmenity = _roomService.GetAmenitySelect();
 
             if (selectAmenity == null)
             {
@@ -38,7 +38,7 @@ namespace HotelManagementSystem.Controllers
             }
             ViewData["SelectAmenity"] = new SelectList(selectAmenity, "Id", "AmenityName");
             return View();
-           
+
         }
 
 
@@ -48,7 +48,7 @@ namespace HotelManagementSystem.Controllers
             var room = await _roomService.CreateRoom(request);
             if (room.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Rooms");
             }
             return BadRequest();
 
@@ -68,7 +68,7 @@ namespace HotelManagementSystem.Controllers
             var room = await _roomService.UpdateRoom(request.Id, request);
             if (room.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Rooms");
 
             }
 
@@ -83,13 +83,13 @@ namespace HotelManagementSystem.Controllers
             var room = await _roomService.DeleteRoomAsync(Id);
             if (room.Success)
             {
-                return RedirectToAction("Index","Room");
+                return RedirectToAction("Rooms", "Room");
             }
             return BadRequest(room);
         }
 
 
-        [HttpGet("get-all-rooms-created")]
+        [HttpGet("rooms")]
         public async Task<IActionResult> GetAllRoomsCreatedAsync()
         {
             var rooms = await _roomService.GetAllRoomsCreatedAsync();
@@ -100,7 +100,7 @@ namespace HotelManagementSystem.Controllers
             return BadRequest(rooms);
         }
 
-        [HttpGet("get-room-by-id/{id}")]
+        [HttpGet("room/{id}")]
         public async Task<IActionResult> GetRoomsByIdAsync(Guid id)
         {
             var rooms = await _roomService.GetRoomsByIdAsync(id);
