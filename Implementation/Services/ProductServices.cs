@@ -167,7 +167,7 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<BaseResponse<ProductDto>> UpdateProduct(Guid Id, UpdateProduct request)
         {
-            var item = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == Id);
+            var item = await _dbContext.Products.FirstOrDefaultAsync();
             if (item == null)
             {
                 return new BaseResponse<ProductDto>
@@ -178,10 +178,10 @@ namespace HotelManagementSystem.Implementation.Services
                 };
             }
 
-            item.Id = request.Id;
+            //item.Id = request.Id;
             item.Name = request.Name;
             item.Price = request.Price;
-            _dbContext.Products.Add(item);
+            _dbContext.Products.Update(item);
 
             if (await _dbContext.SaveChangesAsync() > 0)
             {

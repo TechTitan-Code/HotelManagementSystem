@@ -1,4 +1,5 @@
 ﻿using HMS.Implementation.Interface;
+using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -29,13 +30,15 @@ namespace HotelManagementSystem.Controllers
         [HttpGet("select-amenity")]
         public async Task<IActionResult> Create()
         {
-            var amenities = await _amenityService.GetAllAmenity();
+            var selectAmenity =  _roomService.GetAmenitySelect();
 
-            if (amenities.Data != null)
+            if (selectAmenity == null)
             {
-                ViewBag["SelectAmenity"] = new SelectList(amenities.Data, "Id", "Name");
+                selectAmenity = new List<SelectAmenityDto>();
             }
+            ViewData["SelectAmenity"] = new SelectList(selectAmenity, "Id", "AmenityName");
             return View();
+           
         }
 
 

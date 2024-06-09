@@ -60,8 +60,8 @@ namespace HotelManagementSystem.Controllers
         }
 
 
-        [HttpPost("update-product")]
-        public async Task<IActionResult> UpdateProduct(UpdateProduct request)
+        [HttpPost("edit-product/{id}")]
+        public async Task<IActionResult> EditProduct(UpdateProduct request)
         {
 
             var product = await _productServices.UpdateProduct(request.Id , request);
@@ -69,11 +69,11 @@ namespace HotelManagementSystem.Controllers
             {
                 return RedirectToAction("Index");
             }
-            return View(request);
+            return BadRequest();
         }
 
 
-
+        
 
         [HttpGet("delete-product/{id}")]
         public async Task<IActionResult> DeleteProduct([FromRoute] Guid Id)
@@ -90,7 +90,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("get-all-product-created")]
-        public async Task<IActionResult> GetAllBookingsAsync()
+        public async Task<IActionResult> GetAllProductsAsync()
         {
             var product = await _productServices.GetAllProductAsync();
             if (product.Success)

@@ -152,6 +152,24 @@ namespace HotelManagementSystem.Implementation.Services
             };
         }
 
+        public List<SelectAmenityDto> GetAmenitySelect()
+        {
+            var amenityName = _dbContext.Amenities.ToList();
+            var result = new List<SelectAmenityDto>();
+
+            if (amenityName.Count > 0)
+            {
+                result = amenityName.Select(x => new SelectAmenityDto()
+                {
+                    Id = x.Id,
+                    AmenityName = x.AmenityName,
+                }).ToList();
+            }
+
+            return result;
+        }
+
+
         public async Task<BaseResponse<IList<RoomDto>>> GetAllRoomsCreatedAsync()
         {
             var rooms = await _dbContext.Rooms

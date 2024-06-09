@@ -7,14 +7,16 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace HMS.Implementation.Services
-{
+{ 
     public class OrderServices : IOrderServices
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IProductServices _productServices;
 
-        public OrderServices(ApplicationDbContext dbContext)
+        public OrderServices(ApplicationDbContext dbContext , IProductServices productServices)
         {
             _dbContext = dbContext;
+            _productServices = productServices;
         }
 
         public async Task<BaseResponse<Guid>> CreateOrder(CreateOrder request)
@@ -46,7 +48,6 @@ namespace HMS.Implementation.Services
                 {
                     return new BaseResponse<Guid>
                     {
-                        Success = false,
                         Message = "Order Failed"
 
                     };

@@ -49,12 +49,10 @@
         <input asp-for="RoomRate" class="form-control" />
         <span asp-validation-for="RoomRate" class="text-danger"></span>
 
-        <div class="form-group">
-            <i><label class="control-label"></label> </i>
-            <label asp-for="Amenity"></label>
-
-            <select asp-for="Amenity" class="form-control" asp-items="ViewBag.SelectAmenity">
-                <option value=><i>Select Amenity</i></option>
+        <div class="col-md-6" style="margin-top: 20px; font-size: large; font-weight: medium; color:dark;">
+            <label asp-for="RoomId"></label>
+            <select asp-for="RoomId" class="form-control" asp-items="@(ViewData["SelectAmenity"] as IEnumerable<SelectListItem>)" required>
+                <option value="">Select RoomAmenity</option>
             </select>
         </div>
 

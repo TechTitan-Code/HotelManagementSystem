@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240604061055_Initial_Migration")]
-    partial class Initial_Migration
+    [Migration("20240605111113_Initial_migration")]
+    partial class Initial_migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -246,6 +246,9 @@ namespace HotelManagementSystem.Migrations
                     b.Property<int>("BedType")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("BookingId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
@@ -275,6 +278,8 @@ namespace HotelManagementSystem.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
 
                     b.ToTable("Rooms");
                 });
@@ -315,10 +320,10 @@ namespace HotelManagementSystem.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -380,6 +385,13 @@ namespace HotelManagementSystem.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("HotelManagementSystem.Model.Entity.Room", b =>
+                {
+                    b.HasOne("HotelManagementSystem.Model.Entity.Booking", null)
+                        .WithMany("Rooms")
+                        .HasForeignKey("BookingId");
+                });
+
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.RoomAmenity", b =>
                 {
                     b.HasOne("HotelManagementSystem.Model.Entity.Amenity", "Amenity")
@@ -397,6 +409,11 @@ namespace HotelManagementSystem.Migrations
                     b.Navigation("Amenity");
 
                     b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("HotelManagementSystem.Model.Entity.Booking", b =>
+                {
+                    b.Navigation("Rooms");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Room", b =>

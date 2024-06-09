@@ -20,18 +20,19 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
             if (request != null)
             {
+
+
                 var user = new User()
                 {
                     Name = request.Name,
                     UserName = request.UserName,
                     Address = request.Address,
-                    Age = request.Age,
-                    CreatedTime = DateTime.Now,
+                    DateOfBirth = request.DateOfBirth,
                     Email = request.Email,
                     Gender = request.Gender,
                     Password = request.Password,
                     PhoneNumber = request.PhoneNumber,
-
+                    
                 };
                 _dbContext.Users.Add(user);
 
@@ -109,7 +110,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                 .Select(x => new UserDto()
                 {
                     Address = x.Address,
-                    Age = x.Age,
+                    DateOfBirth = x.DateOfBirth,
                     Email = x.Email,
                     Gender = x.Gender,
                     Name = x.Name,
@@ -159,10 +160,10 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     Success = true,
                     Data = new UserDto
                     {
-                        
+
                         UserId = user.Id,
                         Address = user.Address,
-                        Age = user.Age,
+                        DateOfBirth = user.DateOfBirth,
                         Email = user.Email,
                         Gender = user.Gender,
                         Name = user.Name,
@@ -188,7 +189,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                .Select(x => new UserDto
                {
                    Address = x.Address,
-                   Age = x.Age,
+                   DateOfBirth = x.DateOfBirth,
                    Email = x.Email,
                    Gender = x.Gender,
                    Name = x.Name,
@@ -222,11 +223,11 @@ namespace HotelManagementSystem.Dto.Implementation.Services
             return _dbContext.Users
                 .Select(x => new UserDto()
                 {
-                    
+
                     Name = x.Name,
                     Address = x.Address,
                     Gender = x.Gender,
-                    Age = x.Age,
+                    DateOfBirth = x.DateOfBirth,
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     UserId = x.Id,
@@ -258,7 +259,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
             user.PhoneNumber = request.PhoneNumber;
             user.Email = request.Email;
             user.Address = request.Address;
-            user.Age = request.Age;
+            user.DateOfBirth = request.DateOfBirth;
             _dbContext.Users.Update(user);
 
             if (await _dbContext.SaveChangesAsync() > 0)
