@@ -2,7 +2,7 @@
 
 namespace HotelManagementSystem.Controllers
 {
-    public class AdminController1 : Controller
+    public class AdminController : Controller
     {
         public IActionResult Index()
         {
