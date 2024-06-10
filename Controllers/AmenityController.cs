@@ -13,7 +13,7 @@ public class AmenityController : Controller
     }
 
     [HttpGet("get-amenity")]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Amenities()
     {
         var amenity = await _amenityService.GetAmenity();
         return View(amenity);
@@ -21,7 +21,7 @@ public class AmenityController : Controller
 
 
     [HttpGet("create-amenity")]
-    public async Task<IActionResult> Create()
+    public async Task<IActionResult> CreateAmenity()
     {
         var amenity = await _amenityService.GetAllAmenity();
         if (amenity.Success)
@@ -41,7 +41,7 @@ public class AmenityController : Controller
         var amenity = await _amenityService.CreateAmenity(request);
         if (amenity.Success)
         {
-            return RedirectToAction("Index");
+            return RedirectToAction("Amenities");
         }
         return BadRequest();
     }
@@ -63,7 +63,7 @@ public class AmenityController : Controller
         var amenity = await _amenityService.UpdateAmenity(request.Id, request);
         if (amenity.Success)
         {
-            return RedirectToAction("Index" , "Amenity");
+            return RedirectToAction("Amenities", "Amenity");
         }
         return View(request);
     }
@@ -77,7 +77,7 @@ public class AmenityController : Controller
         var amenity = await _amenityService.DeleteAmenity(id);
         if (amenity.Success)
         {
-            return RedirectToAction("Index", "Amenity");
+            return RedirectToAction("Amenities", "Amenity");
         }
 
         return BadRequest(amenity);

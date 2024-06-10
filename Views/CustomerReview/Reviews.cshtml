@@ -1,13 +1,14 @@
-﻿@model IEnumerable<HotelManagementSystem.Dto.RequestModel.CreateBooking>
+﻿@model IEnumerable<HotelManagementSystem.Dto.CustomerReviewDto>
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Bookings";
+    ViewData["Title"] = "CustomerReview";
 }
+
 <!-- Recent Sales Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <a href="@Url.Action("CreateBooking","Booking")" class="mb-0">Create Booking</a>
+            <a href="@Url.Action("CreateReview","CustomerReview")" class="mb-0">Create Review</a>
         </div>
         @if (Model != null && Model.Any())
         {
@@ -16,8 +17,8 @@
                     <thead>
                         <tr class="text-white">
                             <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                            <th scope="col">Total Cost</th>
-                            <th scope="col">Rooms</th>
+                            <th scope="col">Comment</th>
+                            <th scope="col">Rating</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -26,11 +27,11 @@
                         {
                             <tr>
                                 <td><input class="form-check-input" type="checkbox"></td>
-                                <th scope="col">Total Cost</th>
-                                <th scope="col">Rooms</th>
+                                <td>@item.Comment</td>
+                                <td>@item.Rating</td>
                                 <td>
-                                    <a asp-action="EditBooking" asp-route-id="@item.Id">Edit</a> |
-                                    <a asp-action="DeleteBooking" asp-route-id="@item.Id">Delete</a>
+                                 @*    <a asp-action="EditRo" asp-route-id="@item.Id">Edit</a> |
+                                    <a asp-action="DeleteRoom" asp-route-id="@item.Id">Delete</a> *@
                                 </td>
                             </tr>
                         }
@@ -40,8 +41,10 @@
         }
         else
         {
-            <h3>No bookings available</h3>
+            <h3>No reviews available</h3>
         }
     </div>
 </div>
 <!-- Recent Sales End -->
+
+

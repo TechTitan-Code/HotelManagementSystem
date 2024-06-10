@@ -4,6 +4,7 @@ using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
+using HotelManagementSystem.Model.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagementSystem.Controllers
@@ -18,20 +19,20 @@ namespace HotelManagementSystem.Controllers
         }
 
         [HttpGet("get-product")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Products()
         {
-            var product = await _productServices.GetAllProductAsync();
-            return View(product.Data);
+            var product = await _productServices.GetProduct();
+            return View(product);
             //return View(new List<ProductDto>());
         }
        
 
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> CreateProduct()
         {
             var product = await _productServices.GetAllProductAsync();
             if (product.Success)
             {
-               
+                ViewBag.Rooms = product.Data;
                 return View();
             }
             return BadRequest();
@@ -45,7 +46,7 @@ namespace HotelManagementSystem.Controllers
             var product = await _productServices.CreateProduct(request);
             if (product.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Products");
             }
             return BadRequest();
         }
@@ -67,7 +68,7 @@ namespace HotelManagementSystem.Controllers
             var product = await _productServices.UpdateProduct(request.Id , request);
             if (product.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Products");
             }
             return BadRequest();
         }
@@ -81,7 +82,7 @@ namespace HotelManagementSystem.Controllers
             var product = await _productServices.DeleteProductAsync(Id);
             if (product.Success)
             {
-                return RedirectToAction("Index", "Product");
+                return RedirectToAction("Products", "Product");
             }
 
             return BadRequest(product);

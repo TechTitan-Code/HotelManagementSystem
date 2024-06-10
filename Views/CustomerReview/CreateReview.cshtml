@@ -1,0 +1,33 @@
+﻿@model HotelManagementSystem.Dto.RequestModel.CreateReview
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Create Review";
+}
+
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12 col-12">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">Create Review</h6>
+                <form asp-controller="CustomerReview" asp-action="CreateReview">
+
+                    <div class="row">
+                        <div class="col mb-6">
+                            <label class="form-label">Comment</label>
+                            <input type="text" class="form-control" name="comment" aria-describedby="comment">
+                        </div>
+                        <div class="col mb-6">
+                            <label class="form-label">Rating </label>
+                            <input type="text" class="form-control" name="rating">
+                        </div>
+                    </div>
+                   
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a href="@Url.Action("Rooms","Room")" class="btn btn-dark">Show All</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

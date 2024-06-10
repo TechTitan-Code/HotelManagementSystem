@@ -12,7 +12,7 @@ namespace HMS.Controllers
         private readonly ICustomerServices _customerServices = customerServices;
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Customers()
         {
             var response = await _customerServices.GetAllCustomerCreatedAsync();
             if (response.Success)
@@ -24,7 +24,7 @@ namespace HMS.Controllers
 
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult CreateCustomer()
         {
             return View();
         }
@@ -38,7 +38,7 @@ namespace HMS.Controllers
             var customer = await _customerServices.CreateCustomer(request);
             if (customer.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Customers");
             }
 
             return BadRequest();
@@ -61,7 +61,7 @@ namespace HMS.Controllers
             var customer = await _customerServices.UpdateCustomer(request.Id, request);
             if (customer.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Customers");
             }
             return BadRequest();
         }
@@ -73,7 +73,7 @@ namespace HMS.Controllers
             var customer = await _customerServices.DeleteCustomerAsync(Id);
             if (customer.Success)
             {
-                return RedirectToAction("Index", "Customer");
+                return RedirectToAction("Customers", "Customer");
             }
 
             return BadRequest(customer);

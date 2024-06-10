@@ -159,26 +159,6 @@ namespace HotelManagementSystem.Implementation.Services
             }
         }
 
-
-
-        //public List<SelectRoomDto> GetRoomSelect()
-        //{
-        //    var roomName = _dbContext.Rooms.ToList();
-
-        //    var result = new List<SelectRoomDto>();
-
-        //    if (roomName.Count > 0)
-        //    {
-        //        result = roomName.Select(x => new SelectRoomDto()
-        //        {
-        //            Id = x.Id,
-        //            RoomName = x.RoomName,
-        //        }).ToList();
-        //    } 
-
-        //    return result;
-        //}
-
         public List<SelectRoomDto> GetRoomSelect()
         {
             var roomName = _dbContext.Rooms.ToList();

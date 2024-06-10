@@ -54,7 +54,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("edit-booking/{id}")]
-        public async Task<IActionResult> EditBooking([FromRoute] Guid id)
+        public IActionResult EditBooking([FromRoute] Guid id)
         {
             var selectRoom = _bookService.GetRoomSelect();
             if (selectRoom == null)
@@ -65,7 +65,7 @@ namespace HotelManagementSystem.Controllers
             return View();
         }
 
-       
+
 
 
         [HttpPost("edit-booking/{id}")]

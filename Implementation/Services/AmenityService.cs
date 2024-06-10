@@ -83,6 +83,7 @@ namespace HMS.Implementation.Services
                 //.Include(x => x.RoomType)
                 .Select(x => new AmenityDto()
                 {
+                     Id = x.Id,
                     AmenityName = x.AmenityName,
                     AmenityType = x.AmenityType,
 

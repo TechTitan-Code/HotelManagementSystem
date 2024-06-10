@@ -17,7 +17,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("get-order")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Orders()
         {
             var order = await _orderServices.GetOrder();
             return View(order);
@@ -25,7 +25,7 @@ namespace HotelManagementSystem.Controllers
         }
 
         
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> CreateOrder()
         {
             var order = await _orderServices.GetAllOrderAsync();
             if (order.Success)
@@ -44,7 +44,7 @@ namespace HotelManagementSystem.Controllers
             var order = await _orderServices.CreateOrder(request);
             if (order.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Orders");
             }
             return BadRequest();
         }
@@ -66,7 +66,7 @@ namespace HotelManagementSystem.Controllers
             var order = await _orderServices.UpdateOrder(request.CustomerId, request);
             if (order.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Orders");
             }
             return View(request);
         }
@@ -80,7 +80,7 @@ namespace HotelManagementSystem.Controllers
             var order = await _orderServices.DeleteOrderAsync(id);
             if (order.Success)
             {
-                return RedirectToAction("Index", "Order");
+                return RedirectToAction("Orders", "Order");
             }
 
             return BadRequest(order);

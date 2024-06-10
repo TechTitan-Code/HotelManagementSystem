@@ -16,14 +16,14 @@ namespace HMS.Controllers
 
 
         [HttpGet("get-review")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Reviews()
         {
             var review = await _customerReviewService.GetReview();
             return View(review);
         }
 
 
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> CreateReview()
         {
             var review = await _customerReviewService.GetAllReviewAsync();
             if (review.Success)
@@ -40,7 +40,7 @@ namespace HMS.Controllers
             var review = await _customerReviewService.CreateReview(request, Id);
             if (review.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Reviews");
             }
             else
             {

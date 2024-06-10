@@ -51,6 +51,18 @@ namespace HotelManagementSystem.Implementation.Services
 
         }
 
+        public async Task<List<ProductDto>> GetProduct()
+        {
+            return _dbContext.Products
+                .Select(x => new ProductDto()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Price = x.Price
+                }).ToList();
+        }
+
+
         public async Task<BaseResponse<Guid>> DeleteProductAsync(Guid Id)
         {
             var item = await _dbContext.Products.FirstOrDefaultAsync();
