@@ -1,0 +1,44 @@
+﻿@model HotelManagementSystem.Dto.RequestModel.CreateBooking
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Create Booking";
+}
+
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12 col-12">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">Create Booking</h6>
+                <form asp-controller="Booking" asp-action="CreateBooking">
+                    <div class="row">
+                        <div class="col mb-6">
+                            <label class="form-label">Room Status</label>
+                            <input type="text" class="form-control" name="Status" aria-describedby="room Status">
+                        </div>
+                        <div class="col mb-6">
+                            <label class="form-label">Total Cost</label>
+                            <input type="text" class="form-control" name="TotalCost">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label class="form-label">Room </label>
+                            <select asp-for="RoomId" class="form-select" asp-items="@(ViewData["SelectRoom"] as IEnumerable<SelectListItem>)" required>
+                                <option value="">Select Room</option>
+                            </select>
+                        </div>
+                    </div
+                    <div class="col mb-3">
+                        <label class="form-label">Room Rate</label>
+                        <input type="text" class="form-control" name="RoomRate">
+                    </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a href="@Url.Action("Bookings","Booking")" class="btn btn-dark">Show All</a>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+

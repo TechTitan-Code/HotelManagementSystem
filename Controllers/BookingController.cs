@@ -19,7 +19,7 @@ namespace HotelManagementSystem.Controllers
         }
 
         [HttpGet("get-booking")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Bookings()
         {
             var response = await _bookService.GetBooking();
             return View(response);
@@ -28,7 +28,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("create-booking")]
-        public IActionResult Create()
+        public IActionResult CreateBooking()
         {
             var selectRoom = _bookService.GetRoomSelect();
             if (selectRoom == null)
@@ -47,7 +47,7 @@ namespace HotelManagementSystem.Controllers
             var booking = await _bookService.CreateBooking(request, Id);
             if (booking.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Bookings");
             }
             return BadRequest();
         }
@@ -75,7 +75,7 @@ namespace HotelManagementSystem.Controllers
             var booking = await _bookService.UpdateBooking(request.Id, request);
             if (booking.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Bookings");
             }
             return View("Booking");
         }
@@ -89,7 +89,7 @@ namespace HotelManagementSystem.Controllers
             var booking = await _bookService.DeleteBookingAsync(id);
             if (booking.Success)
             {
-                return RedirectToAction("Index", "Booking");
+                return RedirectToAction("Bookings", "Booking");
             }
 
             return BadRequest(booking);
