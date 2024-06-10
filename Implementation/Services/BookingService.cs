@@ -54,22 +54,22 @@ namespace HotelManagementSystem.Implementation.Services
                     }
                 }
 
-                var existingBooking = _dbContext.Bookings.FirstOrDefault(x =>
-                   //x.CheckIn == request.CheckIn &&
-                   //x.Checkout == request.Checkout &&
-                   x.Status == request.Status);
+                //var existingBooking = _dbContext.Bookings.FirstOrDefault(x =>
+                //   //x.CheckIn == request.CheckIn &&
+                //   //x.Checkout == request.Checkout &&
+                //   x.Status == request.Status);
 
-                if (existingBooking != null)
-                {
-                    // Booking already exists
-                    return new BaseResponse<Guid>
-                    {
-                        Success = true,
-                        Message = "Booking already exists.",
-                        Hasherror = true
-                    };
+                //if (existingBooking != null)
+                //{
+                //    // Booking already exists
+                //    return new BaseResponse<Guid>
+                //    {
+                //        Success = true,
+                //        Message = "Booking already exists.",
+                //        Hasherror = true
+                //    };
 
-                }
+                //}
 
                 var booking = new Booking()
                 {

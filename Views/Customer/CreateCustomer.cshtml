@@ -29,12 +29,12 @@
                         </div>
                         <div class="col mb-3">
                             <label asp-for="Gender"></label>
-                            <select asp-for="Gender" class="form-control">
+                           <select asp-for="Gender" class="form-control">
+                                <option selected>Select Gender</option>
                                 <option value="0">Male</option>
                                 <option value="1">Female</option>
                                 <option value="2">Other</option>
-                            </select>
-                            <span asp-validation-for="Gender" class="text-danger"></span>
+                             </select>
                         </div>
                     </div>
                     <div class="row">
@@ -43,18 +43,18 @@
                             <input type="text" class="form-control" name="Email">
                         </div>
                         <div class="col mb-3">
-                            <label class="form-label"></label>
+                            <label class="form-label">PassWord</label>
                             <input type="text" class="form-control" name="PassWord">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col mb-3">
-                            <label class="form-label"></label>
+                            <label class="form-label">PhoneNumber</label>
                             <input type="text" class="form-control" name="PhoneNumber">
                             <div class="row">
                                 <div class="col mb-6">
                                     <label class="form-label">UserName</label>
-                                    <input type="text" class="form-control" name="UserName" aria-describedby="-name">
+                                    <input type="text" class="form-control" name="UserName">
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Create</button>

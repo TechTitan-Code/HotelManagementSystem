@@ -25,8 +25,8 @@ namespace HotelManagementSystem.Controllers
             return View(product);
             //return View(new List<ProductDto>());
         }
-       
 
+        [HttpGet("create-product")]
         public async Task<IActionResult> CreateProduct()
         {
             var product = await _productServices.GetAllProductAsync();

@@ -1,6 +1,7 @@
 ﻿using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
+using HotelManagementSystem.Implementation.Services;
 using HotelManagementSystem.Model.Entity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,24 +12,23 @@ namespace HMS.Controllers
     {
         private readonly ICustomerServices _customerServices = customerServices;
 
-
+        [HttpGet("get-customer")]
         public async Task<IActionResult> Customers()
+        {
+            var customer = await _customerServices.GetCustomer();
+            return View(customer);
+        }
+
+        [HttpGet("create-customer")]
+        public async Task<IActionResult> CreateCustomer()
         {
             var response = await _customerServices.GetAllCustomerCreatedAsync();
             if (response.Success)
             {
-                return View(response.Data);
+                return View();
             }
-            return View(new List<CustomerDto>());
+            return BadRequest();
         }
-
-
-        [HttpGet]
-        public IActionResult CreateCustomer()
-        {
-            return View();
-        }
-
 
 
         [HttpPost("create-customer")]

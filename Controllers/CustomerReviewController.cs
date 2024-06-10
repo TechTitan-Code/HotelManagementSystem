@@ -22,7 +22,7 @@ namespace HMS.Controllers
             return View(review);
         }
 
-
+        [HttpGet("create-review")]
         public async Task<IActionResult> CreateReview()
         {
             var review = await _customerReviewService.GetAllReviewAsync();

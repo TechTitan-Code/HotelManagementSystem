@@ -21,8 +21,8 @@ namespace HotelManagementSystem.Controllers
         [HttpGet("get-booking")]
         public async Task<IActionResult> Bookings()
         {
-            var response = await _bookService.GetBooking();
-            return View(response);
+            var book = await _bookService.GetBooking();
+            return View(book);
         }
 
 
