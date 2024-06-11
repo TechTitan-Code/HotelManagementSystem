@@ -1,6 +1,7 @@
 ﻿using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
+using HotelManagementSystem.Model.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagementSystem.Controllers
@@ -24,13 +25,12 @@ namespace HotelManagementSystem.Controllers
            // return View(new List<OrderDto>());
         }
 
-        
+        [HttpGet("create-order")]
         public async Task<IActionResult> CreateOrder()
         {
             var order = await _orderServices.GetAllOrderAsync();
             if (order.Success)
             {
-                
                 return View();
             }
             return BadRequest();

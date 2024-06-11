@@ -27,7 +27,7 @@ namespace HMS.Implementation.Services
                 {
                     var order = new Order
                     {
-                        CustomerId = request.CustomerId,
+                        //CustomerId = request.CustomerId,
                         OrderDate = request.OrderDate,
                         ProductId = request.ProductId,
                         TotalAmount = request.TotalAmount

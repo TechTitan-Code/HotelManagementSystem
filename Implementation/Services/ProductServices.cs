@@ -194,7 +194,6 @@ namespace HotelManagementSystem.Implementation.Services
             item.Name = request.Name;
             item.Price = request.Price;
             _dbContext.Products.Update(item);
-
             if (await _dbContext.SaveChangesAsync() > 0)
             {
                 return new BaseResponse<ProductDto>
