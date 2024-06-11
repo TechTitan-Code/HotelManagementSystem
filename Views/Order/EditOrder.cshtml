@@ -9,7 +9,7 @@
 
 <form asp-action="EditCustomer" asp-controller="Customer">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="CustomerId" />
+    <input type="hidden" asp-for="Id" />
 
     <div class="form-group">
         <label asp-for="OrderDate"></label>
@@ -21,11 +21,6 @@
         <label asp-for="Product"></label>
         <input asp-for="Product" class="form-control" />
         <span asp-validation-for="Product" class="text-danger"></span>
-    </div>
-    <div class="form-group" hidden="hidden">
-        <label asp-for="CustomerId" class="control-label"></label>
-        <input asp-for="CustomerId" class="form-control" />
-        <span asp-validation-for="CustomerId" class="text-danger"></span>
     </div>
 
     <div class="form-group">

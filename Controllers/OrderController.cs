@@ -63,7 +63,7 @@ namespace HotelManagementSystem.Controllers
         public async Task<IActionResult> EditOrder(UpdateOrder request)
         {
 
-            var order = await _orderServices.UpdateOrder(request.CustomerId, request);
+            var order = await _orderServices.UpdateOrder(request.Id, request);
             if (order.Success)
             {
                 return RedirectToAction("Orders");

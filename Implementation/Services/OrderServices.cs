@@ -7,13 +7,13 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace HMS.Implementation.Services
-{ 
+{
     public class OrderServices : IOrderServices
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IProductServices _productServices;
 
-        public OrderServices(ApplicationDbContext dbContext , IProductServices productServices)
+        public OrderServices(ApplicationDbContext dbContext, IProductServices productServices)
         {
             _dbContext = dbContext;
             _productServices = productServices;
@@ -27,9 +27,8 @@ namespace HMS.Implementation.Services
                 {
                     var order = new Order
                     {
-                        //CustomerId = request.CustomerId,
+                        Product = request.Product,
                         OrderDate = request.OrderDate,
-                        ProductId = request.ProductId,
                         TotalAmount = request.TotalAmount
 
                     };
@@ -99,9 +98,8 @@ namespace HMS.Implementation.Services
             return await _dbContext.Orders
                 .Select(x => new OrderDto()
                 {
-                    CustomerId = x.CustomerId,
+                     Product = x.Product,
                     OrderDate = x.OrderDate,
-                    ProductId = x.ProductId,
                     TotalAmount = x.TotalAmount
                 })
                 .ToListAsync();
@@ -113,7 +111,6 @@ namespace HMS.Implementation.Services
             .Where(x => x.Id == Id)
             .Select(x => new OrderDto
             {
-                CustomerId = x.CustomerId,
                 OrderDate = x.OrderDate,
                 Product = x.Product,
                 TotalAmount = x.TotalAmount
@@ -152,7 +149,7 @@ namespace HMS.Implementation.Services
                     Success = true,
                     Data = new OrderDto
                     {
-                        CustomerId = order.CustomerId,
+
                         OrderDate = order.OrderDate,
                         Product = order.Product,
                         TotalAmount = order.TotalAmount
@@ -173,7 +170,7 @@ namespace HMS.Implementation.Services
             var order = await _dbContext.Orders
            .Select(x => new OrderDto
            {
-               CustomerId = x.CustomerId,
+
                OrderDate = x.OrderDate,
                Product = x.Product,
                TotalAmount = x.TotalAmount
@@ -204,14 +201,19 @@ namespace HMS.Implementation.Services
         public async Task<BaseResponse<IList<OrderDto>>> UpdateOrder(Guid Id, UpdateOrder request)
         {
             var order = await _dbContext.Orders.FirstOrDefaultAsync();
-            if (order != null)
+            if (order == null)
             {
-                order.CustomerId = request.CustomerId;
-                order.OrderDate = request.OrderDate;
-                order.Product = request.Product;
-                order.TotalAmount = request.TotalAmount;
+                return new BaseResponse<IList<OrderDto>>
+                {
+                    Success = true,
+                    Message = $"Order with ID {Id} Updated successfully.",
+
+                };
             }
-            _dbContext.Orders.Add(order);
+            order.OrderDate = request.OrderDate;
+            order.Product = request.Product;
+            order.TotalAmount = request.TotalAmount;
+            _dbContext.Orders.Update(order);
             if (await _dbContext.SaveChangesAsync() > 0)
             {
                 return new BaseResponse<IList<OrderDto>>
@@ -225,7 +227,7 @@ namespace HMS.Implementation.Services
                 return new BaseResponse<IList<OrderDto>>
                 {
                     Success = false,
-                    Message = $"Failed to Update order {request.CustomerId} ,there was an error in the updating process.",
+                    Message = $"Failed to Update order,there was an error in the updating process.",
                     Hasherror = true
                 };
             }
