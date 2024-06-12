@@ -1,0 +1,44 @@
+﻿@model HotelManagementSystem.Dto.UserDto
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <h2>User Details</h2>
+        @if (Model != null)
+        {
+            <dl class="row">
+                <dt class="col-sm-3">Name</dt>
+                <dd class="col-sm-9">@Model.Name</dd>
+
+                <dt class="col-sm-3">Address</dt>
+                <dd class="col-sm-9">@Model.Address</dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">@Model.Email</dd>
+
+                <dt class="col-sm-3">Phone Number</dt>
+                <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+                <dt class="col-sm-3">User Name</dt>
+                <dd class="col-sm-9">@Model.UserName</dd>
+
+                <dt class="col-sm-3">Date Of Birth</dt>
+                <dd class="col-sm-9">@Model.DateOfBirth.ToShortDateString()</dd>
+
+                <dt class="col-sm-3">Gender</dt>
+                <dd class="col-sm-9">@Model.Gender</dd>
+            </dl>
+        }
+        else
+        {
+            <p>User details are not available.</p>
+        }
+        <a href="@Url.Action("Users", "User")" class="btn btn-primary">Back to List</a>
+    </div>
+</div>
+
+

@@ -1,14 +1,14 @@
-﻿@model IEnumerable<HotelManagementSystem.Dto.CustomerDto>
+﻿@model IEnumerable<HotelManagementSystem.Dto.UserDto>
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Customer";
+    ViewData["Title"] = "User";
 }
 
 <!-- Recent Sales Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <a href="@Url.Action("CreateCustomer","Customer")" class="mb-0">Create Customer</a>
+            <a href="@Url.Action("CreateUser","User")" class="mb-0">Create User</a>
         </div>
         @if (Model != null && Model.Any())
         {
@@ -18,12 +18,13 @@
                         <tr class="text-white">
                             <th scope="col"><input class="form-check-input" type="checkbox"></th>
                             <th scope="col">Name</th>
-                            <th scope="col">Gender</th>
-                            <th scope="col">UserName</th>
-                            <th scope="col">PhoneNumber</th>
                             <th scope="col">Address</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Age</th>
+                            <th scope="col">Phone Number</th>
+                            <th scope="col">User Name</th>
+                            <th scope="col">Date Of Birth</th>
+                            <th scope="col">PassWord</th>
+                            <th scope="col">Gender</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -33,15 +34,17 @@
                             <tr>
                                 <td><input class="form-check-input" type="checkbox"></td>
                                 <td>@item.Name</td>
-                                <td>@item.Gender</td>
-                                <td>@item.UserName</td>
-                                <td>@item.PhoneNumber</td>
                                 <td>@item.Address</td>
                                 <td>@item.Email</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@item.UserName</td>
                                 <td>@item.DateOfBirth</td>
+                                <td>@item.Password</td>
+                                <td>@item.Gender</td>
                                 <td>
-                                    <a asp-action="EditCustomer" asp-route-id="@item.Id">Edit</a> |
-                                    <a asp-action="DeleteCustomer" asp-route-id="@item.Id">Delete</a>
+                                    <a asp-action="EditUser" asp-route-id="@item.Id">Edit</a> |
+                                    <a asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a>
+                                    <a asp-action="GetUserById" asp-route-id="@item.Id">ViewDetails</a>
                                 </td>
                             </tr>
                         }
@@ -51,7 +54,7 @@
         }
         else
         {
-            <h3>No customers available</h3>
+            <h3>No users available</h3>
         }
     </div>
 </div>

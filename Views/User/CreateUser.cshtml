@@ -1,45 +1,45 @@
-﻿@model HotelManagementSystem.Dto.UserDto
+﻿@model HotelManagementSystem.Dto.RequestModel.CreateUser
+
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Edit User";
+    ViewData["Title"] = "Create User";
 }
-
 
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-12 col-12">
             <div class="bg-secondary rounded h-100 p-4">
-                <h6 class="mb-4">Edit User</h6>
-                <form asp-controller="User" asp-action="EditUser">
+                <h6 class="mb-4">Create User</h6>
+                <form asp-controller="User" asp-action="CreateUser">
 
                     <div class="row">
                         <div class="col mb-6">
                             <label class="form-label">Name</label>
-                            <input type="text" class="form-control" name="Name" aria-describedby="name" value="@Model.Name">
+                            <input type="text" class="form-control" name="Name" aria-describedby="name">
                         </div>
                         <div class="col mb-6">
                             <label class="form-label">Address</label>
-                            <input type="text" class="form-control" name="Address" value="@Model.Address">
+                            <input type="text" class="form-control" name="Address">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col mb-6">
                             <label class="form-label">Email</label>
-                            <input type="text" class="form-control" name="Email" value="@Model.Email">
+                            <input type="text" class="form-control" name="Email">
                         </div>
                         <div class="col mb-6">
                             <label class="form-label">UserName</label>
-                            <input type="text" class="form-control" name="UserName" value="@Model.UserName">
+                            <input type="text" class="form-control" name="UserName">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col mb-3">
-                            <label class="form-label">Phone Number</label>
-                            <input type="text" class="form-control" name="PhoneNumber" value="@Model.PhoneNumber">
+                            <label class="form-label">passWord</label>
+                            <input type="password" class="form-control" name="PassWord">
                         </div>
                         <div class="col mb-3">
                             <label class="form-label">DateOfBirth</label>
-                            <input asp-for="DateOfBirth" class="form-control" value="@Model.DateOfBirth" type="date" />
+                            <input asp-for="DateOfBirth" class="form-control" type="date" />
                         </div>
                     </div>
                     <div class="row">
@@ -49,16 +49,18 @@
                                 <option value="">Select Gender</option>
                             </select>
                         </div>
+                        <div class="col mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" name="PhoneNumber">
+                        </div>
                     </div>
-
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    
+                    <button type="submit" class="btn btn-primary">Create</button>
                     <a href="@Url.Action("Users","User")" class="btn btn-dark">Show All</a>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-
 
 

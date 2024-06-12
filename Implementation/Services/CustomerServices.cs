@@ -43,7 +43,7 @@ namespace HMS.Implementation.Services
                         UserName = request.UserName,
                         Email = request.Email,
                         Address = request.Address,
-                        Age = request.Age,
+                        DateOfBirth = request.DateOfBirth,
                         Gender = request.Gender,
                         Name = request.Name,
                         Password = request.Password,
@@ -117,7 +117,7 @@ namespace HMS.Implementation.Services
                 .Select(x => new CustomerDto
                 {
                     Address = x.Address,
-                    Age = x.Age,
+                    DateOfBirth = x.DateOfBirth,
                     Email = x.Email,
                     Gender = x.Gender,
                     Name = x.Name,
@@ -157,7 +157,7 @@ namespace HMS.Implementation.Services
                 {
                     Id = x.Id,
                     Address = x.Address,
-                    Age = x.Age,
+                    DateOfBirth = x.DateOfBirth,
                     Email = x.Email,
                     Gender = x.Gender,
                     Name = x.Name,
@@ -180,7 +180,7 @@ namespace HMS.Implementation.Services
                     Data = new CustomerDto
                     {
                         Address = customer.Address,
-                        Age = customer.Age,
+                        DateOfBirth = customer.DateOfBirth,
                         Email = customer.Email,
                         Gender = customer.Gender,
                         Name = customer.Name,
@@ -206,7 +206,7 @@ namespace HMS.Implementation.Services
                .Select(x => new CustomerDto
                {
                    Address = x.Address,
-                   Age = x.Age,
+                   DateOfBirth = x.DateOfBirth,
                    Email = x.Email,
                    Gender = x.Gender,
                    Name = x.Name,
@@ -251,7 +251,7 @@ namespace HMS.Implementation.Services
             request.Address = request.Address;
             request.PhoneNumber = request.PhoneNumber;
             request.UserName = request.UserName;
-            request.Age = request.Age;
+            request.DateOfBirth = request.DateOfBirth;
             request.Email = request.Email;
             request.Gender = request.Gender;
             request.Password = request.Password;

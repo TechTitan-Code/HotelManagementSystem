@@ -32,7 +32,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     Gender = request.Gender,
                     Password = request.Password,
                     PhoneNumber = request.PhoneNumber,
-                    
+
                 };
                 _dbContext.Users.Add(user);
 
@@ -100,54 +100,102 @@ namespace HotelManagementSystem.Dto.Implementation.Services
         //    return _dbContext.SaveChanges() > 0 ? true : false;
         //}
 
-        public async Task<BaseResponse<IList<UserDto>>> GetUserByIdAsync(Guid Id)
+        //public async Task<BaseResponse<UserDto>> GetUserByIdAsync(Guid Id)
+        //{
+        //    try
+        //    {
+
+        //        var user = await _dbContext.Users
+        //        .Where(x => x.Id == Id)
+        //        .Select(x => new UserDto()
+        //        {
+        //            Address = x.Address,
+        //            DateOfBirth = x.DateOfBirth,
+        //            Email = x.Email,
+        //            Gender = x.Gender,
+        //            Name = x.Name,
+        //            Password = x.Password,
+        //            PhoneNumber = x.PhoneNumber,
+        //            Id = x.Id,
+        //            UserName = x.UserName,
+        //        }).ToListAsync();
+        //        if (user != null)
+        //        {
+        //            return new BaseResponse<UserDto>
+        //            {
+        //                Success = true,
+        //                Message = "User retrieved successfully",
+        //                Data = user
+
+        //            };
+        //        }
+
+        //        return new BaseResponse<UserDto>
+        //        {
+        //            Success = false,
+        //            Message = ""
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new BaseResponse<UserDto>
+        //        {
+        //            Success = false,
+        //            Message = "Failed to retrieve user ",
+        //            Hasherror = true
+        //        };
+
+        //    }
+
+        //}
+
+        public async Task<BaseResponse<UserDto>> GetUserByIdAsync(Guid id)
         {
             try
             {
-
                 var user = await _dbContext.Users
-                .Where(x => x.Id == Id)
-                .Select(x => new UserDto()
-                {
-                    Address = x.Address,
-                    DateOfBirth = x.DateOfBirth,
-                    Email = x.Email,
-                    Gender = x.Gender,
-                    Name = x.Name,
-                    Password = x.Password,
-                    PhoneNumber = x.PhoneNumber,
-                    UserId = x.Id,
-                    UserName = x.UserName,
-                }).ToListAsync();
+                    .Where(x => x.Id == id)
+                    .Select(x => new UserDto()
+                    {
+                        Address = x.Address,
+                        DateOfBirth = x.DateOfBirth,
+                        Email = x.Email,
+                        Gender = x.Gender,
+                        Name = x.Name,
+                        Password = x.Password,
+                        PhoneNumber = x.PhoneNumber,
+                        Id = x.Id,
+                        UserName = x.UserName,
+                    }).FirstOrDefaultAsync();
+
                 if (user != null)
                 {
-                    return new BaseResponse<IList<UserDto>>
+                    return new BaseResponse<UserDto>
                     {
                         Success = true,
                         Message = "User retrieved successfully",
                         Data = user
-
                     };
                 }
 
-                return new BaseResponse<IList<UserDto>>
+                return new BaseResponse<UserDto>
                 {
                     Success = false,
-                    Message = ""
+                    Message = "User not found"
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IList<UserDto>>
+                return new BaseResponse<UserDto>
                 {
                     Success = false,
-                    Message = "Failed to retrieve user ",
+                    Message = "Failed to retrieve user",
                     Hasherror = true
                 };
-
             }
-
         }
+
+
 
         public async Task<BaseResponse<UserDto>> GetUserAsync(Guid Id)
         {
@@ -161,7 +209,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     Data = new UserDto
                     {
 
-                        UserId = user.Id,
+                        Id = user.Id,
                         Address = user.Address,
                         DateOfBirth = user.DateOfBirth,
                         Email = user.Email,
@@ -195,7 +243,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                    Name = x.Name,
                    Password = x.Password,
                    PhoneNumber = x.PhoneNumber,
-                   UserId = x.Id,
+                   Id = x.Id,
                    UserName = x.UserName,
                }).ToListAsync();
                 return new BaseResponse<IList<UserDto>>
@@ -230,7 +278,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     DateOfBirth = x.DateOfBirth,
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
-                    UserId = x.Id,
+                    Id = x.Id,
                     UserName = x.UserName,
                     Password = x.Password
 

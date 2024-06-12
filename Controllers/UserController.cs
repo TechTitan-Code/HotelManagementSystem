@@ -17,14 +17,14 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("get-user")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Users()
         {
             var user = await _userServices.GetUser();
             return View(user);
         }
 
-
-        public async Task<IActionResult> Create()
+        [HttpGet("create-user")]
+        public async Task<IActionResult> CreateUser()
         {
             var user = await _userServices.GetAllUserAsync();
             if (user.Success)
@@ -45,7 +45,7 @@ namespace HotelManagementSystem.Controllers
          var user = await   _userServices.CreateUser(request);
             if (user.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Users");
             }
             return BadRequest();
         }
@@ -66,7 +66,7 @@ namespace HotelManagementSystem.Controllers
            var user = await _userServices.UpdateUser(request.Id, request);
             if (user.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Users");
             }
             return View(user);
         }
@@ -78,7 +78,7 @@ namespace HotelManagementSystem.Controllers
             var user = await _userServices.DeleteUserAsync(id);
             if (user.Success)
             {
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Users", "User");
             }
             return BadRequest(user);
         }
@@ -91,7 +91,7 @@ namespace HotelManagementSystem.Controllers
             var users = await _userServices.GetAllUserAsync();
             if (users.Success)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Users");
             }
             return View(users);
 
@@ -99,17 +99,28 @@ namespace HotelManagementSystem.Controllers
 
 
 
+        //[HttpGet("get-user-by-id/{id}")]
+        //public async Task<IActionResult> GetUserById(Guid id)
+        //{
+        //    var user = await _userServices.GetUserByIdAsync(id);
+        //    if (user.Success)
+        //    {
+        //        return RedirectToAction("Users");
+        //    }
+        //    return View(user);
+        //}
+
+
         [HttpGet("get-user-by-id/{id}")]
-        public async Task<IActionResult> GetUserByIdAsync(Guid id)
+        public async Task<IActionResult> GetUserById(Guid id)
         {
             var user = await _userServices.GetUserByIdAsync(id);
-            if (user.Success)
+            if (user.Success && user.Data != null)
             {
-                return RedirectToAction("Index");
+                return View(user.Data); 
             }
-            return View(user);
+            return RedirectToAction("Users"); 
         }
-
 
 
     }
