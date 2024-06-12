@@ -105,7 +105,7 @@ namespace HMS.Implementation.Services
                 .ToListAsync();
         }
 
-        public async Task<BaseResponse<IList<OrderDto>>> GetOrderByIdAsync(Guid Id)
+        public async Task<BaseResponse<OrderDto>> GetOrderByIdAsync(Guid Id)
         {
             var order = await _dbContext.Orders
             .Where(x => x.Id == Id)
@@ -114,11 +114,11 @@ namespace HMS.Implementation.Services
                 OrderDate = x.OrderDate,
                 Product = x.Product,
                 TotalAmount = x.TotalAmount
-            }).ToListAsync();
+            }).FirstOrDefaultAsync();
 
             if (order != null)
             {
-                return new BaseResponse<IList<OrderDto>>
+                return new BaseResponse<OrderDto>
                 {
                     Success = true,
                     Message = "Order Retrieved Succesfully",
@@ -127,7 +127,7 @@ namespace HMS.Implementation.Services
             }
             else
             {
-                return new BaseResponse<IList<OrderDto>>
+                return new BaseResponse<OrderDto>
                 {
                     Success = false,
                     Message = "Failed to retrieve order , there was an error in the retrieval process",

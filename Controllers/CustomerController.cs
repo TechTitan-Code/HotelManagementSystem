@@ -98,15 +98,15 @@ namespace HMS.Controllers
 
 
         [HttpGet("get-customer-by-id/{id}")]
-        public async Task<IActionResult> GetCustomerByIdAsync(Guid id)
+        public async Task<IActionResult> GetCustomerById(Guid id)
         {
             var customer = await _customerServices.GetCustomerByIdAsync(id);
             if (customer.Success)
             {
-                return View(customer);
+                return View(customer.Data);
             }
 
-            return BadRequest();
+            return RedirectToAction("Customers");
 
         }
 

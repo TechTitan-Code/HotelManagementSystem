@@ -114,17 +114,14 @@ namespace HotelManagementSystem.Controllers
         }
 
         [HttpGet("get-booking-by-id/{id}")]
-        public async Task<IActionResult> GetBookingByIdAsync(Guid id)
+        public async Task<IActionResult> GetBookingById(Guid id)
         {
             var bookings = await _bookService.GetBookingByIdAsync(id);
-            if (bookings.Success == false)
+            if (bookings.Success)
             {
-                return Ok(bookings);
+                return View(bookings.Data);
             }
-            else
-            {
-                return BadRequest(bookings);
-            }
+            return RedirectToAction("Booking");
         }
 
 

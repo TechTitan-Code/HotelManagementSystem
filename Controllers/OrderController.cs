@@ -110,12 +110,9 @@ namespace HotelManagementSystem.Controllers
             var order = await _orderServices.GetOrderByIdAsync(Id);
             if (order.Success)
             {
-                return View(order);
+                return View(order.Data);
             }
-            else
-            {
-                return BadRequest(order);
-            }
+            return RedirectToAction("Orders");
         }
 
 

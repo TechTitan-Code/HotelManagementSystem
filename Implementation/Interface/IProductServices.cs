@@ -9,7 +9,7 @@ namespace HotelManagementSystem.Implementation.Interface
         Task<BaseResponse<Guid>> CreateProduct(CreateProduct request);
         Task<BaseResponse<Guid>> DeleteProductAsync(Guid Id);
         
-        Task<BaseResponse<IList<ProductDto>>> GetAllProductsByIdAsync(Guid Id);
+        Task<BaseResponse<ProductDto>> GetAllProductsByIdAsync(Guid Id);
         Task<BaseResponse<ProductDto>> GetProductAsync(Guid Id);
         Task<BaseResponse<IList<ProductDto>>> GetAllProductAsync();
         Task<List<ProductDto>> GetProduct();

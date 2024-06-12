@@ -90,7 +90,7 @@ namespace HMS.Implementation.Services
                 }).ToList();
         }
 
-        public async Task<BaseResponse<IList<AmenityDto>>> GetAmenityBYId(Guid Id)
+        public async Task<BaseResponse<AmenityDto>> GetAmenityBYId(Guid Id)
         {
             var amenity = await _dbContext.Amenities
             .Where(x => x.Id == Id)
@@ -99,18 +99,19 @@ namespace HMS.Implementation.Services
                 AmenityName = x.AmenityName,
                 AmenityType = x.AmenityType,
 
-            }).ToListAsync();
+            }).FirstOrDefaultAsync();
             if (amenity != null)
             {
-                return new BaseResponse<IList<AmenityDto>>
+                return new BaseResponse<AmenityDto>
                 {
                     Success = true,
-                    Message = "Successful"
+                    Message = "Successful",
+                    Data = amenity
                 };
             }
             else
             {
-                return new BaseResponse<IList<AmenityDto>>
+                return new BaseResponse<AmenityDto>
                 {
                     Success = false,
                     Message = "Successful"

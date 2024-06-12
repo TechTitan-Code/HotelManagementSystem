@@ -110,7 +110,7 @@ namespace HMS.Implementation.Services
 
 
 
-        public async Task<BaseResponse<IList<CustomerDto>>> GetCustomerByIdAsync(Guid Id)
+        public async Task<BaseResponse<CustomerDto>> GetCustomerByIdAsync(Guid Id)
         {
             var customer = await _dbContext.Customers
                 .Where(x => x.Id == Id)
@@ -124,11 +124,11 @@ namespace HMS.Implementation.Services
                     Password = x.Password,
                     PhoneNumber = x.PhoneNumber,
                     UserName = x.UserName,
-                }).ToListAsync();
-            if (customer.Any())
+                }).FirstOrDefaultAsync();
+            if (customer != null)
             {
-                var customers = customer.First();
-                return new BaseResponse<IList<CustomerDto>>
+                
+                return new BaseResponse<CustomerDto>
                 {
                     Success = true,
                     Message = $"Customer with ID {Id} retrieved successfully.",
@@ -137,7 +137,7 @@ namespace HMS.Implementation.Services
             }
             else
             {
-                return new BaseResponse<IList<CustomerDto>>
+                return new BaseResponse<CustomerDto>
                 {
                     Success = false,
                     Message = $"Failed to retrieve customer with ID {Id}.The customer may not exist or there was an error in the retrieval process.",

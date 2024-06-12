@@ -199,7 +199,7 @@ namespace HotelManagementSystem.Implementation.Services
 
 
 
-        public async Task<BaseResponse<IList<RoomDto>>> GetRoomsByIdAsync(Guid Id)
+        public async Task<BaseResponse<RoomDto>> GetRoomsByIdAsync(Guid Id)
         {
 
             var rooms = await _dbContext.Rooms
@@ -215,21 +215,21 @@ namespace HotelManagementSystem.Implementation.Services
                  BedType = x.BedType,
                  RoomType = x.RoomType,
                  MaxOccupancy = x.MaxOccupancy,
-                // Amenity = x.Amenity
-             }).ToListAsync();
+                 // Amenity = x.Amenity
+             }).FirstOrDefaultAsync();
             if (rooms != null)
             {
-                return new BaseResponse<IList<RoomDto>>
+                return new BaseResponse<RoomDto>
                 {
                     Success = true,
                     Message = $"Room {Id} Retrieved succesfully",
-
+                    Data = rooms
 
                 };
             }
             else
             {
-                return new BaseResponse<IList<RoomDto>>
+                return new BaseResponse<RoomDto>
                 {
                     Success = false,
                     Message = $"Room {Id} Retrieval Failed"

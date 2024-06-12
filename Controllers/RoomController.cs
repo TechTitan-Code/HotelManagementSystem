@@ -101,14 +101,14 @@ namespace HotelManagementSystem.Controllers
         }
 
         [HttpGet("room/{id}")]
-        public async Task<IActionResult> GetRoomsByIdAsync(Guid id)
+        public async Task<IActionResult> GetRoomsById(Guid id)
         {
             var rooms = await _roomService.GetRoomsByIdAsync(id);
             if (rooms!= null)
             {
-                return View(rooms);
+                return View(rooms.Data);
             }
-            return BadRequest(rooms);
+            return RedirectToAction("Rooms");
         }
     }
 

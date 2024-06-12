@@ -8,7 +8,7 @@ namespace HotelManagementSystem.Implementation.Interface
     {
         Task<BaseResponse<Guid>> CreateBooking(CreateBooking request, Guid Id);
         Task<BaseResponse<Guid>> DeleteBookingAsync(Guid Id);
-        Task<BaseResponse<IList<BookingDto>>> GetBookingByIdAsync(Guid Id);
+        Task<BaseResponse<BookingDto>> GetBookingByIdAsync(Guid Id);
         Task<BaseResponse<IList<BookingDto>>> GetAllBookingsAsync();
         Task<BaseResponse<BookingDto>> UpdateBooking(Guid Id, UpdateBooking request);
         Task<BaseResponse<BookingDto>> GetBookingAsync(Guid Id);

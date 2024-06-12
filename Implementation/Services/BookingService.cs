@@ -204,7 +204,7 @@ namespace HotelManagementSystem.Implementation.Services
         }
 
 
-        public async Task<BaseResponse<IList<BookingDto>>> GetBookingByIdAsync(Guid Id)
+        public async Task<BaseResponse<BookingDto>> GetBookingByIdAsync(Guid Id)
         {
             var bookings = await _dbContext.Bookings
              .Where(x => x.Id == Id)
@@ -216,10 +216,10 @@ namespace HotelManagementSystem.Implementation.Services
                  Status = x.Status,
                  TotalCost = x.TotalCost,
                  //  Id = x.RoomId,
-             }).ToListAsync();
+             }).FirstOrDefaultAsync();
             if (bookings != null)
             {
-                return new BaseResponse<IList<BookingDto>>
+                return new BaseResponse<BookingDto>
                 {
                     Success = true,
                     Message = "Bookings Retrieved Succesfully",
@@ -228,7 +228,7 @@ namespace HotelManagementSystem.Implementation.Services
             }
             else
             {
-                return new BaseResponse<IList<BookingDto>>
+                return new BaseResponse<BookingDto>
                 {
                     Success = false,
                     Message = "Booking Retrieved Failed",

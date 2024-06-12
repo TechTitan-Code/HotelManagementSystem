@@ -112,12 +112,9 @@ namespace HotelManagementSystem.Controllers
             var product = await _productServices.GetAllProductsByIdAsync(id);
             if (product.Success == false)
             {
-                return View(product);
+                return View(product.Data);
             }
-            else
-            {
-                return BadRequest(product);
-            }
+            return RedirectToAction("Products");
         }
 
 

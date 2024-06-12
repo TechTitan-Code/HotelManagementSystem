@@ -90,7 +90,7 @@ namespace HotelManagementSystem.Implementation.Services
             }
         }
 
-        public async Task<BaseResponse<IList<ProductDto>>> GetAllProductsByIdAsync(Guid Id)
+        public async Task<BaseResponse<ProductDto>> GetAllProductsByIdAsync(Guid Id)
         {
 
             var item = await _dbContext.Products
@@ -99,10 +99,10 @@ namespace HotelManagementSystem.Implementation.Services
                 {
                     Name = x.Name,
                     Price = x.Price,
-                }).ToListAsync();
+                }).FirstOrDefaultAsync();
             if (item != null)
             {
-                return new BaseResponse<IList<ProductDto>>
+                return new BaseResponse<ProductDto>
                 {
                     Success = true,
                     Message = "Products Retrieved Succesfully",
@@ -111,7 +111,7 @@ namespace HotelManagementSystem.Implementation.Services
             }
             else
             {
-                return new BaseResponse<IList<ProductDto>>
+                return new BaseResponse<ProductDto>
                 {
                     Success = false,
                     Message = "Retrieved Failed",

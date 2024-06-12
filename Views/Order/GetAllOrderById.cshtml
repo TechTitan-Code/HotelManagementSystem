@@ -1,0 +1,30 @@
+﻿@model HotelManagementSystem.Dto.OrderDto
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Order Details";
+}
+
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <h2>Order Details</h2>
+        @if (Model != null)
+        {
+            <dl class="row">
+                <dt class="col-sm-3">NProduct</dt>
+                <dd class="col-sm-9">@Model.Product</dd>
+
+                <dt class="col-sm-3">Order Date</dt>
+                <dd class="col-sm-9">@Model.OrderDate</dd>
+
+                <dt class="col-sm-3">Total Amount</dt>
+                <dd class="col-sm-9">@Model.TotalAmount</dd
+            </dl>
+        }
+        else
+        {
+            <p>order details are not available.</p>
+        }
+        <a href="@Url.Action("Orders", "Order")" class="btn btn-primary">Back to List</a>
+    </div>
+</div>

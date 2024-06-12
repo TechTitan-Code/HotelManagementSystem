@@ -102,17 +102,14 @@ public class AmenityController : Controller
     }
 
     [HttpGet("get-booking-by-id/{id}")]
-    public async Task<IActionResult> GetAllAmenity() 
+    public async Task<IActionResult> GetAllAmenityById() 
     {
         var amenity = await _amenityService.GetAllAmenity();
         if (amenity.Success == false)
         {
-            return Ok(amenity);
+            return View(amenity.Data);
         }
-        else
-        {
-            return BadRequest(amenity);
-        }
+        return RedirectToAction("Amenities");
     }
 
 

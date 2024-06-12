@@ -8,7 +8,7 @@ namespace HotelManagementSystem.Implementation.Interface
     {
         Task<BaseResponse<Guid>> CreateCustomer(CreateCustomer request);
         Task<BaseResponse<Guid>> DeleteCustomerAsync(Guid Id);
-        Task<BaseResponse<IList<CustomerDto>>> GetCustomerByIdAsync(Guid Id);
+        Task<BaseResponse<CustomerDto>> GetCustomerByIdAsync(Guid Id);
         Task<BaseResponse<CustomerDto>> GetCustomerAsync(Guid Id);
         Task<BaseResponse<IList<CustomerDto>>> GetAllCustomerCreatedAsync();
         Task<BaseResponse<CustomerDto>> UpdateCustomer(Guid Id, UpdateCustomer request);
