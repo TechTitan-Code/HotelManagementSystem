@@ -121,7 +121,7 @@ namespace HotelManagementSystem.Controllers
             {
                 return View(bookings.Data);
             }
-            return RedirectToAction("Booking");
+            return RedirectToAction("Bookings");
         }
 
 

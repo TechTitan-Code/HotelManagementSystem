@@ -110,7 +110,7 @@ namespace HotelManagementSystem.Controllers
         public async Task<IActionResult> GetAllProductById(Guid id)
         {
             var product = await _productServices.GetAllProductsByIdAsync(id);
-            if (product.Success == false)
+            if (product.Success)
             {
                 return View(product.Data);
             }

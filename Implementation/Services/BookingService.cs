@@ -211,9 +211,10 @@ namespace HotelManagementSystem.Implementation.Services
              .Select(x => new BookingDto()
              {
 
-                 CheckIn = x.CheckIn,
-                 Checkout = x.Checkout,
+                 //CheckIn = x.CheckIn,
+                 //Checkout = x.Checkout,
                  Status = x.Status,
+                  Rooms = x.Rooms,
                  TotalCost = x.TotalCost,
                  //  Id = x.RoomId,
              }).FirstOrDefaultAsync();

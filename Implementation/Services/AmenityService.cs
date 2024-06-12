@@ -123,7 +123,7 @@ namespace HMS.Implementation.Services
 
         public async Task<BaseResponse<AmenityDto>> GetAmenityAsync(Guid Id)
         {
-            var roomAmenity = await _dbContext.Amenities.FirstOrDefaultAsync(x => x.Id == Id);
+            var roomAmenity = await _dbContext.Amenities.FirstOrDefaultAsync(x=> x.Id == Id);
             if (roomAmenity != null)
             {
                 return new BaseResponse<AmenityDto>
