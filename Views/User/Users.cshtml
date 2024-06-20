@@ -23,7 +23,6 @@
                             <th scope="col">Phone Number</th>
                             <th scope="col">User Name</th>
                             <th scope="col">Date Of Birth</th>
-                            <th scope="col">PassWord</th>
                             <th scope="col">Gender</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -39,11 +38,10 @@
                                 <td>@item.PhoneNumber</td>
                                 <td>@item.UserName</td>
                                 <td>@item.DateOfBirth</td>
-                                <td>@item.Password</td>
                                 <td>@item.Gender</td>
                                 <td>
                                     <a asp-action="EditUser" asp-route-id="@item.Id">Edit</a> |
-                                    <a asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a>
+                                    <a asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a> |
                                     <a asp-action="GetUserById" asp-route-id="@item.Id">ViewDetails</a>
                                 </td>
                             </tr>

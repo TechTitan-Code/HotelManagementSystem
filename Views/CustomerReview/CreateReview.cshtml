@@ -19,7 +19,10 @@
                             <input type="text" class="form-control" name="comment" aria-describedby="comment">
                         </div>
                         <div class="col mb-6">
-                            <label class="form-label">Rating </label>
+                            <label asp-for="Rating"></label>
+                            <select asp-for="Rating" class="form-select" asp-items="Html.GetEnumSelectList<HotelManagementSystem.Model.Entity.Enum.Review>()">
+                                <option value=""></option>
+                            </select>
                             <input type="text" class="form-control" name="rating">
                         </div>
                     </div>

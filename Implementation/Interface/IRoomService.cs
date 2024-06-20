@@ -13,7 +13,7 @@ namespace HotelManagementSystem.Implementation.Interface
         Task<BaseResponse<IList<RoomDto>>> GetAllRoomsCreatedAsync();
         Task<BaseResponse<RoomDto>> GetRoomsByIdAsync(Guid Id);
         Task<BaseResponse<RoomDto>> UpdateRoom(Guid Id, UpdateRoom request);
-        Task<List<SelectAmenity>> GetAmenity();
+        //Task<List<SelectAmenity>> GetAmenity();
         List<SelectAmenityDto> GetAmenitySelect();
 
     }

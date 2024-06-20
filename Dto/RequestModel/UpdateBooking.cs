@@ -9,7 +9,9 @@ namespace HotelManagementSystem.Dto.RequestModel
         //public DateTime Checkout { get; set; }
         public RoomStatus Status { get; set; }
         public decimal TotalCost { get; set; }
-        public int RoomId { get; set; } = 0;
+        public Guid RoomId { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
 
     }
 }

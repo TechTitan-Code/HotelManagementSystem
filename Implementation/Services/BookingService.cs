@@ -1,4 +1,5 @@
-﻿using HotelManagementSystem.Dto;
+﻿using Azure.Core;
+using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Implementation.Interface;
@@ -75,8 +76,9 @@ namespace HotelManagementSystem.Implementation.Services
                 {
                     //CheckIn = request.CheckIn,
                     // Checkout = request.Checkout,
-                    Status = request.Status,
                     RoomId = request.RoomId,
+                    Email = request.Email,
+                    PhoneNumber = request.PhoneNumber,
                     TotalCost = request.TotalCost,
 
                 };
@@ -124,9 +126,10 @@ namespace HotelManagementSystem.Implementation.Services
                     // Id = x.Id,
                     CheckIn = x.CheckIn,
                     Checkout = x.Checkout,
-                    Status = x.Status,
-                    Rooms = x.Rooms
-
+                    RoomId = x.RoomId,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    TotalCost = x.TotalCost,
 
                 }).ToList();
         }
@@ -190,8 +193,10 @@ namespace HotelManagementSystem.Implementation.Services
                     {
                         TotalCost = booking.TotalCost,
                         CheckIn = booking.CheckIn,
-                        Status = booking.Status,
-                        Checkout = booking.Checkout
+                        Checkout = booking.Checkout,
+                        RoomId = booking.RoomId,
+                        Email = booking.Email,
+                        PhoneNumber = booking.PhoneNumber,
                     }
 
                 };
@@ -213,10 +218,11 @@ namespace HotelManagementSystem.Implementation.Services
 
                  //CheckIn = x.CheckIn,
                  //Checkout = x.Checkout,
-                 Status = x.Status,
-                  Rooms = x.Rooms,
+                 Rooms = x.Rooms,
+                 RoomId = x.RoomId,
+                 Email = x.Email,
+                 PhoneNumber = x.PhoneNumber,
                  TotalCost = x.TotalCost,
-                 //  Id = x.RoomId,
              }).FirstOrDefaultAsync();
             if (bookings != null)
             {
@@ -247,9 +253,10 @@ namespace HotelManagementSystem.Implementation.Services
 
                 CheckIn = x.CheckIn,
                 Checkout = x.Checkout,
-                Status = x.Status,
                 TotalCost = x.TotalCost,
-                // RoomId = x.RoomId,
+                RoomId = x.RoomId,
+                Email = x.Email,
+                PhoneNumber = x.PhoneNumber,
             }).ToListAsync();
             if (booking != null)
             {
@@ -285,8 +292,10 @@ namespace HotelManagementSystem.Implementation.Services
             }
             //booking.CheckIn = request.CheckIn;
             //booking.Checkout = request.Checkout;
-            booking.Status = request.Status;
             booking.TotalCost = request.TotalCost;
+            booking.RoomId = request.RoomId;
+            booking.PhoneNumber = request.PhoneNumber;
+            booking.Email = request.Email;
             _dbContext.Bookings.Update(booking);
 
             if (await _dbContext.SaveChangesAsync() > 0)

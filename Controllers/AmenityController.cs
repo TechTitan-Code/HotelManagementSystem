@@ -103,7 +103,7 @@ public class AmenityController : Controller
 
     [HttpGet("get-amenity-by-id/{id}")]
     public async Task<IActionResult> GetAmenityBYId(Guid Id) 
-    {
+        {
         var amenity = await _amenityService.GetAmenityBYId( Id);
         if (amenity.Success)
         {

@@ -35,6 +35,7 @@ namespace HotelManagementSystem.Implementation.Services
             {
                 // CustomerId = request.Id,
                 Comment = request.Comment,
+                Rating = request.Rating,
 
 
             };
