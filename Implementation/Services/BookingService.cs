@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using HMS.Implementation.Services;
 using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
@@ -11,98 +12,88 @@ namespace HotelManagementSystem.Implementation.Services
     public class BookingService : IBookingServices
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ICustomerServices _customerServices;
-        private readonly IRoomService _roomService;
 
-        public BookingService(ApplicationDbContext dbContext, ICustomerServices customerServices, IRoomService roomService)
+        public BookingService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _customerServices = customerServices;
-            _roomService = roomService;
         }
 
 
-        public async Task<BaseResponse<Guid>> CreateBooking(CreateBooking request, Guid Id)
+        public async Task<BaseResponse<Guid>> CreateBooking(CreateBooking request)
         {
-            if (request != null)
+            if (request == null)
             {
-
-                // Check if the customer is registered
-
-                //var customer = await _customerServices.GetCustomerByIdAsync(Id);
-                //if (customer.Data == null)
-                //{
-                //    return new BaseResponse<Guid>
-                //    {
-                //        Success = false,
-                //        Message = "Booking Failed. Customer is not registered.",
-                //        //Hasherror = true
-                //    };
-                //}
-
-
-                foreach (var room in request.Rooms)
+                return new BaseResponse<Guid>
                 {
-                    var roomDetails = await _roomService.GetRoomsByIdAsync(room.RoomId);
-                    if (roomDetails == null)
-                    {
-                        return new BaseResponse<Guid>
-                        {
-                            Success = false,
-                            Message = "Booking Failed. The room is not available.",
-                            Hasherror = true
-                        };
-                    }
-                }
-
-                //var existingBooking = _dbContext.Bookings.FirstOrDefault(x =>
-                //   //x.CheckIn == request.CheckIn &&
-                //   //x.Checkout == request.Checkout &&
-                //   x.Status == request.Status);
-
-                //if (existingBooking != null)
-                //{
-                //    // Booking already exists
-                //    return new BaseResponse<Guid>
-                //    {
-                //        Success = true,
-                //        Message = "Booking already exists.",
-                //        Hasherror = true
-                //    };
-
-                //}
-
-                var booking = new Booking()
-                {
-                    //CheckIn = request.CheckIn,
-                    // Checkout = request.Checkout,
-                    RoomId = request.RoomId,
-                    Email = request.Email,
-                    PhoneNumber = request.PhoneNumber,
-                    TotalCost = request.TotalCost,
-
+                    Success = false,
+                    Message = "Booking Failed, request is null.",
+                    Hasherror = true
                 };
-                _dbContext.Bookings.Add(booking);
+            }
 
+            //// Check if the customer is registered
+            //var customer = await _customerServices.GetCustomerByEmailAsync(request.Email);
+            //if (customer.Data == null)
+            //{
+            //    return new BaseResponse<Guid>
+            //    {
+            //        Success = false,
+            //        Message = "Booking Failed. Customer is not registered.",
+            //        Hasherror = true
+            //    };
+            //}
 
+            //foreach (var room in request.Rooms)
+            //{
+            //    var roomDetails = await _roomService.GetRoomByIdAsync(room.RoomId);
+            //    if (roomDetails == null)
+            //    {
+            //        return new BaseResponse<Guid>
+            //        {
+            //            Success = false,
+            //            Message = "Booking Failed. The room is not available.",
+            //            Hasherror = true
+            //        };
+            //    }
+            //}
 
-                if (await _dbContext.SaveChangesAsync() > 0)
+            //var existingBooking = _dbContext.Bookings.FirstOrDefault(x =>
+            //    x.CheckIn == request.CheckIn &&
+            //    x.Checkout == request.Checkout &&
+            //    x.Status == request.Status);
+
+            //if (existingBooking != null)
+            //{
+            //    // Booking already exists
+            //    return new BaseResponse<Guid>
+            //    {
+            //        Success = true,
+            //        Message = "Booking already exists.",
+            //        Hasherror = true
+            //    };
+            //}
+
+            var booking = new Booking()
+            {
+                CheckIn = request.CheckIn,
+                Checkout = request.Checkout,
+                RoomId = request.RoomId,
+                Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
+                TotalCost = request.TotalCost,
+                Rooms = request.Rooms.Select(r => new Room { RoomId = r.RoomId }).ToList()
+            };
+
+            _dbContext.Bookings.Add(booking);
+
+            if (await _dbContext.SaveChangesAsync() > 0)
+            {
+                return new BaseResponse<Guid>
                 {
-                    return new BaseResponse<Guid>
-                    {
-                        Success = true,
-                        Message = "Your booking  has been successful"
-                    };
-                }
-                else
-                {
-                    return new BaseResponse<Guid>
-                    {
-                        Success = false,
-                        Message = "Booking Failed, unable to complete your booking request.",
-                        Hasherror = true
-                    };
-                }
+                    Success = true,
+                    Message = "Your booking has been successful",
+                    Data = booking.Id
+                };
             }
             else
             {
@@ -114,6 +105,7 @@ namespace HotelManagementSystem.Implementation.Services
                 };
             }
         }
+
 
 
         public async Task<List<BookingDto>> GetBooking()
@@ -178,6 +170,7 @@ namespace HotelManagementSystem.Implementation.Services
 
             return result;
         }
+
 
 
         public async Task<BaseResponse<BookingDto>> GetBookingAsync(Guid Id)

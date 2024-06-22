@@ -12,4 +12,5 @@ namespace HotelManagementSystem.Model.Entity
         public Guid RoomId { get; set; }
         public ICollection<Room> Rooms { get; set; } = new List<Room>();
     }
+
 }

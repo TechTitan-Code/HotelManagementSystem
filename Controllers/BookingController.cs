@@ -42,15 +42,16 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpPost("create-booking")]
-        public async Task<IActionResult> CreateBooking(CreateBooking request, Guid Id)
+        public async Task<IActionResult> CreateBooking(CreateBooking request)
         {
-            var booking = await _bookService.CreateBooking(request, Id);
+            var booking = await _bookService.CreateBooking(request);
             if (booking.Success)
             {
                 return RedirectToAction("Bookings");
             }
             return BadRequest();
         }
+
 
 
         [HttpGet("edit-booking/{id}")]

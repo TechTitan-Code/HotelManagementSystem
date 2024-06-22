@@ -6,6 +6,7 @@ namespace HotelManagementSystem.Model.Entity
     {
         public string RoomName { get; set; }
         public int RoomNumber { get; set; }
+        public Guid RoomId { get; set; }
         public int RoomCount { get; set; }
         public RoomType RoomType { get; set; }
         public BedType BedType { get; set; }
