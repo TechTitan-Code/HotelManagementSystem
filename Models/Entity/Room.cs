@@ -17,6 +17,5 @@ namespace HotelManagementSystem.Model.Entity
         public bool Availability { get; set; } 
 
         public ICollection<Amenity> Amenities { get; set; }
-
     }
 }

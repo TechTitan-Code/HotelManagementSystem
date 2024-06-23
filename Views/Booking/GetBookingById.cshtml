@@ -4,7 +4,7 @@
     ViewData["Title"] = "Booking Details";
 }
 
-div class="container-fluid pt-4 px-4">
+<div class="container-fluid pt-4 px-4">
 <div class="bg-secondary text-center rounded p-4">
     <h2>Booking Details</h2>
     @if (Model != null)
@@ -14,7 +14,12 @@ div class="container-fluid pt-4 px-4">
             <dd class="col-sm-9">@Model.Rooms</dd>
 
             <dt class="col-sm-3">Total Cost</dt>
-            <dd class="col-sm-9">@Model.TotalCost</dd>
+            <dd class="col-sm-9">@Model.TotalCost</dd> 
+            <dt class="col-sm-3">Phone Number</dt>
+            <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
         </dl>
     }
     else

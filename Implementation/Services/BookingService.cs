@@ -202,6 +202,7 @@ namespace HotelManagementSystem.Implementation.Services
         }
 
 
+
         public async Task<BaseResponse<BookingDto>> GetBookingByIdAsync(Guid Id)
         {
             var bookings = await _dbContext.Bookings
@@ -211,6 +212,7 @@ namespace HotelManagementSystem.Implementation.Services
 
                  //CheckIn = x.CheckIn,
                  //Checkout = x.Checkout,
+                  Id = x.Id,
                  Rooms = x.Rooms,
                  RoomId = x.RoomId,
                  Email = x.Email,
@@ -271,6 +273,7 @@ namespace HotelManagementSystem.Implementation.Services
                 };
             }
         }
+
 
         public async Task<BaseResponse<BookingDto>> UpdateBooking(Guid Id, UpdateBooking request)
         {
