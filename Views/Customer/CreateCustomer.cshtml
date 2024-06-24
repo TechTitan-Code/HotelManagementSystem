@@ -33,32 +33,32 @@
                                 <select asp-for="Gender" class="form-select" asp-items="Html.GetEnumSelectList<HotelManagementSystem.Model.Entity.Enum.Gender>()">
                                     <option value="">Select Gender</option>
                                 </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="text" class="form-control" name="Email">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="text" class="form-control" name="Email">
+                            </div>
+                            <div class="col mb-3">
+                                <label class="form-label">PassWord</label>
+                                <input type="password" class="form-control" name="PassWord">
+                            </div>
                         </div>
-                        <div class="col mb-3">
-                            <label class="form-label">PassWord</label>
-                            <input type="password" class="form-control" name="PassWord">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col mb-3">
-                            <label class="form-label">PhoneNumber</label>
-                            <input type="text" class="form-control" name="PhoneNumber">
-                            <div class="row">
-                                <div class="col mb-6">
-                                    <label class="form-label">UserName</label>
-                                    <input type="text" class="form-control" name="UserName">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label class="form-label">PhoneNumber</label>
+                                <input type="text" class="form-control" name="PhoneNumber">
+                                <div class="row">
+                                    <div class="col mb-6">
+                                        <label class="form-label">UserName</label>
+                                        <input type="text" class="form-control" name="UserName">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="mt-3">
-                            <button type="submit" class="btn btn-primary">Create</button>
-                            <a href="@Url.Action("Customers","Customer")" class="btn btn-dark" ms-2>Show All</a>
-                            </div>
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-primary">Create</button>
+                                    <a href="@Url.Action("Customers","Customer")" class="btn btn-dark" ms-2>Show All</a>
+                                </div>
                 </form>
             </div>
         </div>

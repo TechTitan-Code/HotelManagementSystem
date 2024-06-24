@@ -10,7 +10,7 @@ namespace HotelManagementSystem.Model.Entity
         public string PhoneNumber { get; set; }
         public decimal TotalCost { get; set; }
         public Guid RoomId { get; set; }
-        public ICollection<Room> Rooms { get; set; } = new List<Room>();
+        public Room Rooms { get; set; } 
     }
 
 }

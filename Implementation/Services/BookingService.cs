@@ -85,7 +85,7 @@ namespace HotelManagementSystem.Implementation.Services
                 Email = request.Email,
                 PhoneNumber = request.PhoneNumber,
                 TotalCost = room.RoomRate,
-                Rooms = request.Rooms.Select(r => new Room { RoomId = r.RoomId }).ToList()
+               // Rooms = request.Rooms.Select(r => new Room { RoomId = r.RoomId }).ToList()
             };
 
             _dbContext.Bookings.Add(booking);
@@ -126,6 +126,7 @@ namespace HotelManagementSystem.Implementation.Services
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     TotalCost = x.TotalCost,
+                    RoomName = x.Rooms.RoomName,
 
                 }).ToList();
         }

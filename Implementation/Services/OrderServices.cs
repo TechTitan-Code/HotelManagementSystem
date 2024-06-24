@@ -175,7 +175,7 @@ namespace HMS.Implementation.Services
                 {
                     OrderDate = x.OrderDate,
                     TotalAmount = x.TotalAmount,
-                   // Product = x.Product,
+                    ProductName = x.Products.Name,
                 })
                 .ToListAsync();
         }
@@ -286,7 +286,7 @@ namespace HMS.Implementation.Services
                 };
             }
             order.OrderDate = request.OrderDate;
-            order.Product = request.Product;
+            //order.Product = request.Product;
             order.TotalAmount = request.TotalAmount;
             _dbContext.Orders.Update(order);
             if (await _dbContext.SaveChangesAsync() > 0)

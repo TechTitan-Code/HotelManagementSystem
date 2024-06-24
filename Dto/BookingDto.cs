@@ -13,7 +13,7 @@ namespace HotelManagementSystem.Dto
         public Guid RoomId { get; set; }
         public RoomStatus Status { get; set; } = RoomStatus.Pending;
         public decimal TotalCost { get; set; }
-        public ICollection<Room> Rooms { get; set; } = new List<Room>();
+        public string RoomName { get; set; }
+        public Room Rooms { get; set; }
     }
-
 }
