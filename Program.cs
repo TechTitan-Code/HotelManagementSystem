@@ -23,6 +23,7 @@ builder.Services.AddTransient<IOrderServices, OrderServices>();
 builder.Services.AddTransient<IProductServices, ProductServices>();
 builder.Services.AddTransient<ICustomerReviewService, CustomerReviewService>();
 builder.Services.AddTransient<IAmenityService , AmenityService>();
+builder.Services.AddTransient<IPaymentServices , PaymentServices>();
 
 
 

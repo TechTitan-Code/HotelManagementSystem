@@ -21,12 +21,16 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<BaseResponse<Guid>> CreateBooking(CreateBooking request)
         {
-            if (request == null)
+            
+
+            // Retrieve the product from the database
+            var room = await _dbContext.Rooms.FindAsync(request.RoomId);
+            if (room == null)
             {
                 return new BaseResponse<Guid>
                 {
                     Success = false,
-                    Message = "Booking Failed, request is null.",
+                    Message = "Product not found",
                     Hasherror = true
                 };
             }
@@ -80,7 +84,7 @@ namespace HotelManagementSystem.Implementation.Services
                 RoomId = request.RoomId,
                 Email = request.Email,
                 PhoneNumber = request.PhoneNumber,
-                TotalCost = request.TotalCost,
+                TotalCost = room.RoomRate,
                 Rooms = request.Rooms.Select(r => new Room { RoomId = r.RoomId }).ToList()
             };
 

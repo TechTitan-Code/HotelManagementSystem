@@ -19,18 +19,75 @@ namespace HMS.Implementation.Services
             _productServices = productServices;
         }
 
+        //public async Task<BaseResponse<Guid>> CreateOrder(CreateOrder request)
+        //{
+        //    try
+        //    {
+        //        if (request != null)
+        //        {
+        //            var order = new Order
+        //            {
+        //                Product = request.Product,
+        //                OrderDate = request.OrderDate,
+        //                TotalAmount = request.TotalAmount
+
+        //            };
+        //            _dbContext.Orders.Add(order);
+        //        }
+
+        //        if (await _dbContext.SaveChangesAsync() > 0)
+        //        {
+        //            return new BaseResponse<Guid>
+        //            {
+        //                Success = true,
+        //                Message = "Order  has been Placed Succesfully"
+        //            };
+        //        }
+        //        else
+        //        {
+        //            return new BaseResponse<Guid>
+        //            {
+        //                Message = "Order Failed"
+
+        //            };
+        //        }
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new BaseResponse<Guid>
+        //        {
+        //            Success = false,
+        //            Message = "Order failed ,Unable to create Order",
+        //            Hasherror = true
+        //        };
+        //    }
+        //}
+
         public async Task<BaseResponse<Guid>> CreateOrder(CreateOrder request)
         {
             try
             {
                 if (request != null)
                 {
+                    // Retrieve the product from the database
+                    var product = await _dbContext.Products.FindAsync(request.ProductId);
+                    if (product == null)
+                    {
+                        return new BaseResponse<Guid>
+                        {
+                            Success = false,
+                            Message = "Product not found",
+                            Hasherror = true
+                        };
+                    }
+
                     var order = new Order
                     {
-                        Product = request.Product,
+                        ProductId = request.ProductId,
                         OrderDate = request.OrderDate,
-                        TotalAmount = request.TotalAmount
-
+                        TotalAmount = product.Price
                     };
                     _dbContext.Orders.Add(order);
                 }
@@ -40,30 +97,48 @@ namespace HMS.Implementation.Services
                     return new BaseResponse<Guid>
                     {
                         Success = true,
-                        Message = "Order  has been Placed Succesfully"
+                        Message = "Order has been placed successfully",
+                        //Data = order.Id
                     };
                 }
                 else
                 {
                     return new BaseResponse<Guid>
                     {
-                        Message = "Order Failed"
-
+                        Message = "Order failed"
                     };
                 }
-
-
             }
             catch (Exception ex)
             {
                 return new BaseResponse<Guid>
                 {
                     Success = false,
-                    Message = "Order failed ,Unable to create Order",
+                    Message = "Order failed, unable to create order",
                     Hasherror = true
                 };
             }
         }
+
+
+        // Select product
+        public List<SelectProductDto> GetProductSelect()
+        {
+            var products = _dbContext.Products.ToList();
+            var result = new List<SelectProductDto>();
+
+            if (products.Count > 0)
+            {
+                result = products.Select(x => new SelectProductDto()
+                {
+                    Id = x.Id,
+                    ProductName = x.Name,
+                }).ToList();
+            }
+
+            return result;
+        }
+
 
 
         public async Task<BaseResponse<Guid>> DeleteOrderAsync(Guid Id)
@@ -98,9 +173,9 @@ namespace HMS.Implementation.Services
             return await _dbContext.Orders
                 .Select(x => new OrderDto()
                 {
-                     Product = x.Product,
                     OrderDate = x.OrderDate,
-                    TotalAmount = x.TotalAmount
+                    TotalAmount = x.TotalAmount,
+                   // Product = x.Product,
                 })
                 .ToListAsync();
         }
@@ -111,9 +186,9 @@ namespace HMS.Implementation.Services
             .Where(x => x.Id == Id)
             .Select(x => new OrderDto
             {
-                OrderDate = x.OrderDate,
-                Product = x.Product,
-                TotalAmount = x.TotalAmount
+                 OrderDate = x.OrderDate,
+                  TotalAmount = x.TotalAmount,
+                   
             }).FirstOrDefaultAsync();
 
             if (order != null)
@@ -151,7 +226,7 @@ namespace HMS.Implementation.Services
                     {
 
                         OrderDate = order.OrderDate,
-                        Product = order.Product,
+                        //Product = order.Product,
                         TotalAmount = order.TotalAmount
                     }
 
@@ -172,7 +247,7 @@ namespace HMS.Implementation.Services
            {
 
                OrderDate = x.OrderDate,
-               Product = x.Product,
+               // Product = x.Product,
                TotalAmount = x.TotalAmount
            }).ToListAsync();
 

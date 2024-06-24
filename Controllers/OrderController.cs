@@ -1,8 +1,11 @@
 ﻿using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
+using HotelManagementSystem.Implementation.Services;
 using HotelManagementSystem.Model.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.Controllers
 {
@@ -25,18 +28,20 @@ namespace HotelManagementSystem.Controllers
            // return View(new List<OrderDto>());
         }
 
+       
+
+
         [HttpGet("create-order")]
-        public async Task<IActionResult> CreateOrder()
+        public IActionResult CreateOrder()
         {
-            var order = await _orderServices.GetAllOrderAsync();
-            if (order.Success)
-            {
-                return View();
-            }
-            return BadRequest();
+            var products = _orderServices.GetProductSelect();
+            ViewBag.Products = new SelectList(products, "Id", "ProductName");
+
+            return View();
         }
 
 
+        
 
         [HttpPost("create-order")]
         public async Task<IActionResult> CreateOrder(CreateOrder request)
@@ -75,7 +80,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("delete-order/{id}")]
-        public async Task<IActionResult> Deleteorder([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteOrder([FromRoute] Guid id)
         {
             var order = await _orderServices.DeleteOrderAsync(id);
             if (order.Success)

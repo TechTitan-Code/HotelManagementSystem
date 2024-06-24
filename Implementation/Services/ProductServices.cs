@@ -17,6 +17,40 @@ namespace HotelManagementSystem.Implementation.Services
         }
 
 
+        //public async Task<BaseResponse<Guid>> CreateProduct(CreateProduct request)
+        //{
+        //    if (request != null)
+        //    {
+        //        var items = new Product
+        //        {
+        //            Id = request.Id,
+        //            Name = request.Name,
+        //            Price = request.Price
+        //        };
+        //        _dbContext.Products.Add(items);
+        //    }
+
+        //    if (await _dbContext.SaveChangesAsync() > 0)
+        //    {
+        //        return new BaseResponse<Guid>
+        //        {
+        //            Success = true,
+        //            Message = "Product Created Succesfully"
+        //        };
+        //    }
+        //    else
+        //    {
+        //        return new BaseResponse<Guid>
+        //        {
+        //            Success = false,
+        //            Message = "Fail To Create Product",
+        //            Hasherror = true
+        //        };
+        //    }
+
+
+        //}
+
         public async Task<BaseResponse<Guid>> CreateProduct(CreateProduct request)
         {
             if (request != null)
@@ -35,7 +69,8 @@ namespace HotelManagementSystem.Implementation.Services
                 return new BaseResponse<Guid>
                 {
                     Success = true,
-                    Message = "Product Created Succesfully"
+                    Message = "Product Created Successfully",
+                    
                 };
             }
             else
@@ -47,9 +82,8 @@ namespace HotelManagementSystem.Implementation.Services
                     Hasherror = true
                 };
             }
-
-
         }
+
 
         public async Task<List<ProductDto>> GetProduct()
         {

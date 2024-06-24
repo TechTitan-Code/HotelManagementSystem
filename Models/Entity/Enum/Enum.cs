@@ -38,6 +38,18 @@
         Worst 
 
     }
+
+    public enum PaymentMethod
+    {
+        Cash = 1,
+        Transfer
+    }
+
+    public enum PaymentStatus
+    {
+        Pending = 1,
+        Approved
+    }
 }
 
 
