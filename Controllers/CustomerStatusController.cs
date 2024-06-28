@@ -3,6 +3,7 @@ using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
+using HotelManagementSystem.Model.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -26,47 +27,60 @@ namespace HotelManagementSystem.Controllers
         }
 
 
+        //[HttpGet("check-in")]
+        //public IActionResult CheckIn()
+        //{
+        //    var customer = _customerStatusServices.GetCustomerSelect();
+
+        //    ViewBag.Customers = new SelectList(customer, "Id", "Name");
+
+        //    return View();
+        //}
+
+
+        //[HttpPost("check-in")]
+        //public async Task<IActionResult> CheckIn(Guid customerId , Guid bookingId)
+        //{
+        //    var response = await _customerStatusServices.CheckIn(customerId , bookingId);
+        //    if (response.Success)
+        //    {
+        //        return RedirectToAction("CustomerStatus");
+        //    }
+
+        //    return BadRequest();
+        //}
+
+
+
         [HttpGet("check-in")]
         public IActionResult CheckIn()
         {
-            var customer = _customerStatusServices.GetCustomerSelect();
-            var booking = _customerStatusServices.GetBookingSelect();
-
-            ViewBag.Customers = new SelectList(customer, "Id", "Name");
-            //ViewBag.Booking = new SelectList(booking, "Id", "BookingReference");
-
+            var customers = _customerStatusServices.GetCustomerSelect();
+            ViewBag.Customers = new SelectList(customers, "Id", "Name");
             return View();
         }
 
-        
-
-
-
         [HttpPost("check-in")]
-        public async Task<IActionResult> CheckIn(Guid customerId , Guid bookingId)
+        public async Task<IActionResult> CheckIn(Guid customerId, Guid bookingId)
         {
-            var response = await _customerStatusServices.CheckIn(customerId , bookingId);
+            var response = await _customerStatusServices.CheckIn(customerId, bookingId);
             if (response.Success)
             {
                 return RedirectToAction("CustomerStatus");
             }
 
-            return BadRequest();
+            ModelState.AddModelError(string.Empty, response.Message);
+            return View();
         }
 
 
         [HttpGet("check-out")]
         public IActionResult CheckOut()
         {
-            var customer = _customerStatusServices.GetCustomerSelect();
-            var booking = _customerStatusServices.GetBookingSelect();
-
-            //ViewBag.Customers = new SelectList(customer, "Id", "FullName");
-            //ViewBag.Booking = new SelectList(booking, "Id", "BookingReference");
-
+            var customers = _customerStatusServices.GetCustomerSelect();
+            ViewBag.Customers = new SelectList(customers, "Id", "Name");
             return View();
         }
-
 
 
         [HttpPost("check-out")]
