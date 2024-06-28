@@ -12,10 +12,12 @@ namespace HotelManagementSystem.Implementation.Services
     public class BookingService : IBookingServices
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly ICustomerServices _customerServices;
 
-        public BookingService(ApplicationDbContext dbContext)
+        public BookingService(ApplicationDbContext dbContext , ICustomerServices customerServices)
         {
             _dbContext = dbContext;
+            _customerServices = customerServices;
         }
 
 
@@ -30,22 +32,11 @@ namespace HotelManagementSystem.Implementation.Services
                 return new BaseResponse<Guid>
                 {
                     Success = false,
-                    Message = "Product not found",
+                    Message = "Room not found",
                     Hasherror = true
                 };
             }
 
-            //// Check if the customer is registered
-            //var customer = await _customerServices.GetCustomerByEmailAsync(request.Email);
-            //if (customer.Data == null)
-            //{
-            //    return new BaseResponse<Guid>
-            //    {
-            //        Success = false,
-            //        Message = "Booking Failed. Customer is not registered.",
-            //        Hasherror = true
-            //    };
-            //}
 
             //foreach (var room in request.Rooms)
             //{
@@ -61,21 +52,7 @@ namespace HotelManagementSystem.Implementation.Services
             //    }
             //}
 
-            //var existingBooking = _dbContext.Bookings.FirstOrDefault(x =>
-            //    x.CheckIn == request.CheckIn &&
-            //    x.Checkout == request.Checkout &&
-            //    x.Status == request.Status);
-
-            //if (existingBooking != null)
-            //{
-            //    // Booking already exists
-            //    return new BaseResponse<Guid>
-            //    {
-            //        Success = true,
-            //        Message = "Booking already exists.",
-            //        Hasherror = true
-            //    };
-            //}
+            
 
             var booking = new Booking()
             {
