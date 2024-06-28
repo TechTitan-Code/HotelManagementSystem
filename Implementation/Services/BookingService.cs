@@ -118,7 +118,7 @@ namespace HotelManagementSystem.Implementation.Services
                 //.Include(x => x.RoomType)
                 .Select(x => new BookingDto()
                 {
-                    // Id = x.Id,
+                    Id = x.Id,
                     RoomId = x.RoomId,
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
