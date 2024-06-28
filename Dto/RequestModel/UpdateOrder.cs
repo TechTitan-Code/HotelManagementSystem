@@ -6,7 +6,8 @@ namespace HotelManagementSystem.Dto.RequestModel
     {
         public Guid Id { get; set; }
         public DateTime OrderDate { get; set; }
-        public Product Product { get; set; } 
+        public Product Products { get; set; }
+        public Guid ProductId { get; set; }
         public decimal TotalAmount { get; set; }
 
     }

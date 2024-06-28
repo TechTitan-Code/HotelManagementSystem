@@ -3,6 +3,7 @@ using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
+using HotelManagementSystem.Model.Entity.Enum;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.Implementation.Services
@@ -17,6 +18,7 @@ namespace HotelManagementSystem.Implementation.Services
             _dbContext = dbContext;
             _bookingServices = bookingServices;
         }
+
 
         public async Task<BaseResponse<Guid>> CreatePayment(CreatePayment request)
         {

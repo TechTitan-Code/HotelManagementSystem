@@ -3,6 +3,7 @@ using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
 using HotelManagementSystem.Model.Entity;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HMS.Controllers
@@ -38,7 +39,7 @@ namespace HMS.Controllers
             var customer = await _customerServices.CreateCustomer(request);
             if (customer.Success)
             {
-                return RedirectToAction("Customers");
+                return RedirectToAction("Login" , "User");
             }
 
             return BadRequest();
@@ -64,6 +65,31 @@ namespace HMS.Controllers
                 return RedirectToAction("Customers");
             }
             return BadRequest();
+        }
+
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            var userName = User.Identity.Name;
+            var status = await _customerServices.CustomerLogout(userName);
+
+            if (status.Success)
+            {
+                // Clear any authentication cookies or session
+                await HttpContext.SignOutAsync();
+                return RedirectToAction("Login", "Customer");
+            }
+            else
+            {
+                //TempData["msg"] = userName.;
+                return RedirectToAction(nameof(Login));
+            }
         }
 
 

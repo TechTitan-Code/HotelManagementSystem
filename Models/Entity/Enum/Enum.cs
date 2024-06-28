@@ -50,6 +50,15 @@
         Pending = 1,
         Approved
     }
+
+    public enum UserRole
+    {
+        Admin = 1,
+        Customer 
+    }
+
+
+
 }
 
 

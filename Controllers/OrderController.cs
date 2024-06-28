@@ -1,11 +1,7 @@
-﻿using HotelManagementSystem.Dto;
-using HotelManagementSystem.Dto.RequestModel;
+﻿using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
-using HotelManagementSystem.Implementation.Services;
-using HotelManagementSystem.Model.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.Controllers
 {
@@ -27,6 +23,8 @@ namespace HotelManagementSystem.Controllers
             return View(order);
            // return View(new List<OrderDto>());
         }
+
+
 
        
 
@@ -109,11 +107,11 @@ namespace HotelManagementSystem.Controllers
 
         }
 
-        [HttpGet("get-order-by-id/{id}")]
-        public async Task<IActionResult> GetAllOrderById(Guid Id)
+        [HttpGet("get-order/{id}")]
+        public async Task<IActionResult> GetOrderById(Guid id)
         {
-            var order = await _orderServices.GetOrderByIdAsync(Id);
-            if (order.Success)
+            var order = await _orderServices.GetOrderByIdAsync(id);
+            if (order != null)
             {
                 return View(order.Data);
             }
@@ -121,6 +119,7 @@ namespace HotelManagementSystem.Controllers
         }
 
 
+       
     }
 }
 

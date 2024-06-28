@@ -21,7 +21,7 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<BaseResponse<Guid>> CreateBooking(CreateBooking request)
         {
-            
+
 
             // Retrieve the product from the database
             var room = await _dbContext.Rooms.FindAsync(request.RoomId);
@@ -79,13 +79,12 @@ namespace HotelManagementSystem.Implementation.Services
 
             var booking = new Booking()
             {
-                CheckIn = request.CheckIn,
-                Checkout = request.Checkout,
                 RoomId = request.RoomId,
+                CustomerId = request.CustomerId,
                 Email = request.Email,
                 PhoneNumber = request.PhoneNumber,
                 TotalCost = room.RoomRate,
-               // Rooms = request.Rooms.Select(r => new Room { RoomId = r.RoomId }).ToList()
+                // Rooms = request.Rooms.Select(r => new Room { RoomId = r.RoomId }).ToList()
             };
 
             _dbContext.Bookings.Add(booking);
@@ -120,8 +119,6 @@ namespace HotelManagementSystem.Implementation.Services
                 .Select(x => new BookingDto()
                 {
                     // Id = x.Id,
-                    CheckIn = x.CheckIn,
-                    Checkout = x.Checkout,
                     RoomId = x.RoomId,
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
@@ -190,8 +187,6 @@ namespace HotelManagementSystem.Implementation.Services
                     Data = new BookingDto
                     {
                         TotalCost = booking.TotalCost,
-                        CheckIn = booking.CheckIn,
-                        Checkout = booking.Checkout,
                         RoomId = booking.RoomId,
                         Email = booking.Email,
                         PhoneNumber = booking.PhoneNumber,
@@ -217,7 +212,7 @@ namespace HotelManagementSystem.Implementation.Services
 
                  //CheckIn = x.CheckIn,
                  //Checkout = x.Checkout,
-                  Id = x.Id,
+                 Id = x.Id,
                  Rooms = x.Rooms,
                  RoomId = x.RoomId,
                  Email = x.Email,
@@ -251,8 +246,6 @@ namespace HotelManagementSystem.Implementation.Services
             .Select(x => new BookingDto()
             {
 
-                CheckIn = x.CheckIn,
-                Checkout = x.Checkout,
                 TotalCost = x.TotalCost,
                 RoomId = x.RoomId,
                 Email = x.Email,

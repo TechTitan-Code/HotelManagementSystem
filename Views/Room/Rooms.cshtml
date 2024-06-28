@@ -8,9 +8,12 @@
 <!-- Recent Sales Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <a href="@Url.Action("CreateRoom","Room")" class="mb-0">Create Room</a>
-        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <a href="@Url.Action("CreateRoom","Room")" class="mb-0">Create Room</a>
+            </div>
+        }
         @if (Model != null && Model.Any())
         {
             <div class="table-responsive">
@@ -43,8 +46,13 @@
                                 <td>@item.RoomStatus</td>
                                 <td>@item.Availability</td>
                                 <td>
-                                    <a asp-action="EditRoom" asp-route-id="@item.Id">Edit</a> |
-                                    <a asp-action="DeleteRoom" asp-route-id="@item.Id">Delete</a> |
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-action="EditRoom" asp-route-id="@item.Id">Edit <bold>|</bold> </a>
+                                        <a asp-action="DeleteRoom" asp-route-id-="@item.Id">Delete <bold>|</bold></a>
+                                    }
+@*                                     <a asp-action="EditRoom" asp-route-id="@item.Id">Edit</a> |
+                                    <a asp-action="DeleteRoom" asp-route-id="@item.Id">Delete</a> | *@
                                     <a asp-action="GetRoomsById" asp-route-id="@item.Id">ViewDetails</a>
                                 </td>
                             </tr>

@@ -86,7 +86,7 @@ namespace HMS.Implementation.Services
                     var order = new Order
                     {
                         ProductId = request.ProductId,
-                        OrderDate = request.OrderDate,
+                        OrderDate = DateTime.Now,
                         TotalAmount = product.Price
                     };
                     _dbContext.Orders.Add(order);
@@ -173,6 +173,7 @@ namespace HMS.Implementation.Services
             return await _dbContext.Orders
                 .Select(x => new OrderDto()
                 {
+                    Id = x.Id,
                     OrderDate = x.OrderDate,
                     TotalAmount = x.TotalAmount,
                     ProductName = x.Products.Name,
@@ -180,23 +181,57 @@ namespace HMS.Implementation.Services
                 .ToListAsync();
         }
 
+        //public async Task<BaseResponse<OrderDto>> GetOrderByIdAsync(Guid Id)
+        //{
+
+        //    var order = await _dbContext.Orders
+        //     .Where(x => x.Id == Id)
+        //     .Select(x => new OrderDto()
+        //     {
+        //         Id = x.Id,
+        //         ProductName = x.Products.Name,
+        //         OrderDate = x.OrderDate,
+        //         TotalAmount = x.TotalAmount,
+        //     }).FirstOrDefaultAsync();
+        //    if (order != null)
+        //    {
+        //        return new BaseResponse<OrderDto>
+        //        {
+        //            Success = true,
+        //            Message = $"Order {Id} Retrieved succesfully",
+        //            Data = order
+
+        //        };
+        //    }
+        //    else
+        //    {
+        //        return new BaseResponse<OrderDto>
+        //        {
+        //            Success = false,
+        //            Message = $"Order {Id} Retrieval Failed"
+        //        };
+        //    }
+
+        //}
+
         public async Task<BaseResponse<OrderDto>> GetOrderByIdAsync(Guid Id)
         {
             var order = await _dbContext.Orders
-            .Where(x => x.Id == Id)
-            .Select(x => new OrderDto
-            {
-                 OrderDate = x.OrderDate,
-                  TotalAmount = x.TotalAmount,
-                   
-            }).FirstOrDefaultAsync();
+                .Where(x => x.Id == Id)
+                .Select(x => new OrderDto
+                {
+                    Id = x.Id,
+                    ProductName = x.Products.Name, 
+                    OrderDate = x.OrderDate,
+                    TotalAmount = x.TotalAmount,
+                }).FirstOrDefaultAsync();
 
             if (order != null)
             {
                 return new BaseResponse<OrderDto>
                 {
                     Success = true,
-                    Message = "Order Retrieved Succesfully",
+                    Message = $"Order {Id} Retrieved successfully",
                     Data = order
                 };
             }
@@ -205,12 +240,13 @@ namespace HMS.Implementation.Services
                 return new BaseResponse<OrderDto>
                 {
                     Success = false,
-                    Message = "Failed to retrieve order , there was an error in the retrieval process",
-                    Hasherror = true
+                    Message = $"Order {Id} Retrieval Failed"
                 };
             }
-
         }
+
+
+
 
 
         public async Task<BaseResponse<OrderDto>> GetOrderAsync(Guid Id)

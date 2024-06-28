@@ -3,16 +3,30 @@ using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace HotelManagementSystem.Dto.Implementation.Services
 {
     public class UserService : IUserServices
     {
         private readonly ApplicationDbContext _dbContext;
-        public UserService(ApplicationDbContext dbContext)
+        private readonly ICustomerServices _customerServices;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<User> _signInManager;
+
+        public UserService(ApplicationDbContext dbContext, UserManager<User> userManager,
+                            SignInManager<User> signInManager,
+                           RoleManager<IdentityRole> roleManager,
+                            ICustomerServices customerService)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _signInManager = signInManager;
+            _customerServices = customerService;
         }
 
         public async Task<BaseResponse<Guid>> CreateUser(CreateUser request)
@@ -30,11 +44,11 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     DateOfBirth = request.DateOfBirth,
                     Email = request.Email,
                     Gender = request.Gender,
-                    Password = request.Password,
                     PhoneNumber = request.PhoneNumber,
 
                 };
-                _dbContext.Users.Add(user);
+
+                var result = await _userManager.CreateAsync(user, request.Password);
 
 
                 if (await _dbContext.SaveChangesAsync() > 0)
@@ -56,7 +70,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
         }
 
-        public async Task<BaseResponse<Guid>> DeleteUserAsync(Guid id)
+        public async Task<BaseResponse<Guid>> DeleteUserAsync(string id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
             if (user != null)
@@ -85,10 +99,6 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                 };
             }
         }
-
-
-
-
 
         //public bool DeleteUser(int id)
         //{
@@ -149,7 +159,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
         //}
 
-        public async Task<BaseResponse<UserDto>> GetUserByIdAsync(Guid id)
+        public async Task<BaseResponse<UserDto>> GetUserByIdAsync(string id)
         {
             try
             {
@@ -162,7 +172,6 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                         Email = x.Email,
                         Gender = x.Gender,
                         Name = x.Name,
-                        Password = x.Password,
                         PhoneNumber = x.PhoneNumber,
                         Id = x.Id,
                         UserName = x.UserName,
@@ -195,9 +204,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
             }
         }
 
-
-
-        public async Task<BaseResponse<UserDto>> GetUserAsync(Guid Id)
+        public async Task<BaseResponse<UserDto>> GetUserAsync(string Id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == Id);
             if (user != null)
@@ -241,7 +248,6 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                    Email = x.Email,
                    Gender = x.Gender,
                    Name = x.Name,
-                   Password = x.Password,
                    PhoneNumber = x.PhoneNumber,
                    Id = x.Id,
                    UserName = x.UserName,
@@ -280,14 +286,13 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     PhoneNumber = x.PhoneNumber,
                     Id = x.Id,
                     UserName = x.UserName,
-                    Password = x.Password
 
                 }).ToList();
         }
 
 
 
-        public async Task<BaseResponse<IList<UserDto>>> UpdateUser(Guid Id, UpdateUser request)
+        public async Task<BaseResponse<IList<UserDto>>> UpdateUser(string Id, UpdateUser request)
         {
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == Id);
             if (user == null)
@@ -300,10 +305,8 @@ namespace HotelManagementSystem.Dto.Implementation.Services
             }
 
             user.Name = request.Name;
-            user.Password = request.Password;
             user.PhoneNumber = request.PhoneNumber;
             user.UserName = request.UserName;
-            user.Password = request.Password;
             user.PhoneNumber = request.PhoneNumber;
             user.Email = request.Email;
             user.Address = request.Address;
@@ -324,8 +327,190 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                 Message = "Update Failed"
             };
         }
+
+        public Task<BaseResponse<Guid>> DeleteUserAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BaseResponse<UserDto>> GetUserByIdAsync(Guid Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BaseResponse<UserDto>> GetUserAsync(Guid Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BaseResponse<IList<UserDto>>> UpdateUser(Guid Id, UpdateUser request)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public async Task<Status> LoginAsync(LoginModel model)
+        //{
+        //    var status = new Status();
+        //    try
+        //    {
+        //        var user = await _userManager.FindByNameAsync(model.UserName);
+        //        if (user == null)
+        //        {
+        //            status.StatusCode = 0;
+        //            status.Message = "Invalid Password or Username";
+        //            return status;
+        //        } 
+
+        //        if (!await _userManager.CheckPasswordAsync(user, model.Password))
+        //        {
+        //            status.StatusCode = 0;
+        //            status.Message = "Invalid Password or Username";
+        //            return status;
+        //        }
+
+        //        var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, true, true);
+        //        if (signInResult.Succeeded)
+        //        {
+        //            var userRoles = await _userManager.GetRolesAsync(user);
+        //            var authClaims = new List<Claim>
+        //        {
+        //            new Claim(ClaimTypes.Name, user.UserName),
+        //        };
+
+        //            foreach (var userRole in userRoles)
+        //            {
+        //                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+        //            }
+        //            status.StatusCode = 1;
+        //            status.Message = "Logged in successfully";
+        //        }
+        //        else if (signInResult.IsLockedOut)
+        //        {
+        //            status.StatusCode = 0;
+        //            status.Message = "User is locked out";
+        //        }
+        //        else
+        //        {
+        //            status.StatusCode = 0;
+        //            status.Message = "Error on logging in";
+        //        }
+
+        //        return status;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        status.StatusCode = 0;
+        //        status.Message = "error occured while processing your request";
+        //        return status;
+        //    }
+        //}
+
+        public async Task LogOutAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
+         
+        public async Task<Status> ChangePasswordAsync(ChangePasswordModel model, string username)
+        {
+            var status = new Status();
+
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                status.Message = "User does not exist";
+                status.StatusCode = 0;
+                return status;
+            }
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                status.Message = "Password has updated successfully";
+                status.StatusCode = 1;
+            }
+            else
+            {
+                status.Message = "Some error occured";
+                status.StatusCode = 0;
+            }
+            return status;
+
+        }
+        public async Task<Status> LoginAsync(LoginModel model)
+        {
+            var status = new Status();
+            try
+            {
+                // Attempt to find the user
+                var user = await _userManager.FindByNameAsync(model.UserName);
+                if (user != null)
+                {
+                    // Check the user's password
+                    if (!await _userManager.CheckPasswordAsync(user, model.Password))
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Invalid Password or Username";
+                        return status;
+                    }
+
+                    // Attempt to sign in the user
+                    var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, true, true);
+                    if (signInResult.Succeeded)
+                    {
+                        var userRoles = await _userManager.GetRolesAsync(user);
+                        var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                };
+
+                        foreach (var userRole in userRoles)
+                        {
+                            authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                        }
+
+                        status.StatusCode = 1;
+                        status.Message = "Logged in successfully";
+                    }
+                    else if (signInResult.IsLockedOut)
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "User is locked out";
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Error on logging in";
+                    }
+
+                    return status;
+                }
+                else
+                {
+                    // If user is not found, attempt to log in as a customer
+                    var customerStatus = await _customerServices.CustomerLogin(model);
+                    if (customerStatus.StatusCode == 1)
+                    {
+                        return customerStatus;
+                    }
+                    else
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Invalid Password or Username";
+                        return status;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                status.StatusCode = 0;
+                status.Message = "Error occurred while processing your request";
+                return status;
+            }
+        }
+
     }
+
 }
+
 
 
 

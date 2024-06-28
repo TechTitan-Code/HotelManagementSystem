@@ -2,6 +2,7 @@
 
 namespace HotelManagementSystem.Model.Entity
 {
+
     public class Payment : BaseEntity
     {
         public Guid BookingId { get; set; }

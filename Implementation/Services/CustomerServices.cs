@@ -1,8 +1,10 @@
-﻿using HotelManagementSystem.Dto;
+﻿using Azure;
+using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace HMS.Implementation.Services
@@ -15,6 +17,92 @@ namespace HMS.Implementation.Services
         {
             _dbContext = dbContext;
         }
+        //public async Task<Status> CustomerLogin(LoginModel login)
+        //{
+        //    var customer = await _dbContext.Customers.FirstOrDefaultAsync(d => d.UserName == login.UserName);
+        //    if (customer == null)
+        //    {
+        //        return new Status { Success = false, Message = "Customer not found" };
+        //    }
+
+        //    var passwordHasher = new PasswordHasher<Customer>();
+        //    var result = passwordHasher.VerifyHashedPassword(customer, customer.Password, login.Password);
+        //    if (result == PasswordVerificationResult.Success)
+        //    {
+        //        return new Status { Success = true, Message = "Login successful" };
+        //    }
+        //    else
+        //    {
+        //        return new Status { Success = false, Message = "Invalid username or password" };
+        //    }
+        //}
+        public async Task<Status> CustomerLogin(LoginModel login)
+        {
+            var status = new Status();
+
+            try
+            {
+                var customer = await _dbContext.Customers.FirstOrDefaultAsync(d => d.UserName == login.UserName);
+                if (customer == null)
+                {
+                    status.Success = false;
+                    status.Message = "Customer not found";
+                    return status;
+                }
+
+
+
+                if (customer.Password != login.Password)
+                {
+                    status.Success = false;
+                    status.Message = "Invalid username or password";
+                    return status;
+                }
+
+                status.Success = true;
+                status.Message = "Login successful";
+                status.StatusCode = 1;
+            }
+            catch (Exception ex)
+            {
+                status.Success = false;
+                status.Message = "Error occurred while processing your request";
+                // Log the exception if needed
+            }
+
+            return status;
+        }
+
+
+        public async Task<Status> CustomerLogout(string userName)
+        {
+            var status = new Status();
+
+            try
+            {
+                var customer = await _dbContext.Customers.FirstOrDefaultAsync(d => d.UserName == userName);
+                if (customer == null)
+                {
+                    status.Success = false;
+                    status.Message = "Customer not found";
+                    return status;
+                }
+
+                // If we reach here, we assume the customer was logged in and now is logged out.
+                status.Success = true;
+                status.Message = "Logout successful";
+                status.StatusCode = 1;
+            }
+            catch (Exception ex)
+            {
+                status.Success = false;
+                status.Message = "Error occurred while processing your request";
+                // Log the exception if needed
+            }
+
+            return status;
+        }
+
 
         public async Task<BaseResponse<Guid>> CreateCustomer(CreateCustomer request)
         {
@@ -82,6 +170,16 @@ namespace HMS.Implementation.Services
         }
 
 
+
+        private bool isLoggedIn = false;
+
+        // Method to logout
+        public void Logout()
+        {
+            isLoggedIn = false;
+        }
+
+
         public async Task<BaseResponse<Guid>> DeleteCustomerAsync(Guid Id)
         {
             var customer = await _dbContext.Customers.FirstOrDefaultAsync();
@@ -127,7 +225,7 @@ namespace HMS.Implementation.Services
                 }).FirstOrDefaultAsync();
             if (customer != null)
             {
-                
+
                 return new BaseResponse<CustomerDto>
                 {
                     Success = true,

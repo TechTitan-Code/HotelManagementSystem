@@ -1,31 +1,31 @@
-﻿@model HotelManagementSystem.Dto.BookingDto
+﻿@model HotelManagementSystem.Dto.OrderDto
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Booking Details";
+    ViewData["Title"] = "Order Details";
 }
 
 <div class="container-fluid pt-4 px-4">
-<div class="bg-secondary text-center rounded p-4">
-    <h2>Booking Details</h2>
-    @if (Model != null)
-    {
-        <dl class="row">
-            <dt class="col-sm-3">Room</dt>
-            <dd class="col-sm-9">@Model.Rooms</dd>
-
-            <dt class="col-sm-3">Total Cost</dt>
-            <dd class="col-sm-9">@Model.TotalCost</dd> 
-            <dt class="col-sm-3">Phone Number</dt>
-            <dd class="col-sm-9">@Model.PhoneNumber</dd>
-
-            <dt class="col-sm-3">Email</dt>
-            <dd class="col-sm-9">@Model.Email</dd>
-        </dl>
-    }
-    else
-    {
-        <p>Booking details are not available.</p>
-    }
-    <a href="@Url.Action("Bookings", "Booking")" class="btn btn-primary">Back to List</a>
-</div>
+    <div class="bg-secondary text-center rounded p-4">
+        <h3>Order Details</h3>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <tbody>
+                    <tr>
+                        <th scope="row">Product</th>
+                        <td>@Model.ProductName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Order Date</th>
+                        <td>@Model.OrderDate.ToString("MM/dd/yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total Amount</th>
+                        <td>@Model.TotalAmount</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a asp-action="EditOrder" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+            <a asp-action="Orders" class="btn btn-secondary">Back to Orders</a>
+        </div>
+    </div>
 </div>

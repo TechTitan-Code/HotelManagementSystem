@@ -1,6 +1,6 @@
-﻿   <!-- Navbar Start -->
+﻿<!-- Navbar Start -->
 <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
-    <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+    <a href="@Url.Action("Index", "Admin")" class="navbar-brand d-flex d-lg-none me-4">
         <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
     </a>
     <a href="#" class="sidebar-toggler flex-shrink-0">
@@ -10,6 +10,7 @@
         <input class="form-control bg-dark border-0" type="search" placeholder="Search">
     </form>
     <div class="navbar-nav align-items-center ms-auto">
+        <!-- Messages Dropdown (visible to all users) -->
         <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                 <i class="fa fa-envelope me-lg-2"></i>
@@ -20,7 +21,7 @@
                     <div class="d-flex align-items-center">
                         <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
                         <div class="ms-2">
-                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                            <h6 class="fw-normal mb-0">Admin sent you a message</h6>
                             <small>15 minutes ago</small>
                         </div>
                     </div>
@@ -30,7 +31,7 @@
                     <div class="d-flex align-items-center">
                         <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
                         <div class="ms-2">
-                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                            <h6 class="fw-normal mb-0">Admin sent you a message</h6>
                             <small>15 minutes ago</small>
                         </div>
                     </div>
@@ -40,19 +41,20 @@
                     <div class="d-flex align-items-center">
                         <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
                         <div class="ms-2">
-                            <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                            <h6 class="fw-normal mb-0">Admin sent you a message</h6>
                             <small>15 minutes ago</small>
                         </div>
                     </div>
                 </a>
                 <hr class="dropdown-divider">
-                <a href="#" class="dropdown-item text-center">See all message</a>
+                <a href="#" class="dropdown-item text-center">See all messages</a>
             </div>
         </div>
+        <!-- Notifications Dropdown (visible to all users) -->
         <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                 <i class="fa fa-bell me-lg-2"></i>
-                <span class="d-none d-lg-inline-flex">Notificatin</span>
+                <span class="d-none d-lg-inline-flex">Notification</span>
             </a>
             <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                 <a href="#" class="dropdown-item">
@@ -73,15 +75,22 @@
                 <a href="#" class="dropdown-item text-center">See all notifications</a>
             </div>
         </div>
+        <!-- Profile Dropdown (conditional visibility) -->
         <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                 <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                <span class="d-none d-lg-inline-flex">John Doe</span>
+                <span class="d-none d-lg-inline-flex">@User.Identity.Name</span>
             </a>
             <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                <a href="#" class="dropdown-item">My Profile</a>
-                <a href="#" class="dropdown-item">Settings</a>
-                <a href="#" class="dropdown-item">Log Out</a>
+                <a href="@Url.Action("GetCustomerById", "Customer")" class="dropdown-item">My Profile</a>
+                <form id="logoutForm" method="post" action="@Url.Action("Logout", "Customer")" class="d-inline">
+                    <button type="submit" class="dropdown-item bg-transparent border-0 p-0">Log Out</button>
+                </form>
+                 @if (User.IsInRole("Admin"))
+                {
+                <a href = "@Url.Action("Logout", "User")" class="dropdown-item">Log Out</a>
+                }
+              
             </div>
         </div>
     </div>

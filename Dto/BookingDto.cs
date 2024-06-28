@@ -6,8 +6,6 @@ namespace HotelManagementSystem.Dto
     public class BookingDto
     {
         public Guid Id { get; set; }
-        public DateTime CheckIn { get; set; }
-        public DateTime Checkout { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public Guid RoomId { get; set; }

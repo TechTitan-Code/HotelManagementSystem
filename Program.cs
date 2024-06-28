@@ -4,6 +4,7 @@ using HotelManagementSystem.Dto.Implementation.Services;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
 using HotelManagementSystem.Model.Entity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,15 +16,21 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddIdentity<User, IdentityRole>(opt =>
+{
+
+}).AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 builder.Services.AddTransient<IRoomService, RoomService>();
 builder.Services.AddTransient<IBookingServices, BookingService>();
-builder.Services.AddTransient<IUserServices, UserService>();
+builder.Services.AddScoped<IUserServices, UserService>();
 builder.Services.AddTransient<ICustomerServices, CustomerServices>();
 builder.Services.AddTransient<IOrderServices, OrderServices>();
 builder.Services.AddTransient<IProductServices, ProductServices>();
 builder.Services.AddTransient<ICustomerReviewService, CustomerReviewService>();
 builder.Services.AddTransient<IAmenityService , AmenityService>();
 builder.Services.AddTransient<IPaymentServices , PaymentServices>();
+builder.Services.AddTransient<ICustomerStatusServices , CustomerStatusServices>();
 
 
 
@@ -46,6 +53,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Admin}/{action=Index}/{id?}");
+    pattern: "{controller=User}/{action=Login}/{id?}");
 
 app.Run();

@@ -1,6 +1,4 @@
-﻿using HotelManagementSystem.Dto.ResponseModel;
-using HotelManagementSystem.Model.Entity;
-using HotelManagementSystem.Model.Entity.Enum;
+﻿using HotelManagementSystem.Model.Entity;
 
 namespace HotelManagementSystem.Dto
 {
@@ -17,3 +15,5 @@ namespace HotelManagementSystem.Dto
 
 
 }
+
+

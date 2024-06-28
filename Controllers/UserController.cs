@@ -1,6 +1,7 @@
 ﻿using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagementSystem.Controllers
@@ -122,6 +123,39 @@ namespace HotelManagementSystem.Controllers
             return RedirectToAction("Users"); 
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login([FromForm] LoginModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+            var result = await _userServices.LoginAsync(model);
+            if (result.StatusCode == 1)
+            {
+                return RedirectToAction("Index", "Admin" );
+            }
+            else
+            {
+                TempData["msg"] = result.Message;
+                return RedirectToAction(nameof(Login));
+            }
+        }
+        public async Task<IActionResult> ChangePassword([FromForm] ChangePasswordModel changePasswordModelDto, string username)
+        {
 
+            var result = await _userServices.ChangePasswordAsync(changePasswordModelDto, username);
+            return RedirectToAction(nameof(Login));
+
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _userServices.LogOutAsync();
+            return RedirectToAction(nameof(Login));
+        }
     }
 }

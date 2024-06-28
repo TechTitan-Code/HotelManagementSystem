@@ -3,17 +3,21 @@ using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
 using HotelManagementSystem.Model.Entity;
+using HotelManagementSystem.Model.Entity.Enum;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.Controllers
 {
     public class PaymentController : Controller
     {
         private readonly IPaymentServices _paymentServices;
+        private readonly ApplicationDbContext _dbContext;
 
-        public PaymentController(IPaymentServices paymentServices)
+        public PaymentController(IPaymentServices paymentServices ,ApplicationDbContext dbContext)
         {
             _paymentServices = paymentServices;
+            _dbContext = dbContext;
         }
 
         [HttpGet("get-payment")]

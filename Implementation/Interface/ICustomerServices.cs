@@ -13,5 +13,8 @@ namespace HotelManagementSystem.Implementation.Interface
         Task<BaseResponse<IList<CustomerDto>>> GetAllCustomerCreatedAsync();
         Task<BaseResponse<CustomerDto>> UpdateCustomer(Guid Id, UpdateCustomer request);
         Task<List<CustomerDto>> GetCustomer();
+        Task<Status> CustomerLogin(LoginModel loginModel);
+        Task<Status> CustomerLogout(string userName);
+        public void Logout();
     }
 }

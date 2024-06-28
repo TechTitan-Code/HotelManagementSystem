@@ -12,7 +12,8 @@ namespace HotelManagementSystem.Dto.RequestModel
         public RoomStatus Status { get; set; }
         public decimal TotalCost { get; set; }
         public Guid RoomId { get; set; }
-        public ICollection<RoomDto> Rooms { get; set; } = new List<RoomDto>();
+        public Guid CustomerId { get; set; }
+       
 
         public class RoomDto
         {
