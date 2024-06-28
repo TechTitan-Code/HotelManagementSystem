@@ -17,25 +17,6 @@ namespace HMS.Implementation.Services
         {
             _dbContext = dbContext;
         }
-        //public async Task<Status> CustomerLogin(LoginModel login)
-        //{
-        //    var customer = await _dbContext.Customers.FirstOrDefaultAsync(d => d.UserName == login.UserName);
-        //    if (customer == null)
-        //    {
-        //        return new Status { Success = false, Message = "Customer not found" };
-        //    }
-
-        //    var passwordHasher = new PasswordHasher<Customer>();
-        //    var result = passwordHasher.VerifyHashedPassword(customer, customer.Password, login.Password);
-        //    if (result == PasswordVerificationResult.Success)
-        //    {
-        //        return new Status { Success = true, Message = "Login successful" };
-        //    }
-        //    else
-        //    {
-        //        return new Status { Success = false, Message = "Invalid username or password" };
-        //    }
-        //}
         public async Task<Status> CustomerLogin(LoginModel login)
         {
             var status = new Status();
@@ -170,16 +151,6 @@ namespace HMS.Implementation.Services
         }
 
 
-
-        private bool isLoggedIn = false;
-
-        // Method to logout
-        public void Logout()
-        {
-            isLoggedIn = false;
-        }
-
-
         public async Task<BaseResponse<Guid>> DeleteCustomerAsync(Guid Id)
         {
             var customer = await _dbContext.Customers.FirstOrDefaultAsync();
@@ -205,8 +176,6 @@ namespace HMS.Implementation.Services
                 };
             }
         }
-
-
 
         public async Task<BaseResponse<CustomerDto>> GetCustomerByIdAsync(Guid Id)
         {

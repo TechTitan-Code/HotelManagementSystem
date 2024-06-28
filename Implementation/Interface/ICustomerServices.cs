@@ -15,6 +15,6 @@ namespace HotelManagementSystem.Implementation.Interface
         Task<List<CustomerDto>> GetCustomer();
         Task<Status> CustomerLogin(LoginModel loginModel);
         Task<Status> CustomerLogout(string userName);
-        public void Logout();
+        
     }
 }

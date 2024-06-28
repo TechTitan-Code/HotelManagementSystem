@@ -27,31 +27,6 @@ namespace HotelManagementSystem.Controllers
         }
 
 
-        //[HttpGet("check-in")]
-        //public IActionResult CheckIn()
-        //{
-        //    var customer = _customerStatusServices.GetCustomerSelect();
-
-        //    ViewBag.Customers = new SelectList(customer, "Id", "Name");
-
-        //    return View();
-        //}
-
-
-        //[HttpPost("check-in")]
-        //public async Task<IActionResult> CheckIn(Guid customerId , Guid bookingId)
-        //{
-        //    var response = await _customerStatusServices.CheckIn(customerId , bookingId);
-        //    if (response.Success)
-        //    {
-        //        return RedirectToAction("CustomerStatus");
-        //    }
-
-        //    return BadRequest();
-        //}
-
-
-
         [HttpGet("check-in")]
         public IActionResult CheckIn()
         {
@@ -73,7 +48,6 @@ namespace HotelManagementSystem.Controllers
             return View();
         }
 
-
         [HttpGet("check-out")]
         public IActionResult CheckOut()
         {
@@ -81,7 +55,6 @@ namespace HotelManagementSystem.Controllers
             ViewBag.Customers = new SelectList(customers, "Id", "Name");
             return View();
         }
-
 
         [HttpPost("check-out")]
         public async Task<IActionResult> CheckOut(Guid customerId, Guid bookingId)
