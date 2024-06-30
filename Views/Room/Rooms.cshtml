@@ -28,6 +28,7 @@
                             <th scope="col">Max Occupancy</th>
                             <th scope="col">Room Rate</th>
                             <th scope="col">Room Status</th>
+                            <th scope="col">Room Amenities</th>
                             <th scope="col">Availability</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -44,6 +45,7 @@
                                 <td>@item.MaxOccupancy</td>
                                 <td>@item.RoomRate</td>
                                 <td>@item.RoomStatus</td>
+                                <td>@item.AmenityName</td>
                                 <td>@item.Availability</td>
                                 <td>
                                     @if (User.IsInRole("Admin"))

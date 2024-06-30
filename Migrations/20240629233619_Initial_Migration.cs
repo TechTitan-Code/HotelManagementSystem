@@ -6,11 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HotelManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial_Migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Amenities",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AmenityName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AmenityType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Amenities", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -160,14 +175,21 @@ namespace HotelManagementSystem.Migrations
                     MaxOccupancy = table.Column<int>(type: "int", nullable: false),
                     RoomRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     RoomStatus = table.Column<int>(type: "int", nullable: false),
-                    Availability = table.Column<bool>(type: "bit", nullable: false),
+                    Availability = table.Column<int>(type: "int", nullable: false),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false),
+                    AmenitiesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rooms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rooms_Amenities_AmenitiesId",
+                        column: x => x.AmenitiesId,
+                        principalTable: "Amenities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -299,27 +321,6 @@ namespace HotelManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Amenities",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AmenityName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AmenityType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Amenities", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Amenities_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Bookings",
                 columns: table => new
                 {
@@ -343,76 +344,20 @@ namespace HotelManagementSystem.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "RoomAmenities",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AmenityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoomAmenities", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RoomAmenities_Amenities_AmenityId",
-                        column: x => x.AmenityId,
-                        principalTable: "Amenities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RoomAmenities_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SelectAmenity",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AmenityNameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SelectAmenity", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SelectAmenity_Amenities_AmenityNameId",
-                        column: x => x.AmenityNameId,
-                        principalTable: "Amenities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SelectAmenity_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "f0ef7830-e4db-4827-87cb-ca6fa7d5be75", null, "Admin", "ADMIN" });
+                values: new object[] { "dff78acd-e5df-4200-b511-d50cbedd4333", null, "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "CreatedTime", "DateOfBirth", "Discriminator", "Email", "EmailConfirmed", "Gender", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedTime", "UserName", "UserRole" },
-                values: new object[] { "1e0dc732-4aeb-4de3-9ebb-a8b6aff88e3b", 0, null, "acda41a6-9db4-4ce7-9c86-f51db9dbe1e8", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "User", "admin@gmail.com", true, 1, false, null, "Ahmad Korede", "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAELlpZQDv0vc4JJe4HOecLGkkBWk8uZzW/htB3yf53+22NWuDElU13Vf0WhK+hi3cJw==", null, false, "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 1 });
+                values: new object[] { "3d74411d-2982-4db9-a469-cc5c706a3cdb", 0, null, "aec1605e-4dfb-4acf-a3b0-4b5722023fbb", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "User", "admin@gmail.com", true, 1, false, null, "Ahmad Korede", "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEGq2lN9bTTJtUdCPNMUE50Zmi+NvySuzKmVUzROtLJBVWovG/RZ6S17p23QjZjM4Xg==", null, false, "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 1 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "f0ef7830-e4db-4827-87cb-ca6fa7d5be75", "1e0dc732-4aeb-4de3-9ebb-a8b6aff88e3b" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Amenities_RoomId",
-                table: "Amenities",
-                column: "RoomId");
+                values: new object[] { "dff78acd-e5df-4200-b511-d50cbedd4333", "3d74411d-2982-4db9-a469-cc5c706a3cdb" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -464,24 +409,9 @@ namespace HotelManagementSystem.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoomAmenities_AmenityId",
-                table: "RoomAmenities",
-                column: "AmenityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoomAmenities_RoomId",
-                table: "RoomAmenities",
-                column: "RoomId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SelectAmenity_AmenityNameId",
-                table: "SelectAmenity",
-                column: "AmenityNameId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SelectAmenity_RoomId",
-                table: "SelectAmenity",
-                column: "RoomId");
+                name: "IX_Rooms_AmenitiesId",
+                table: "Rooms",
+                column: "AmenitiesId");
         }
 
         /// <inheritdoc />
@@ -521,25 +451,19 @@ namespace HotelManagementSystem.Migrations
                 name: "payments");
 
             migrationBuilder.DropTable(
-                name: "RoomAmenities");
-
-            migrationBuilder.DropTable(
-                name: "SelectAmenity");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Rooms");
+
+            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Amenities");
-
-            migrationBuilder.DropTable(
-                name: "Rooms");
         }
     }
 }

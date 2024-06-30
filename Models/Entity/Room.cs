@@ -14,7 +14,7 @@ namespace HotelManagementSystem.Model.Entity
         public decimal RoomRate { get; set; }
         public RoomStatus RoomStatus { get; set; }
         public List<SelectAmenity> Amenity { get; set; }
-        public bool Availability { get; set; }
+        public RoomAvailability Availability { get; set; }
         public bool IsAvailable { get; set; }
 
         public ICollection<Amenity> Amenities { get; set; }

@@ -63,8 +63,10 @@
                         </div>
                     </div>
                     <div class="col mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" name="availability">
-                        <label class="form-check-label">Availability</label>
+                        <label class="form-label">Availability</label>
+                        <select asp-for="Availability" class="form-select" asp-items="Html.GetEnumSelectList<HotelManagementSystem.Model.Entity.Enum.RoomAvailability>()">
+                            <option value="">Room Availability</option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Create</button>
                     <a href="@Url.Action("Rooms","Room")" class="btn btn-dark">Show All</a>

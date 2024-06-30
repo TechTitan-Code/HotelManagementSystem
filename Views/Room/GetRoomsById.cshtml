@@ -7,46 +7,65 @@
 
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
-        <h2>Room Details</h2>
-        @if (Model != null)
-        {
-            <dl class="row">
-                <dt class="col-sm-3">RoomName</dt>
-                <dd class="col-sm-9">@Model.RoomName</dd>
+        <h3>Room Details</h3>
+        <div class="table-responsive">
+            @if (Model != null)
+            {
+                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <tbody>
+                        <tr>
+                            <th scope="row">RoomName</th>
+                            <td>@Model.RoomName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">RoomNumber</th>
+                            <td>@Model.RoomNumber</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">RoomType</th>
+                            <td>@Model.RoomType</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Room Status</th>
+                            <td>@Model.RoomStatus</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">RoomPrice</th>
+                            <td>@Model.RoomRate</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Amenity</th>
+                            <td>@Model.Amenities</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Availability</th>
+                            <td>@Model.Availability</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Maximum occupancy</th>
+                            <td>@Model.MaxOccupancy</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">RoomBedType</th>
+                            <td>@Model.BedType</td>
+                        </tr>
 
-                <dt class="col-sm-3">RoomNumber</dt>
-                <dd class="col-sm-9">@Model.RoomNumber</dd>
-
-                <dt class="col-sm-3">RoomType</dt>
-                <dd class="col-sm-9">@Model.RoomType</dd>
-
-                <dt class="col-sm-3">Room Status </dt>
-                <dd class="col-sm-9">@Model.RoomStatus</dd>
-
-                <dt class="col-sm-3">Amenity</dt>
-                <dd class="col-sm-9">@Model.Amenities</dd>
-
-                <dt class="col-sm-3">Availability</dt>
-                <dd class="col-sm-9">@Model.Availability</dd>
-
-                <dt class="col-sm-3">Bed type</dt>
-                <dd class="col-sm-9">@Model.BedType</dd>
-
-                <dt class="col-sm-3">Maximum Occupancy type</dt>
-                <dd class="col-sm-9">@Model.MaxOccupancy</dd>
-
-                <dt class="col-sm-3">Room Rate</dt>
-                <dd class="col-sm-9">@Model.RoomRate</dd>
-
-
-            </dl>
-        }
-        else
-        {
-            <p>room details are not available.</p>
-        }
-        <a href="@Url.Action("Rooms", "Room")" class="btn btn-primary">Back to List</a>
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>Room details are not available.</p>
+            }
+            <a href="@Url.Action("Rooms", "Room")" class="btn btn-primary mt-3">Back to List</a>
+        </div>
     </div>
 </div>
+
+
+
+
+
+
 
 

@@ -16,7 +16,7 @@ namespace HotelManagementSystem.Dto.RequestModel
         public RoomStatus RoomStatus { get; set; }
         public Amenity Amenity { get; set; }
         public int AmenityId { get; set; }
-        public bool Availability { get; set; }
+        public RoomAvailability Availability { get; set; }
 
 
     }

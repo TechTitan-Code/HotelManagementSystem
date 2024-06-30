@@ -333,10 +333,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
             throw new NotImplementedException();
         }
 
-        public Task<BaseResponse<UserDto>> GetUserByIdAsync(Guid Id)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public Task<BaseResponse<UserDto>> GetUserAsync(Guid Id)
         {

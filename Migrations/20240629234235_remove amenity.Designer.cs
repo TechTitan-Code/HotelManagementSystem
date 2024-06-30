@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240628103712_initial")]
-    partial class initial
+    [Migration("20240629234235_remove amenity")]
+    partial class removeamenity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,27 +24,6 @@ namespace HotelManagementSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("HotelManagementSystem.Dto.RequestModel.SelectAmenity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AmenityNameId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AmenityNameId");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("SelectAmenity");
-                });
 
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Amenity", b =>
                 {
@@ -63,15 +42,10 @@ namespace HotelManagementSystem.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoomId");
 
                     b.ToTable("Amenities");
                 });
@@ -276,8 +250,11 @@ namespace HotelManagementSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Availability")
-                        .HasColumnType("bit");
+                    b.Property<Guid>("AmenityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Availability")
+                        .HasColumnType("int");
 
                     b.Property<int>("BedType")
                         .HasColumnType("int");
@@ -318,34 +295,9 @@ namespace HotelManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rooms");
-                });
-
-            modelBuilder.Entity("HotelManagementSystem.Model.Entity.RoomAmenity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AmenityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
                     b.HasIndex("AmenityId");
 
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("RoomAmenities");
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Models.Entity.CustomerStatus", b =>
@@ -410,7 +362,7 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f0ef7830-e4db-4827-87cb-ca6fa7d5be75",
+                            Id = "fb0ea989-3765-4609-a67a-ac1f50e81e2a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -579,8 +531,8 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "1e0dc732-4aeb-4de3-9ebb-a8b6aff88e3b",
-                            RoleId = "f0ef7830-e4db-4827-87cb-ca6fa7d5be75"
+                            UserId = "50f66729-61d6-4057-bada-dbcdcce90fab",
+                            RoleId = "fb0ea989-3765-4609-a67a-ac1f50e81e2a"
                         });
                 });
 
@@ -633,15 +585,15 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1e0dc732-4aeb-4de3-9ebb-a8b6aff88e3b",
+                            Id = "50f66729-61d6-4057-bada-dbcdcce90fab",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "acda41a6-9db4-4ce7-9c86-f51db9dbe1e8",
+                            ConcurrencyStamp = "09846967-72da-4c57-8674-2e4fccbb1edf",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAELlpZQDv0vc4JJe4HOecLGkkBWk8uZzW/htB3yf53+22NWuDElU13Vf0WhK+hi3cJw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGp22bek7TuHZ/Lcf/4+ZMJa8ME3og7Ku12NJiRzxRyAKE3QZ8nNx6sK+qM3hcgVcA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -653,28 +605,6 @@ namespace HotelManagementSystem.Migrations
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserRole = 1
                         });
-                });
-
-            modelBuilder.Entity("HotelManagementSystem.Dto.RequestModel.SelectAmenity", b =>
-                {
-                    b.HasOne("HotelManagementSystem.Model.Entity.Amenity", "AmenityName")
-                        .WithMany()
-                        .HasForeignKey("AmenityNameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HotelManagementSystem.Model.Entity.Room", null)
-                        .WithMany("Amenity")
-                        .HasForeignKey("RoomId");
-
-                    b.Navigation("AmenityName");
-                });
-
-            modelBuilder.Entity("HotelManagementSystem.Model.Entity.Amenity", b =>
-                {
-                    b.HasOne("HotelManagementSystem.Model.Entity.Room", null)
-                        .WithMany("Amenities")
-                        .HasForeignKey("RoomId");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Booking", b =>
@@ -699,7 +629,7 @@ namespace HotelManagementSystem.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("HotelManagementSystem.Model.Entity.RoomAmenity", b =>
+            modelBuilder.Entity("HotelManagementSystem.Model.Entity.Room", b =>
                 {
                     b.HasOne("HotelManagementSystem.Model.Entity.Amenity", "Amenity")
                         .WithMany()
@@ -707,15 +637,7 @@ namespace HotelManagementSystem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HotelManagementSystem.Model.Entity.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Amenity");
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -767,13 +689,6 @@ namespace HotelManagementSystem.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("HotelManagementSystem.Model.Entity.Room", b =>
-                {
-                    b.Navigation("Amenities");
-
-                    b.Navigation("Amenity");
                 });
 #pragma warning restore 612, 618
         }

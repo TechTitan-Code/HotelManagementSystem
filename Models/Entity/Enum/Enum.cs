@@ -55,8 +55,17 @@
     {
         Admin = 1,
         Customer 
+    } 
+    
+    
+    public enum RoomAvailability
+    {
+        Available = 1,
+        NotAvailable 
     }
 
+
+   
 
 
 }

@@ -7,8 +7,9 @@ namespace HotelManagementSystem.Implementation.Interface
     public interface IUserServices
     {
         Task<BaseResponse<Guid>> CreateUser(CreateUser request);
-        Task<BaseResponse<Guid>> DeleteUserAsync(Guid id);
-        Task<BaseResponse<UserDto>> GetUserByIdAsync(Guid Id);
+        Task<BaseResponse<Guid>> DeleteUserAsync(string id);
+         Task<BaseResponse<UserDto>> GetUserAsync(string Id);
+        Task<BaseResponse<UserDto>> GetUserByIdAsync(string id);
         Task<BaseResponse<UserDto>> GetUserAsync(Guid Id);
         Task<BaseResponse<IList<UserDto>>> GetAllUserAsync();
         Task<BaseResponse<IList<UserDto>>> UpdateUser(Guid Id, UpdateUser request);

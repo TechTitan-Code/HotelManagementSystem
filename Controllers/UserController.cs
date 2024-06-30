@@ -74,7 +74,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("delete-user/{id}")]
-        public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteUser([FromRoute] string id)
         {
             var user = await _userServices.DeleteUserAsync(id);
             if (user.Success)
@@ -113,7 +113,7 @@ namespace HotelManagementSystem.Controllers
 
 
         [HttpGet("get-user-by-id/{id}")]
-        public async Task<IActionResult> GetUserById(Guid id)
+        public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userServices.GetUserByIdAsync(id);
             if (user.Success && user.Data != null)

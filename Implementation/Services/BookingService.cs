@@ -14,7 +14,7 @@ namespace HotelManagementSystem.Implementation.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly ICustomerServices _customerServices;
 
-        public BookingService(ApplicationDbContext dbContext , ICustomerServices customerServices)
+        public BookingService(ApplicationDbContext dbContext, ICustomerServices customerServices)
         {
             _dbContext = dbContext;
             _customerServices = customerServices;
@@ -52,7 +52,7 @@ namespace HotelManagementSystem.Implementation.Services
             //    }
             //}
 
-            
+
 
             var booking = new Booking()
             {
@@ -167,6 +167,7 @@ namespace HotelManagementSystem.Implementation.Services
                         RoomId = booking.RoomId,
                         Email = booking.Email,
                         PhoneNumber = booking.PhoneNumber,
+                        RoomName = booking.Rooms.RoomName,
                     }
 
                 };

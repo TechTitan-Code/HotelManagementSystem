@@ -5,35 +5,52 @@
 }
 
 
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-12 col-12">
-            <div class="bg-secondary rounded h-100 p-4">
-                <h6 class="mb-4">Create Booking</h6>
-                <form asp-controller="Booking" asp-action="CreateBooking">
-                    <div class="row">
-                        <div class="col mb-3">
-                            <label class="form-label">Room </label>
-                            <select asp-for="RoomId" class="form-select" asp-items="@(ViewData["SelectRoom"] as IEnumerable<SelectListItem>)" required>
-                                <option value="">Select Room</option>
-                            </select>
-                             <div class="col mb-6">
-                            <label class="form-label">Email</label>
-                            <input type="text" class="form-control" name="Email">
+@if(!User.IsInRole("Admin"))
+{
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-12 col-12">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <h6 class="mb-4">Create Booking</h6>
+                    <form asp-controller="Booking" asp-action="CreateBooking">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label class="form-label">Room </label>
+                                <select asp-for="RoomId" class="form-select" asp-items="@(ViewData["SelectRoom"] as IEnumerable<SelectListItem>)" required>
+                                    <option value="">Select Room</option>
+                                </select>
+                            </div>
+                            <div class="col mb-3">
+                                <div class="col mb-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="text" class="form-control" name="Email">
+                                </div>
+                            </div>
+                            <div class="col mb-3">
+                                <div class="col mb-6">
+                                    <label class="form-label">PhoneNumber</label>
+                                    <input type="text" class="form-control" name="PhoneNumber">
+                                </div>
+                            </div>
                         </div>
-                        </div>
-                    </div
-                    <div class="col mb-3">
-                         <div class="col mb-6">
-                            <label class="form-label">PhoneNumber</label>
-                            <input type="text" class="form-control" name="PhoneNumber">
-                        </div>
-                    </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-            <a href="@Url.Action("Bookings","Booking")" class="btn btn-dark">Show All</a>
-            </form>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
+}
+else
+{
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-12 col-12">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <p class="text-white">Admins are not allowed to create bookings. If you need to create a booking, please log in as a customer or contact support for assistance.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<a href="@Url.Action("Index", "Admin")" class="btn btn-dark">Go back</a>
 
