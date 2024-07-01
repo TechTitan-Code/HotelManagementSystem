@@ -170,7 +170,7 @@ namespace HMS.Implementation.Services
                 }
 
             }
-            catch
+            catch (Exception ex)
             {
                 return new BaseResponse<Guid>
                 {
@@ -328,7 +328,7 @@ namespace HMS.Implementation.Services
                     };
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return new BaseResponse<IList<OrderDto>>
                 {

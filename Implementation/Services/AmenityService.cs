@@ -46,7 +46,7 @@ namespace HMS.Implementation.Services
                     };
                 }
             }
-            catch
+            catch (Exception ex)
             {
 
                 return new BaseResponse<IList<AmenityDto>>
@@ -87,7 +87,7 @@ namespace HMS.Implementation.Services
                     };
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return new BaseResponse<Guid>
                 {
@@ -148,7 +148,7 @@ namespace HMS.Implementation.Services
                     };
                 }
             }
-            catch
+            catch (Exception ex)
             {
 
                 return new BaseResponse<AmenityDto>
@@ -191,7 +191,7 @@ namespace HMS.Implementation.Services
                     };
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return new BaseResponse<AmenityDto>
                 {
@@ -231,7 +231,7 @@ namespace HMS.Implementation.Services
                     };
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return new BaseResponse<IList<AmenityDto>>
                 {
@@ -278,7 +278,7 @@ namespace HMS.Implementation.Services
                     };
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return new BaseResponse<AmenityDto>
                 {

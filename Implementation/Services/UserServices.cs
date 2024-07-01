@@ -117,7 +117,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     };
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return new BaseResponse<Guid>
 
@@ -266,8 +266,45 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
         public async Task<BaseResponse<IList<UserDto>>> UpdateUser(string Id, UpdateUser request)
         {
-            var user = _dbContext.Users.FirstOrDefault(x => x.Id == Id);
-            if (user == null)
+            try
+            {
+                var user = _dbContext.Users.FirstOrDefault(x => x.Id == Id);
+                if (user == null)
+                {
+                    return new BaseResponse<IList<UserDto>>
+                    {
+                        Success = false,
+                        Message = "Update Failed"
+                    };
+                }
+
+                user.Name = request.Name;
+                user.PhoneNumber = request.PhoneNumber;
+                user.UserName = request.UserName;
+                user.PhoneNumber = request.PhoneNumber;
+                user.Email = request.Email;
+                user.Address = request.Address;
+                user.AgeRange = request.AgeRange;
+                _dbContext.Users.Update(user);
+
+                if (await _dbContext.SaveChangesAsync() > 0)
+                {
+                    return new BaseResponse<IList<UserDto>>
+                    {
+                        Success = true,
+                        Message = "User Updated succesfully"
+                    };
+                }
+                else
+                {
+                    return new BaseResponse<IList<UserDto>>
+                    {
+                        Success = true,
+                        Message = "User Updated succesfully"
+                    };
+                }
+            }
+            catch (Exception ex)
             {
                 return new BaseResponse<IList<UserDto>>
                 {
@@ -275,29 +312,8 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     Message = "Update Failed"
                 };
             }
-
-            user.Name = request.Name;
-            user.PhoneNumber = request.PhoneNumber;
-            user.UserName = request.UserName;
-            user.PhoneNumber = request.PhoneNumber;
-            user.Email = request.Email;
-            user.Address = request.Address;
-            user.AgeRange = request.AgeRange;
-            _dbContext.Users.Update(user);
-
-            if (await _dbContext.SaveChangesAsync() > 0)
-            {
-                return new BaseResponse<IList<UserDto>>
-                {
-                    Success = true,
-                    Message = "User Updated succesfully"
-                };
-            }
-            return new BaseResponse<IList<UserDto>>
-            {
-                Success = false,
-                Message = "Update Failed"
-            };
+          
+           
         }
 
 

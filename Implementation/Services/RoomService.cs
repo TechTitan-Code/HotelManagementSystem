@@ -132,7 +132,7 @@ namespace HotelManagementSystem.Implementation.Services
                     };
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 return new BaseResponse<Guid>
                 {
@@ -307,7 +307,7 @@ namespace HotelManagementSystem.Implementation.Services
                     };
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return new BaseResponse<RoomDto>
                 {
