@@ -17,146 +17,13 @@ namespace HMS.Implementation.Services
         {
             _dbContext = dbContext;
         }
-        public async Task<Status> CustomerLogin(LoginModel login)
+
+        public async Task<BaseResponse<Guid>> DeleteCustomerAsync(string Id)
         {
-            var status = new Status();
-
-            try
-            {
-                var customer = await _dbContext.Customers.FirstOrDefaultAsync(d => d.UserName == login.UserName);
-                if (customer == null)
-                {
-                    status.Success = false;
-                    status.Message = "Customer not found";
-                    return status;
-                }
-
-
-
-                if (customer.Password != login.Password)
-                {
-                    status.Success = false;
-                    status.Message = "Invalid username or password";
-                    return status;
-                }
-
-                status.Success = true;
-                status.Message = "Login successful";
-                status.StatusCode = 1;
-            }
-            catch (Exception ex)
-            {
-                status.Success = false;
-                status.Message = "Error occurred while processing your request";
-                // Log the exception if needed
-            }
-
-            return status;
-        }
-
-
-        public async Task<Status> CustomerLogout(string userName)
-        {
-            var status = new Status();
-
-            try
-            {
-                var customer = await _dbContext.Customers.FirstOrDefaultAsync(d => d.UserName == userName);
-                if (customer == null)
-                {
-                    status.Success = false;
-                    status.Message = "Customer not found";
-                    return status;
-                }
-
-                // If we reach here, we assume the customer was logged in and now is logged out.
-                status.Success = true;
-                status.Message = "Logout successful";
-                status.StatusCode = 1;
-            }
-            catch (Exception ex)
-            {
-                status.Success = false;
-                status.Message = "Error occurred while processing your request";
-                // Log the exception if needed
-            }
-
-            return status;
-        }
-
-
-        public async Task<BaseResponse<Guid>> CreateCustomer(CreateCustomer request)
-        {
-            try
-            {
-                if (request != null)
-                {
-                    var existingCustomer = _dbContext.Customers.FirstOrDefault(x =>
-                    // x.Id == request.Id &&
-                    x.UserName == request.UserName &&
-                    x.Email == request.Email);
-
-                    if (existingCustomer != null)
-                    {
-                        return new BaseResponse<Guid>
-                        {
-                            Success = true,
-                            Message = $"Customer {request.UserName} already exists.",
-                            Hasherror = true
-                        };
-                    }
-
-                    var customer = new Customer
-                    {
-                        //  Id = request.Id,
-                        UserName = request.UserName,
-                        Email = request.Email,
-                        Address = request.Address,
-                        DateOfBirth = request.DateOfBirth,
-                        Gender = request.Gender,
-                        Name = request.Name,
-                        Password = request.Password,
-                        PhoneNumber = request.PhoneNumber,
-                    };
-                    _dbContext.Customers.Add(customer);
-                }
-                if (await _dbContext.SaveChangesAsync() > 0)
-                {
-                    return new BaseResponse<Guid>
-                    {
-                        Success = true,
-                        Message = $"Registration Successful, Congratulations {request.UserName}",
-                    };
-                }
-                else
-                {
-                    return new BaseResponse<Guid>
-                    {
-                        Message = "Failed"
-                    };
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                return new BaseResponse<Guid>
-                {
-                    Success = false,
-                    Message = $"Registration Failed, Unable to register {request.UserName}",
-                    Hasherror = true
-
-                };
-            }
-        }
-
-
-        public async Task<BaseResponse<Guid>> DeleteCustomerAsync(Guid Id)
-        {
-            var customer = await _dbContext.Customers.FirstOrDefaultAsync();
+            var customer = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == Id);
             if (customer != null)
             {
-                _dbContext.Customers.Remove(customer);
+                _dbContext.Users.Remove(customer);
             }
             if (await _dbContext.SaveChangesAsync() > 0)
             {
@@ -177,18 +44,17 @@ namespace HMS.Implementation.Services
             }
         }
 
-        public async Task<BaseResponse<CustomerDto>> GetCustomerByIdAsync(Guid Id)
+        public async Task<BaseResponse<CustomerDto>> GetCustomerByIdAsync(string Id)
         {
-            var customer = await _dbContext.Customers
+            var customer = await _dbContext.Users
                 .Where(x => x.Id == Id)
                 .Select(x => new CustomerDto
                 {
                     Address = x.Address,
-                    DateOfBirth = x.DateOfBirth,
+                    AgeRange = x.AgeRange,
                     Email = x.Email,
                     Gender = x.Gender,
                     Name = x.Name,
-                    Password = x.Password,
                     PhoneNumber = x.PhoneNumber,
                     UserName = x.UserName,
                 }).FirstOrDefaultAsync();
@@ -217,27 +83,26 @@ namespace HMS.Implementation.Services
 
         public async Task<List<CustomerDto>> GetCustomer()
         {
-            return _dbContext.Customers
+            return _dbContext.Users
                 //.Include(x => x.Id)
                 //.Include(x => x.RoomType)
                 .Select(x => new CustomerDto()
                 {
                     Id = x.Id,
                     Address = x.Address,
-                    DateOfBirth = x.DateOfBirth,
+                    AgeRange = x.AgeRange,
                     Email = x.Email,
                     Gender = x.Gender,
                     Name = x.Name,
-                    Password = x.Password,
                     PhoneNumber = x.PhoneNumber,
                     UserName = x.UserName,
                 }).ToList();
         }
 
 
-        public async Task<BaseResponse<CustomerDto>> GetCustomerAsync(Guid Id)
+        public async Task<BaseResponse<CustomerDto>> GetCustomerAsync(string Id)
         {
-            var customer = await _dbContext.Customers.FirstOrDefaultAsync(x => x.Id == Id);
+            var customer = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == Id);
             if (customer != null)
             {
                 return new BaseResponse<CustomerDto>
@@ -247,11 +112,10 @@ namespace HMS.Implementation.Services
                     Data = new CustomerDto
                     {
                         Address = customer.Address,
-                        DateOfBirth = customer.DateOfBirth,
+                        AgeRange = customer.AgeRange,
                         Email = customer.Email,
                         Gender = customer.Gender,
                         Name = customer.Name,
-                        Password = customer.Password,
                         PhoneNumber = customer.PhoneNumber,
                         UserName = customer.UserName,
 
@@ -269,15 +133,14 @@ namespace HMS.Implementation.Services
 
         public async Task<BaseResponse<IList<CustomerDto>>> GetAllCustomerCreatedAsync()
         {
-            var customer = await _dbContext.Customers
+            var customer = await _dbContext.Users
                .Select(x => new CustomerDto
                {
                    Address = x.Address,
-                   DateOfBirth = x.DateOfBirth,
+                   AgeRange = x.AgeRange,
                    Email = x.Email,
                    Gender = x.Gender,
                    Name = x.Name,
-                   Password = x.Password,
                    PhoneNumber = x.PhoneNumber,
                    UserName = x.UserName,
                }).ToListAsync();
@@ -301,9 +164,9 @@ namespace HMS.Implementation.Services
             }
         }
 
-        public async Task<BaseResponse<CustomerDto>> UpdateCustomer(Guid Id, UpdateCustomer request)
+        public async Task<BaseResponse<CustomerDto>> UpdateCustomer(string Id, UpdateCustomer request)
         {
-            var customer = await _dbContext.Customers.FirstOrDefaultAsync();
+            var customer = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == Id);
             if (customer == null)
             {
                 return new BaseResponse<CustomerDto>
@@ -322,7 +185,7 @@ namespace HMS.Implementation.Services
             request.Email = request.Email;
             request.Gender = request.Gender;
             request.Password = request.Password;
-            _dbContext.Customers.Update(customer);
+            _dbContext.Users.Update(customer);
             if (await _dbContext.SaveChangesAsync() > 0)
             {
                 return new BaseResponse<CustomerDto>

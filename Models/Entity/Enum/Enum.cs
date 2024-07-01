@@ -63,11 +63,6 @@
         Available = 1,
         NotAvailable 
     }
-
-
-   
-
-
 }
 
 

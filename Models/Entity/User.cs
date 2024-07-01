@@ -12,7 +12,6 @@ namespace HotelManagementSystem.Model.Entity
         public string? Address { get; set; }
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
-
-
+        public string AgeRange { get; set; }
     }
 }

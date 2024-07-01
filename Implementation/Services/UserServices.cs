@@ -3,6 +3,7 @@ using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
+using HotelManagementSystem.Model.Entity.Enum;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -34,8 +35,6 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
             if (request != null)
             {
-
-
                 var user = new User()
                 {
                     Name = request.Name,
@@ -45,14 +44,15 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     Email = request.Email,
                     Gender = request.Gender,
                     PhoneNumber = request.PhoneNumber,
-
+                    UserRole = UserRole.Customer
                 };
 
                 var result = await _userManager.CreateAsync(user, request.Password);
 
-
                 if (await _dbContext.SaveChangesAsync() > 0)
                 {
+                    await _userManager.AddToRoleAsync(user, UserRole.Customer.ToString());
+
                     return new BaseResponse<Guid>
 
                     {
@@ -333,7 +333,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
             throw new NotImplementedException();
         }
 
-       
+
 
         public Task<BaseResponse<UserDto>> GetUserAsync(Guid Id)
         {
@@ -406,7 +406,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
         {
             await _signInManager.SignOutAsync();
         }
-         
+
         public async Task<Status> ChangePasswordAsync(ChangePasswordModel model, string username)
         {
             var status = new Status();
@@ -455,9 +455,9 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     {
                         var userRoles = await _userManager.GetRolesAsync(user);
                         var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                };
+                                {
+                                    new Claim(ClaimTypes.Name, user.UserName),
+                                };
 
                         foreach (var userRole in userRoles)
                         {
@@ -480,21 +480,9 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
                     return status;
                 }
-                else
-                {
-                    // If user is not found, attempt to log in as a customer
-                    var customerStatus = await _customerServices.CustomerLogin(model);
-                    if (customerStatus.StatusCode == 1)
-                    {
-                        return customerStatus;
-                    }
-                    else
-                    {
-                        status.StatusCode = 0;
-                        status.Message = "Invalid Password or Username";
-                        return status;
-                    }
-                }
+                status.StatusCode = 0;
+                status.Message = "Invalid login details";
+                return status;
             }
             catch (Exception)
             {

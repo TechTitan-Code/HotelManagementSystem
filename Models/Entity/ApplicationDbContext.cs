@@ -22,7 +22,13 @@ namespace HotelManagementSystem.Model.Entity
                     Id = adminRoleId,
                     Name = "Admin",
                     NormalizedName = "ADMIN" 
-                }
+                },
+                 new IdentityRole
+                 {
+                     Id = Guid.NewGuid().ToString(),
+                     Name = "Customer",
+                     NormalizedName = "Customer"
+                 }
             );
 
             var hasher = new PasswordHasher<User>();
@@ -57,7 +63,6 @@ namespace HotelManagementSystem.Model.Entity
         public DbSet<User> Users { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
         public DbSet<Booking> Bookings { get; set; }
-        public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Payment> payments { get; set; }

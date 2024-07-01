@@ -32,24 +32,11 @@ namespace HMS.Controllers
         }
 
 
-        [HttpPost("create-customer")]
-        public async Task<IActionResult> CreateCustomer(CreateCustomer request)
-        {
-
-            var customer = await _customerServices.CreateCustomer(request);
-            if (customer.Success)
-            {
-                return RedirectToAction("Login" , "User");
-            }
-
-            return BadRequest();
-
-
-        }
+       
 
 
         [HttpGet("edit-customer/{id}")]
-        public async Task<IActionResult> EditCustomer([FromRoute] Guid id)
+        public async Task<IActionResult> EditCustomer([FromRoute] string id)
         {
             var customer = await _customerServices.GetCustomerAsync(id);
 
@@ -59,7 +46,7 @@ namespace HMS.Controllers
         [HttpPost("edit-customer/{id}")]
         public async Task<IActionResult> EditCustomer(UpdateCustomer request)
         {
-            var customer = await _customerServices.UpdateCustomer(request.Id, request);
+            var customer = await _customerServices.UpdateCustomer(request.Id.ToString(), request);
             if (customer.Success)
             {
                 return RedirectToAction("Customers");
@@ -73,28 +60,11 @@ namespace HMS.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            var userName = User.Identity.Name;
-            var status = await _customerServices.CustomerLogout(userName);
-
-            if (status.Success)
-            {
-                // Clear any authentication cookies or session
-                await HttpContext.SignOutAsync();
-                return RedirectToAction("Login", "Customer");
-            }
-            else
-            {
-                //TempData["msg"] = userName.;
-                return RedirectToAction(nameof(Login));
-            }
-        }
+       
 
 
         [HttpGet("delete-customer/{id}")]
-        public async Task<IActionResult> DeleteCustomer([FromRoute] Guid Id)
+        public async Task<IActionResult> DeleteCustomer([FromRoute] string Id)
         {
             var customer = await _customerServices.DeleteCustomerAsync(Id);
             if (customer.Success)
@@ -124,7 +94,7 @@ namespace HMS.Controllers
 
 
         [HttpGet("get-customer-by-id/{id}")]
-        public async Task<IActionResult> GetCustomerById(Guid id)
+        public async Task<IActionResult> GetCustomerById(string id)
         {
             var customer = await _customerServices.GetCustomerByIdAsync(id);
             if (customer.Success)

@@ -22,7 +22,7 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<BaseResponse<Guid>> CheckIn(Guid customerId, Guid bookingId)
         {
-            var customer = await _dbContext.Customers.FindAsync(customerId);
+            var customer = await _dbContext.Users.FindAsync(customerId);
             if (customer == null)
             {
                 return new BaseResponse<Guid>
@@ -116,14 +116,14 @@ namespace HotelManagementSystem.Implementation.Services
 
         public List<SelectCustomerDto> GetCustomerSelect()
         {
-            var customers = _dbContext.Customers.ToList();
+            var customers = _dbContext.Users.ToList();
             var result = new List<SelectCustomerDto>();
 
             if (customers.Count > 0)
             {
                 result = customers.Select(x => new SelectCustomerDto()
                 {
-                    Id = x.Id,
+                    Id = Guid.Parse(x.Id),
                     Name = x.Name,
                 }).ToList();
             }
@@ -157,7 +157,7 @@ namespace HotelManagementSystem.Implementation.Services
                 result = bookings.Select(x => new SelectBookingDto()
                 {
                     Id = x.Id,
-                     Email = x.Email
+                    Email = x.Email
                 }).ToList();
             }
 
