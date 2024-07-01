@@ -32,64 +32,92 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
         public async Task<BaseResponse<Guid>> CreateUser(CreateUser request)
         {
-
-            if (request != null)
+            try
             {
-                var user = new User()
+                if (request != null)
                 {
-                    Name = request.Name,
-                    UserName = request.UserName,
-                    Address = request.Address,
-                    DateOfBirth = request.DateOfBirth,
-                    Email = request.Email,
-                    Gender = request.Gender,
-                    PhoneNumber = request.PhoneNumber,
-                    UserRole = UserRole.Customer
-                };
-
-                var result = await _userManager.CreateAsync(user, request.Password);
-
-                if (await _dbContext.SaveChangesAsync() > 0)
-                {
-                    await _userManager.AddToRoleAsync(user, UserRole.Customer.ToString());
-
-                    return new BaseResponse<Guid>
-
+                    var user = new User()
                     {
-                        Success = true,
-                        Message = "User Created Successfully"
+                        Name = request.Name,
+                        UserName = request.UserName,
+                        Address = request.Address,
+                        DateOfBirth = request.DateOfBirth,
+                        Email = request.Email,
+                        Gender = request.Gender,
+                        PhoneNumber = request.PhoneNumber,
+                        UserRole = UserRole.Customer
                     };
-                }
-            }
-            return new BaseResponse<Guid>
 
+                    var result = await _userManager.CreateAsync(user, request.Password);
+
+                    if (result.Succeeded)
+                    {
+                        var addUserRole = await _userManager.AddToRoleAsync(user, UserRole.Customer.ToString());
+
+                        if (addUserRole.Succeeded)
+                        {
+                            return new BaseResponse<Guid>
+
+                            {
+                                Success = true,
+                                Message = "User Created Successfully"
+                            };
+                        }
+                    }
+                }
+
+                return new BaseResponse<Guid>
+
+                {
+                    Success = false,
+                    Message = "User Created failed"
+                };
+            }
+            catch (Exception ex)
             {
-                Success = false,
-                Message = "User Created failed"
-            };
+                return new BaseResponse<Guid>
+
+                {
+                    Success = false,
+                    Message = "User Created failed"
+                };
+            }
+
+
 
         }
 
         public async Task<BaseResponse<Guid>> DeleteUserAsync(string id)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
-            if (user != null)
+            try
             {
-                _dbContext.Users.Remove(user);
-            }
-
-            if (await _dbContext.SaveChangesAsync() > 0)
-            {
-                return new BaseResponse<Guid>
+                var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+                if (user != null)
                 {
-                    Success = true,
-                    Message = "User deleted succesfully",
+                    _dbContext.Users.Remove(user);
+                }
+
+                if (await _dbContext.SaveChangesAsync() > 0)
+                {
+                    return new BaseResponse<Guid>
+                    {
+                        Success = true,
+                        Message = "User deleted succesfully",
 
 
-                };
+                    };
+                }
+                else
+                {
+                    return new BaseResponse<Guid>
+
+                    {
+                        Success = false,
+                        Message = "Delete Failed, unable to process the deletion of User at this time"
+                    };
+                }
             }
-
-            else
+            catch
             {
                 return new BaseResponse<Guid>
 
@@ -98,66 +126,10 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     Message = "Delete Failed, unable to process the deletion of User at this time"
                 };
             }
+
+
+
         }
-
-        //public bool DeleteUser(int id)
-        //{
-        //    var user = _dbContext.Users.FirstOrDefault(x => x.Id == id);
-        //    if (user != null)
-        //    {
-        //        _dbContext.Users.Remove(user);
-        //    }
-        //    return _dbContext.SaveChanges() > 0 ? true : false;
-        //}
-
-        //public async Task<BaseResponse<UserDto>> GetUserByIdAsync(Guid Id)
-        //{
-        //    try
-        //    {
-
-        //        var user = await _dbContext.Users
-        //        .Where(x => x.Id == Id)
-        //        .Select(x => new UserDto()
-        //        {
-        //            Address = x.Address,
-        //            DateOfBirth = x.DateOfBirth,
-        //            Email = x.Email,
-        //            Gender = x.Gender,
-        //            Name = x.Name,
-        //            Password = x.Password,
-        //            PhoneNumber = x.PhoneNumber,
-        //            Id = x.Id,
-        //            UserName = x.UserName,
-        //        }).ToListAsync();
-        //        if (user != null)
-        //        {
-        //            return new BaseResponse<UserDto>
-        //            {
-        //                Success = true,
-        //                Message = "User retrieved successfully",
-        //                Data = user
-
-        //            };
-        //        }
-
-        //        return new BaseResponse<UserDto>
-        //        {
-        //            Success = false,
-        //            Message = ""
-        //        };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new BaseResponse<UserDto>
-        //        {
-        //            Success = false,
-        //            Message = "Failed to retrieve user ",
-        //            Hasherror = true
-        //        };
-
-        //    }
-
-        //}
 
         public async Task<BaseResponse<UserDto>> GetUserByIdAsync(string id)
         {
@@ -168,7 +140,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     .Select(x => new UserDto()
                     {
                         Address = x.Address,
-                        DateOfBirth = x.DateOfBirth,
+                        AgeRange = x.AgeRange,
                         Email = x.Email,
                         Gender = x.Gender,
                         Name = x.Name,
@@ -218,7 +190,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
                         Id = user.Id,
                         Address = user.Address,
-                        DateOfBirth = user.DateOfBirth,
+                        AgeRange = user.AgeRange,
                         Email = user.Email,
                         Gender = user.Gender,
                         Name = user.Name,
@@ -244,7 +216,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                .Select(x => new UserDto
                {
                    Address = x.Address,
-                   DateOfBirth = x.DateOfBirth,
+                   AgeRange = x.AgeRange,
                    Email = x.Email,
                    Gender = x.Gender,
                    Name = x.Name,
@@ -281,7 +253,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                     Name = x.Name,
                     Address = x.Address,
                     Gender = x.Gender,
-                    DateOfBirth = x.DateOfBirth,
+                    AgeRange = x.AgeRange,
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
                     Id = x.Id,
@@ -310,7 +282,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
             user.PhoneNumber = request.PhoneNumber;
             user.Email = request.Email;
             user.Address = request.Address;
-            user.DateOfBirth = request.DateOfBirth;
+            user.AgeRange = request.AgeRange;
             _dbContext.Users.Update(user);
 
             if (await _dbContext.SaveChangesAsync() > 0)
@@ -328,79 +300,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
             };
         }
 
-        public Task<BaseResponse<Guid>> DeleteUserAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
 
-
-
-        public Task<BaseResponse<UserDto>> GetUserAsync(Guid Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<BaseResponse<IList<UserDto>>> UpdateUser(Guid Id, UpdateUser request)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public async Task<Status> LoginAsync(LoginModel model)
-        //{
-        //    var status = new Status();
-        //    try
-        //    {
-        //        var user = await _userManager.FindByNameAsync(model.UserName);
-        //        if (user == null)
-        //        {
-        //            status.StatusCode = 0;
-        //            status.Message = "Invalid Password or Username";
-        //            return status;
-        //        } 
-
-        //        if (!await _userManager.CheckPasswordAsync(user, model.Password))
-        //        {
-        //            status.StatusCode = 0;
-        //            status.Message = "Invalid Password or Username";
-        //            return status;
-        //        }
-
-        //        var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, true, true);
-        //        if (signInResult.Succeeded)
-        //        {
-        //            var userRoles = await _userManager.GetRolesAsync(user);
-        //            var authClaims = new List<Claim>
-        //        {
-        //            new Claim(ClaimTypes.Name, user.UserName),
-        //        };
-
-        //            foreach (var userRole in userRoles)
-        //            {
-        //                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-        //            }
-        //            status.StatusCode = 1;
-        //            status.Message = "Logged in successfully";
-        //        }
-        //        else if (signInResult.IsLockedOut)
-        //        {
-        //            status.StatusCode = 0;
-        //            status.Message = "User is locked out";
-        //        }
-        //        else
-        //        {
-        //            status.StatusCode = 0;
-        //            status.Message = "Error on logging in";
-        //        }
-
-        //        return status;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        status.StatusCode = 0;
-        //        status.Message = "error occured while processing your request";
-        //        return status;
-        //    }
-        //}
 
         public async Task LogOutAsync()
         {

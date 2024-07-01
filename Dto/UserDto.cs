@@ -13,7 +13,7 @@ namespace HotelManagementSystem.Dto
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public string? UserName { get; set; } 
-        public DateTime DateOfBirth { get; set; }
+        public string AgeRange { get; set; }
         public Gender Gender { get; set; }
 
        

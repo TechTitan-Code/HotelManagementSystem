@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagementSystem.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserServices _userServices;
@@ -16,7 +17,7 @@ namespace HotelManagementSystem.Controllers
             _userServices = userService;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("get-user")]
         public async Task<IActionResult> Users()
         {
@@ -24,6 +25,7 @@ namespace HotelManagementSystem.Controllers
             return View(user);
         }
 
+        [AllowAnonymous]
         [HttpGet("create-user")]
         public async Task<IActionResult> CreateUser()
         {
@@ -38,7 +40,7 @@ namespace HotelManagementSystem.Controllers
 
 
 
-
+        [AllowAnonymous]
         [HttpPost("create-user")]
         public async Task<IActionResult> CreateUser(CreateUser request)
         {
@@ -46,14 +48,14 @@ namespace HotelManagementSystem.Controllers
          var user = await   _userServices.CreateUser(request);
             if (user.Success)
             {
-                return RedirectToAction("Users");
+                return RedirectToAction("Login");
             }
             return BadRequest();
         }
 
 
         [HttpGet("edit-user/{id}")]
-        public async Task<IActionResult> EditUser([FromRoute] Guid id)
+        public async Task<IActionResult> EditUser([FromRoute] string id)
         {
             var user = await _userServices.GetUserAsync(id);
 
@@ -123,10 +125,13 @@ namespace HotelManagementSystem.Controllers
             return RedirectToAction("Users"); 
         }
 
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
+
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login([FromForm] LoginModel model)
         {

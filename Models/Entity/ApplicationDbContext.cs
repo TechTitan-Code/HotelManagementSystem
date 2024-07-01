@@ -46,7 +46,7 @@ namespace HotelManagementSystem.Model.Entity
                     SecurityStamp = string.Empty,
                     UserRole = UserRole.Admin,
                     Name = "Ahmad Korede",
-                    DateOfBirth = new DateTime(2000, 1, 1),
+                    AgeRange = "20-40",
                     Gender = Gender.Male
                 }
             );

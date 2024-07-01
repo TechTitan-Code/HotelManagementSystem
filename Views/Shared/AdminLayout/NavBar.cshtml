@@ -83,14 +83,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                 <a href="@Url.Action("GetCustomerById", "Customer")" class="dropdown-item">My Profile</a>
-                <form id="logoutForm" method="post" action="@Url.Action("Logout", "Customer")" class="d-inline">
-                    <button type="submit" class="dropdown-item bg-transparent border-0 p-0">Log Out</button>
-                </form>
-                 @if (User.IsInRole("Admin"))
-                {
-                <a href = "@Url.Action("Logout", "User")" class="dropdown-item">Log Out</a>
-                }
-              
+                <a href="@Url.Action("Logout", "User")" class="dropdown-item">Log Out</a>
             </div>
         </div>
     </div>

@@ -23,59 +23,70 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<BaseResponse<Guid>> CreateBooking(CreateBooking request)
         {
-
-
-            // Retrieve the product from the database
-            var room = await _dbContext.Rooms.FindAsync(request.RoomId);
-            if (room == null)
+            try
             {
-                return new BaseResponse<Guid>
+                // Retrieve the product from the database
+                var room = await _dbContext.Rooms.FindAsync(request.RoomId);
+                if (room == null)
                 {
-                    Success = false,
-                    Message = "Room not found",
-                    Hasherror = true
-                };
-            }
+                    return new BaseResponse<Guid>
+                    {
+                        Success = false,
+                        Message = "Room not found",
+                        Hasherror = true
+                    };
+                }
 
 
-            //foreach (var room in request.Rooms)
-            //{
-            //    var roomDetails = await _roomService.GetRoomByIdAsync(room.RoomId);
-            //    if (roomDetails == null)
-            //    {
-            //        return new BaseResponse<Guid>
-            //        {
-            //            Success = false,
-            //            Message = "Booking Failed. The room is not available.",
-            //            Hasherror = true
-            //        };
-            //    }
-            //}
+                //foreach (var room in request.Rooms)
+                //{
+                //    var roomDetails = await _roomService.GetRoomByIdAsync(room.RoomId);
+                //    if (roomDetails == null)
+                //    {
+                //        return new BaseResponse<Guid>
+                //        {
+                //            Success = false,
+                //            Message = "Booking Failed. The room is not available.",
+                //            Hasherror = true
+                //        };
+                //    }
+                //}
 
 
 
-            var booking = new Booking()
-            {
-                RoomId = request.RoomId,
-                CustomerId = request.CustomerId,
-                Email = request.Email,
-                PhoneNumber = request.PhoneNumber,
-                TotalCost = room.RoomRate,
-                // Rooms = request.Rooms.Select(r => new Room { RoomId = r.RoomId }).ToList()
-            };
-
-            _dbContext.Bookings.Add(booking);
-
-            if (await _dbContext.SaveChangesAsync() > 0)
-            {
-                return new BaseResponse<Guid>
+                var booking = new Booking()
                 {
-                    Success = true,
-                    Message = "Your booking has been successful",
-                    Data = booking.Id
+                    RoomId = request.RoomId,
+                    CustomerId = request.CustomerId,
+                    Email = request.Email,
+                    PhoneNumber = request.PhoneNumber,
+                    TotalCost = room.RoomRate,
+                    // Rooms = request.Rooms.Select(r => new Room { RoomId = r.RoomId }).ToList()
                 };
+
+                _dbContext.Bookings.Add(booking);
+
+                if (await _dbContext.SaveChangesAsync() > 0)
+                {
+                    return new BaseResponse<Guid>
+                    {
+                        Success = true,
+                        Message = "Your booking has been successful",
+                        Data = booking.Id
+                    };
+                }
+
+                else
+                {
+                    return new BaseResponse<Guid>
+                    {
+                        Success = false,
+                        Message = "Booking Failed, unable to complete your booking request.",
+                        Hasherror = true
+                    };
+                }
             }
-            else
+            catch
             {
                 return new BaseResponse<Guid>
                 {
@@ -85,7 +96,6 @@ namespace HotelManagementSystem.Implementation.Services
                 };
             }
         }
-
 
 
         public async Task<List<BookingDto>> GetBooking()
@@ -106,24 +116,36 @@ namespace HotelManagementSystem.Implementation.Services
         }
 
 
-
         public async Task<BaseResponse<Guid>> DeleteBookingAsync(Guid Id)
         {
-            var booking = _dbContext.Bookings.FirstOrDefault();
-            if (booking != null)
+            try
             {
-                _dbContext.Bookings.Remove(booking);
-            }
-            if (await _dbContext.SaveChangesAsync() > 0)
-            {
-                return new BaseResponse<Guid>
+                var booking = _dbContext.Bookings.FirstOrDefault();
+                if (booking != null)
                 {
-                    Success = true,
-                    Message = $"Booking {Id} Has been Deleted Succesfully"
-                };
+                    _dbContext.Bookings.Remove(booking);
+                }
+                if (await _dbContext.SaveChangesAsync() > 0)
+                {
+                    return new BaseResponse<Guid>
+                    {
+                        Success = true,
+                        Message = $"Booking {Id} Has been Deleted Succesfully"
+                    };
+                }
+                else
+                {
+                    return new BaseResponse<Guid>
+                    {
+                        Success = false,
+                        Message = $"Delete Failed unable to process the deletion of  booking {Id} at this time",
+                        Hasherror = true
+                    };
+                }
             }
-            else
+            catch
             {
+
                 return new BaseResponse<Guid>
                 {
                     Success = false,
@@ -131,6 +153,8 @@ namespace HotelManagementSystem.Implementation.Services
                     Hasherror = true
                 };
             }
+
+
         }
 
         public List<SelectRoomDto> GetRoomSelect()
@@ -253,32 +277,44 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<BaseResponse<BookingDto>> UpdateBooking(Guid Id, UpdateBooking request)
         {
-            var booking = _dbContext.Bookings.FirstOrDefault();
-            if (booking == null)
+            try
             {
-                return new BaseResponse<BookingDto>
+                var booking = _dbContext.Bookings.FirstOrDefault();
+                if (booking == null)
                 {
-                    Success = true,
-                    Message = $"Booking {Id} Updated Succesfully"
-                };
-            }
-            //booking.CheckIn = request.CheckIn;
-            //booking.Checkout = request.Checkout;
-            booking.TotalCost = request.TotalCost;
-            booking.RoomId = request.RoomId;
-            booking.PhoneNumber = request.PhoneNumber;
-            booking.Email = request.Email;
-            _dbContext.Bookings.Update(booking);
+                    return new BaseResponse<BookingDto>
+                    {
+                        Success = true,
+                        Message = $"Booking {Id} Updated Succesfully"
+                    };
+                }
+                //booking.CheckIn = request.CheckIn;
+                //booking.Checkout = request.Checkout;
+                booking.TotalCost = request.TotalCost;
+                booking.RoomId = request.RoomId;
+                booking.PhoneNumber = request.PhoneNumber;
+                booking.Email = request.Email;
+                _dbContext.Bookings.Update(booking);
 
-            if (await _dbContext.SaveChangesAsync() > 0)
-            {
-                return new BaseResponse<BookingDto>
+                if (await _dbContext.SaveChangesAsync() > 0)
                 {
-                    Success = true,
-                    Message = $"Booking {Id} Updated Succesfully"
-                };
+                    return new BaseResponse<BookingDto>
+                    {
+                        Success = true,
+                        Message = $"Booking {Id} Updated Succesfully"
+                    };
+                }
+                else
+                {
+                    return new BaseResponse<BookingDto>
+                    {
+                        Success = false,
+                        Message = $"Booking {Id} Update Failed",
+                        Hasherror = false
+                    };
+                }
             }
-            else
+            catch
             {
                 return new BaseResponse<BookingDto>
                 {
@@ -288,7 +324,5 @@ namespace HotelManagementSystem.Implementation.Services
                 };
             }
         }
-
-
     }
 }

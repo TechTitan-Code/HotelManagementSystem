@@ -22,25 +22,36 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<BaseResponse<Guid>> CreatePayment(CreatePayment request)
         {
-            var payment = new Payment
+            try
             {
-                BookingId = request.BookingId,
-                PaymentMethod = request.PaymentMethod,
-                PaymentDate = request.PaymentDate,
-                Amount = request.Amount,
-                Balance = request.Balance,
-                PaymentStatus = request.PaymentStatus
-            };
+                var payment = new Payment
+                {
+                    BookingId = request.BookingId,
+                    PaymentMethod = request.PaymentMethod,
+                    PaymentDate = request.PaymentDate,
+                    Amount = request.Amount,
+                    Balance = request.Balance,
+                    PaymentStatus = request.PaymentStatus
+                };
 
-            _dbContext.payments.Add(payment);
-            await _dbContext.SaveChangesAsync();
+                _dbContext.payments.Add(payment);
+                await _dbContext.SaveChangesAsync();
+                return new BaseResponse<Guid>
+                {
+                    Success = true,
+                    Message = $"payment Successfully"
 
-            return new BaseResponse<Guid>
+                };
+            }
+            catch (Exception ex)
             {
-                Success = true,
-                Message = $"payment Successfully"
+                return new BaseResponse<Guid>
+                {
+                    Success = true,
+                    Message = $"payment Failed"
 
-            };
+                };
+            }
         }
 
         public async Task<PaymentDto> GetPaymentById(Guid paymentId)
@@ -102,6 +113,5 @@ namespace HotelManagementSystem.Implementation.Services
                 Data = payment
             };
         }
-
     }
 }

@@ -11,7 +11,7 @@ namespace HotelManagementSystem.Dto.RequestModel
         [Required]
         public string Address { get; set; }
         [Required]
-        public DateOnly DateOfBirth { get; set; }
+        public string AgeRange { get; set; }
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }

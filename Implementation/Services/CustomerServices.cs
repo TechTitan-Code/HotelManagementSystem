@@ -20,20 +20,32 @@ namespace HMS.Implementation.Services
 
         public async Task<BaseResponse<Guid>> DeleteCustomerAsync(string Id)
         {
-            var customer = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == Id);
-            if (customer != null)
+            try
             {
-                _dbContext.Users.Remove(customer);
-            }
-            if (await _dbContext.SaveChangesAsync() > 0)
-            {
-                return new BaseResponse<Guid>
+                var customer = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == Id);
+                if (customer != null)
                 {
-                    Success = true,
-                    Message = $"Customer {Id} has Been deleted Succesfully"
-                };
+                    _dbContext.Users.Remove(customer);
+                }
+                if (await _dbContext.SaveChangesAsync() > 0)
+                {
+                    return new BaseResponse<Guid>
+                    {
+                        Success = true,
+                        Message = $"Customer {Id} has Been deleted Succesfully"
+                    };
+                }
+                else
+                {
+                    return new BaseResponse<Guid>
+                    {
+                        Success = false,
+                        Message = $"Failed to delete Customer with {Id}.The room may not exist or there was an error in the deletion process.",
+                        Hasherror = true
+                    };
+                }
             }
-            else
+            catch
             {
                 return new BaseResponse<Guid>
                 {
@@ -166,9 +178,49 @@ namespace HMS.Implementation.Services
 
         public async Task<BaseResponse<CustomerDto>> UpdateCustomer(string Id, UpdateCustomer request)
         {
-            var customer = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == Id);
-            if (customer == null)
+            try
             {
+                var customer = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == Id);
+                if (customer == null)
+                {
+                    return new BaseResponse<CustomerDto>
+                    {
+                        Success = false,
+                        Message = $"Failed to Update customer {request.UserName} ,there was an error in the updating process.",
+                        Hasherror = true
+                    };
+                }
+
+                request.Id = request.Id;
+                request.Address = request.Address;
+                request.PhoneNumber = request.PhoneNumber;
+                request.UserName = request.UserName;
+                request.DateOfBirth = request.DateOfBirth;
+                request.Email = request.Email;
+                request.Gender = request.Gender;
+                request.Password = request.Password;
+                _dbContext.Users.Update(customer);
+                if (await _dbContext.SaveChangesAsync() > 0)
+                {
+                    return new BaseResponse<CustomerDto>
+                    {
+                        Success = true,
+                        Message = $"Customer with ID {Id} Updated successfully."
+                    };
+                }
+                else
+                {
+                    return new BaseResponse<CustomerDto>
+                    {
+                        Success = false,
+                        Message = $"Failed to Update customer {request.UserName} ,there was an error in the updating process.",
+                        Hasherror = true
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+
                 return new BaseResponse<CustomerDto>
                 {
                     Success = false,
@@ -177,32 +229,6 @@ namespace HMS.Implementation.Services
                 };
             }
 
-            request.Id = request.Id;
-            request.Address = request.Address;
-            request.PhoneNumber = request.PhoneNumber;
-            request.UserName = request.UserName;
-            request.DateOfBirth = request.DateOfBirth;
-            request.Email = request.Email;
-            request.Gender = request.Gender;
-            request.Password = request.Password;
-            _dbContext.Users.Update(customer);
-            if (await _dbContext.SaveChangesAsync() > 0)
-            {
-                return new BaseResponse<CustomerDto>
-                {
-                    Success = true,
-                    Message = $"Customer with ID {Id} Updated successfully."
-                };
-            }
-            else
-            {
-                return new BaseResponse<CustomerDto>
-                {
-                    Success = false,
-                    Message = $"Failed to Update customer {request.UserName} ,there was an error in the updating process.",
-                    Hasherror = true
-                };
-            }
         }
 
 

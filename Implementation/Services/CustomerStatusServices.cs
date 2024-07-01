@@ -22,83 +22,112 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<BaseResponse<Guid>> CheckIn(Guid customerId, Guid bookingId)
         {
-            var customer = await _dbContext.Users.FindAsync(customerId);
-            if (customer == null)
+            try
+            {
+                var customer = await _dbContext.Users.FindAsync(customerId);
+                if (customer == null)
+                {
+                    return new BaseResponse<Guid>
+                    {
+                        Success = false,
+                        Message = "Customer not found."
+                    };
+                }
+
+                //var booking = await _dbContext.Bookings.FindAsync(bookingId);
+                //if (booking == null)
+                //{
+                //    return new BaseResponse<Guid>
+                //    {
+                //        Success = false,
+                //        Message = "Booking not found."
+                //    };
+                //}
+
+                var customerStatus = new CustomerStatus
+                {
+                    BookingId = bookingId,
+                    CustomerId = customerId,
+                    CustomerName = customer.Name,
+                    CheckInDate = DateTime.Now,
+                };
+
+                _dbContext.CustomerStatuses.Add(customerStatus);
+                await _dbContext.SaveChangesAsync();
+
+                // Assume Rooms is a related entity in Booking and you want to update its availability
+                //booking.Rooms.IsAvailable = false;
+                //_dbContext.Rooms.Update(booking.Rooms);
+                //await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<Guid>
+                {
+                    Success = true,
+                    Message = "Check-in successful.",
+                    Data = customerStatus.BookingId
+                };
+
+            }
+
+
+            catch (Exception ex)
             {
                 return new BaseResponse<Guid>
                 {
-                    Success = false,
-                    Message = "Customer not found."
+                    Success = true,
+                    Message = "Check-in failed.",
+
                 };
             }
 
-            //var booking = await _dbContext.Bookings.FindAsync(bookingId);
-            //if (booking == null)
-            //{
-            //    return new BaseResponse<Guid>
-            //    {
-            //        Success = false,
-            //        Message = "Booking not found."
-            //    };
-            //}
-
-            var customerStatus = new CustomerStatus
-            {
-                BookingId = bookingId,
-                CustomerId = customerId,
-                CustomerName = customer.Name,
-                CheckInDate = DateTime.Now,
-            };
-
-            _dbContext.CustomerStatuses.Add(customerStatus);
-            await _dbContext.SaveChangesAsync();
-
-            // Assume Rooms is a related entity in Booking and you want to update its availability
-            //booking.Rooms.IsAvailable = false;
-            //_dbContext.Rooms.Update(booking.Rooms);
-            //await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<Guid>
-            {
-                Success = true,
-                Message = "Check-in successful.",
-                Data = customerStatus.BookingId
-            };
         }
 
         public async Task<BaseResponse<Guid>> CheckOut(Guid customerId, Guid bookingId)
         {
-            var customerStatus = await _dbContext.CustomerStatuses
-                .FirstOrDefaultAsync(cs => cs.CustomerId == customerId && cs.BookingId == bookingId);
+            try
+            {
+                var customerStatus = await _dbContext.CustomerStatuses
+                               .FirstOrDefaultAsync(cs => cs.CustomerId == customerId && cs.BookingId == bookingId);
 
-            if (customerStatus == null)
+                if (customerStatus == null)
+                {
+                    return new BaseResponse<Guid>
+                    {
+                        Success = false,
+                        Message = "Customer status not found."
+                    };
+                }
+
+                customerStatus.CheckOutDate = DateTime.Now;
+                _dbContext.CustomerStatuses.Update(customerStatus);
+                await _dbContext.SaveChangesAsync();
+
+                //var booking = await _dbContext.Bookings.FindAsync(bookingId);
+                //if (booking != null)
+                //{
+                //    booking.Rooms.IsAvailable = true;
+                //    _dbContext.Rooms.Update(booking.Rooms);
+                //    await _dbContext.SaveChangesAsync();
+                //}
+
+                return new BaseResponse<Guid>
+                {
+                    Success = true,
+                    Message = "Check-out successful.",
+                    Data = customerStatus.BookingId
+                };
+
+            }
+            catch
             {
                 return new BaseResponse<Guid>
                 {
-                    Success = false,
-                    Message = "Customer status not found."
+                    Success = true,
+                    Message = "Check-out failed.",
                 };
             }
-
-            customerStatus.CheckOutDate = DateTime.Now;
-            _dbContext.CustomerStatuses.Update(customerStatus);
-            await _dbContext.SaveChangesAsync();
-
-            //var booking = await _dbContext.Bookings.FindAsync(bookingId);
-            //if (booking != null)
-            //{
-            //    booking.Rooms.IsAvailable = true;
-            //    _dbContext.Rooms.Update(booking.Rooms);
-            //    await _dbContext.SaveChangesAsync();
-            //}
-
-            return new BaseResponse<Guid>
-            {
-                Success = true,
-                Message = "Check-out successful.",
-                Data = customerStatus.BookingId
-            };
         }
+           
 
         public async Task<List<CustomerStatusDto>> GetCustomerStatus()
         {

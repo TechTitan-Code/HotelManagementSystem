@@ -143,20 +143,34 @@ namespace HMS.Implementation.Services
 
         public async Task<BaseResponse<Guid>> DeleteOrderAsync(Guid Id)
         {
-            var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == Id);
-            if (order != null)
+            try
             {
-                _dbContext.Orders.Remove(order);
-            }
-            if (await _dbContext.SaveChangesAsync() > 0)
-            {
-                return new BaseResponse<Guid>
+                var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == Id);
+                if (order != null)
                 {
-                    Success = true,
-                    Message = $"Order Has been deleted succesfully",
-                };
+                    _dbContext.Orders.Remove(order);
+                }
+                if (await _dbContext.SaveChangesAsync() > 0)
+                {
+                    return new BaseResponse<Guid>
+                    {
+                        Success = true,
+                        Message = $"Order Has been deleted succesfully",
+                    };
+                }
+
+                else
+                {
+                    return new BaseResponse<Guid>
+                    {
+                        Success = false,
+                        Message = " Failed to delete Order,The order may not exist or there was an error in the deletion process.",
+                        Hasherror = true
+                    };
+                }
+
             }
-            else
+            catch
             {
                 return new BaseResponse<Guid>
                 {
@@ -181,38 +195,7 @@ namespace HMS.Implementation.Services
                 .ToListAsync();
         }
 
-        //public async Task<BaseResponse<OrderDto>> GetOrderByIdAsync(Guid Id)
-        //{
 
-        //    var order = await _dbContext.Orders
-        //     .Where(x => x.Id == Id)
-        //     .Select(x => new OrderDto()
-        //     {
-        //         Id = x.Id,
-        //         ProductName = x.Products.Name,
-        //         OrderDate = x.OrderDate,
-        //         TotalAmount = x.TotalAmount,
-        //     }).FirstOrDefaultAsync();
-        //    if (order != null)
-        //    {
-        //        return new BaseResponse<OrderDto>
-        //        {
-        //            Success = true,
-        //            Message = $"Order {Id} Retrieved succesfully",
-        //            Data = order
-
-        //        };
-        //    }
-        //    else
-        //    {
-        //        return new BaseResponse<OrderDto>
-        //        {
-        //            Success = false,
-        //            Message = $"Order {Id} Retrieval Failed"
-        //        };
-        //    }
-
-        //}
 
         public async Task<BaseResponse<OrderDto>> GetOrderByIdAsync(Guid Id)
         {
@@ -221,7 +204,7 @@ namespace HMS.Implementation.Services
                 .Select(x => new OrderDto
                 {
                     Id = x.Id,
-                    ProductName = x.Products.Name, 
+                    ProductName = x.Products.Name,
                     OrderDate = x.OrderDate,
                     TotalAmount = x.TotalAmount,
                 }).FirstOrDefaultAsync();
@@ -311,29 +294,41 @@ namespace HMS.Implementation.Services
 
         public async Task<BaseResponse<IList<OrderDto>>> UpdateOrder(Guid Id, UpdateOrder request)
         {
-            var order = await _dbContext.Orders.FirstOrDefaultAsync();
-            if (order == null)
+            try
             {
-                return new BaseResponse<IList<OrderDto>>
+                var order = await _dbContext.Orders.FirstOrDefaultAsync();
+                if (order == null)
                 {
-                    Success = true,
-                    Message = $"Order with ID {Id} Updated successfully.",
+                    return new BaseResponse<IList<OrderDto>>
+                    {
+                        Success = true,
+                        Message = $"Order with ID {Id} Updated successfully.",
 
-                };
-            }
-            order.OrderDate = request.OrderDate;
-            //order.Product = request.Product;
-            order.TotalAmount = request.TotalAmount;
-            _dbContext.Orders.Update(order);
-            if (await _dbContext.SaveChangesAsync() > 0)
-            {
-                return new BaseResponse<IList<OrderDto>>
+                    };
+                }
+                order.OrderDate = request.OrderDate;
+                //order.Product = request.Product;
+                order.TotalAmount = request.TotalAmount;
+                _dbContext.Orders.Update(order);
+                if (await _dbContext.SaveChangesAsync() > 0)
                 {
-                    Success = true,
-                    Message = $"Order with ID {Id} Updated successfully."
-                };
+                    return new BaseResponse<IList<OrderDto>>
+                    {
+                        Success = true,
+                        Message = $"Order with ID {Id} Updated successfully."
+                    };
+                }
+                else
+                {
+                    return new BaseResponse<IList<OrderDto>>
+                    {
+                        Success = false,
+                        Message = $"Failed to Update order,there was an error in the updating process.",
+                        Hasherror = true
+                    };
+                }
             }
-            else
+            catch
             {
                 return new BaseResponse<IList<OrderDto>>
                 {
@@ -342,6 +337,7 @@ namespace HMS.Implementation.Services
                     Hasherror = true
                 };
             }
+
         }
     }
 }
