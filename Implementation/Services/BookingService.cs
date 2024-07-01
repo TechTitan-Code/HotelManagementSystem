@@ -288,9 +288,19 @@ namespace HotelManagementSystem.Implementation.Services
                         Message = $"Booking {Id} Updated Succesfully"
                     };
                 }
-                //booking.CheckIn = request.CheckIn;
-                //booking.Checkout = request.Checkout;
-                booking.TotalCost = request.TotalCost;
+                var room = await _dbContext.Rooms.FindAsync(request.RoomId);
+                {
+                    if (room == null)
+                    {
+                        return new BaseResponse<BookingDto>
+                        {
+                            Success = true,
+                            Message = "Room not Found"
+                        };
+                    }
+
+                }
+                booking.TotalCost = room.RoomRate;
                 booking.RoomId = request.RoomId;
                 booking.PhoneNumber = request.PhoneNumber;
                 booking.Email = request.Email;
