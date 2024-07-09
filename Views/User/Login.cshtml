@@ -59,12 +59,15 @@
                         <form asp-action="Login" asp-controller="User">
                             <div class="col mb-3">
                                 <label class="form-label">UserName</label>
-                                <input type="UserName" class="form-control" name="UserName">
-                                <span asp-validation-for="UserName"></span>
+                                <input type="text" class="form-control" name="UserName" required>
+                                <div class="valid-feedback">Valid.</div>
+                                <div class="invalid-feedback">UserName Is required.</div>
                             </div>
                             <div class="col mb-3">
                                 <label class="form-label">PassWord</label>
-                                <input type="password" class="form-control" name="PassWord">
+                                <input type="password" class="form-control" name="PassWord" required >
+                                <div class="valid-feedback">Valid.</div>
+                                <div class="invalid-feedback">PassWord is Required.</div>
                             </div>
 
                            @*  <div class="form-floating mb-3">
