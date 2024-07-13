@@ -1,4 +1,5 @@
-﻿using HMS.Implementation.Services;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using HMS.Implementation.Services;
 using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
@@ -12,10 +13,12 @@ namespace HotelManagementSystem.Controllers
     public class ProductController : Controller
     {
         private readonly IProductServices _productServices;
+        private readonly INotyfService _notyf;
 
-        public ProductController(IProductServices productServices)
+        public ProductController(IProductServices productServices , INotyfService notyf)
         {
             _productServices = productServices;
+            _notyf = notyf;
         }
 
         [HttpGet("get-product")]
@@ -46,6 +49,8 @@ namespace HotelManagementSystem.Controllers
             var product = await _productServices.CreateProduct(request);
             if (product.Success)
             {
+
+                _notyf.Success(product.Message, 3);
                 return RedirectToAction("Products");
             }
             return BadRequest();

@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification;
 using HMS.Implementation.Interface;
 using HMS.Implementation.Services;
 using HotelManagementSystem.Dto.Implementation.Services;
@@ -31,6 +32,14 @@ builder.Services.AddTransient<ICustomerReviewService, CustomerReviewService>();
 builder.Services.AddTransient<IAmenityService , AmenityService>();
 builder.Services.AddTransient<IPaymentServices , PaymentServices>();
 builder.Services.AddTransient<ICustomerStatusServices , CustomerStatusServices>();
+
+builder.Services.AddNotyf(config =>
+{
+    config.DurationInSeconds = 5;
+    config.IsDismissable = true;
+    config.Position = NotyfPosition.TopRight;
+}
+);
 
 
 

@@ -1,4 +1,5 @@
-﻿using HotelManagementSystem.Dto.RequestModel;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,10 +10,12 @@ namespace HotelManagementSystem.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderServices _orderServices;
-        public OrderController(IOrderServices orderServices)
+        private readonly INotyfService _notyf;
+
+        public OrderController(IOrderServices orderServices , INotyfService notyf)
         {
             _orderServices = orderServices;
-           
+            _notyf = notyf;
         }
 
 
@@ -23,11 +26,6 @@ namespace HotelManagementSystem.Controllers
             return View(order);
            // return View(new List<OrderDto>());
         }
-
-
-
-       
-
 
         [HttpGet("create-order")]
         public IActionResult CreateOrder()
@@ -47,8 +45,10 @@ namespace HotelManagementSystem.Controllers
             var order = await _orderServices.CreateOrder(request);
             if (order.Success)
             {
+                _notyf.Success(order.Message, 3);
                 return RedirectToAction("Orders");
             }
+            _notyf.Error(order.Message);
             return BadRequest();
         }
 
@@ -69,8 +69,10 @@ namespace HotelManagementSystem.Controllers
             var order = await _orderServices.UpdateOrder(request.Id, request);
             if (order.Success)
             {
+                _notyf.Success(order.Message, 3);
                 return RedirectToAction("Orders");
             }
+            _notyf.Error(order.Message);
             return View(request);
         }
 
@@ -83,9 +85,10 @@ namespace HotelManagementSystem.Controllers
             var order = await _orderServices.DeleteOrderAsync(id);
             if (order.Success)
             {
+                _notyf.Success(order.Message, 3);
                 return RedirectToAction("Orders", "Order");
             }
-
+            _notyf.Error(order.Message);
             return BadRequest(order);
 
         }
@@ -104,7 +107,6 @@ namespace HotelManagementSystem.Controllers
                 return BadRequest(order);
             }
 
-
         }
 
         [HttpGet("get-order/{id}")]
@@ -113,8 +115,10 @@ namespace HotelManagementSystem.Controllers
             var order = await _orderServices.GetOrderByIdAsync(id);
             if (order != null)
             {
+                _notyf.Success(order.Message, 3);
                 return View(order.Data);
             }
+            _notyf.Error(order?.Message);
             return RedirectToAction("Orders");
         }
 

@@ -1,4 +1,5 @@
-﻿using HMS.Implementation.Interface;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using HMS.Implementation.Interface;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -6,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 public class AmenityController : Controller
 {
     private readonly IAmenityService _amenityService;
+    private readonly INotyfService _notyf;
 
-    public AmenityController(IAmenityService amenityService)
+    public AmenityController(IAmenityService amenityService ,INotyfService notyf)
     {
         _amenityService = amenityService;
+        _notyf = notyf;
     }
 
     [HttpGet("get-amenity")]
@@ -41,8 +44,10 @@ public class AmenityController : Controller
         var amenity = await _amenityService.CreateAmenity(request);
         if (amenity.Success)
         {
+            _notyf.Success(amenity.Message, 3);
             return RedirectToAction("Amenities");
         }
+        _notyf.Error(amenity.Message);
         return BadRequest();
     }
 
@@ -63,8 +68,10 @@ public class AmenityController : Controller
         var amenity = await _amenityService.UpdateAmenity(request.Id, request);
         if (amenity.Success)
         {
+            _notyf.Success(amenity.Message, 3);
             return RedirectToAction("Amenities", "Amenity");
         }
+        _notyf.Error(amenity.Message);
         return View(request);
     }
 
@@ -77,9 +84,10 @@ public class AmenityController : Controller
         var amenity = await _amenityService.DeleteAmenity(id);
         if (amenity.Success)
         {
+            _notyf.Success(amenity.Message, 3);
             return RedirectToAction("Amenities", "Amenity");
         }
-
+        _notyf.Error(amenity.Message);
         return BadRequest(amenity);
 
     }
@@ -107,8 +115,10 @@ public class AmenityController : Controller
         var amenity = await _amenityService.GetAmenityBYId( Id);
         if (amenity.Success)
         {
+            _notyf.Success(amenity.Message, 3);
             return View(amenity.Data);
         }
+        _notyf.Error(amenity.Message);
         return RedirectToAction("Amenities");
     }
 

@@ -1,4 +1,5 @@
-﻿using HotelManagementSystem.Dto;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
@@ -11,11 +12,13 @@ namespace HotelManagementSystem.Controllers
     {
         private readonly IBookingServices _bookService;
         private readonly IRoomService _roomService;
+        private readonly INotyfService _notyf;
 
-        public BookingController(IBookingServices bookService, IRoomService roomService)
+        public BookingController(IBookingServices bookService, IRoomService roomService , INotyfService notyf)
         {
             _bookService = bookService;
             _roomService = roomService;
+            _notyf = notyf;
         }
 
         [HttpGet("get-booking")]
@@ -47,8 +50,10 @@ namespace HotelManagementSystem.Controllers
             var booking = await _bookService.CreateBooking(request);
             if (booking.Success)
             {
+                _notyf.Success(booking.Message, 3);
                 return RedirectToAction("Bookings");
             }
+            _notyf.Error(booking.Message);
             return BadRequest();
         }
 
@@ -76,8 +81,10 @@ namespace HotelManagementSystem.Controllers
             var booking = await _bookService.UpdateBooking(request.Id, request);
             if (booking.Success)
             {
+                _notyf.Success(booking.Message, 3);
                 return RedirectToAction("Bookings");
             }
+            _notyf.Error(booking.Message);
             return View("Booking");
         }
 
@@ -90,9 +97,10 @@ namespace HotelManagementSystem.Controllers
             var booking = await _bookService.DeleteBookingAsync(id);
             if (booking.Success)
             {
+                _notyf.Success(booking.Message, 3);
                 return RedirectToAction("Bookings", "Booking");
             }
-
+            _notyf.Error(booking.Message);
             return BadRequest(booking);
 
         }
@@ -102,16 +110,11 @@ namespace HotelManagementSystem.Controllers
         public async Task<IActionResult> GetAllBookingsAsync()
         {
             var bookings = await _bookService.GetAllBookingsAsync();
-            if (bookings.Success == false)
+            if (bookings.Success)
             {
-                return Ok(bookings);
+                return View(bookings);
             }
-            else
-            {
                 return BadRequest(bookings);
-            }
-
-
         }
 
         [HttpGet("get-booking-by-id/{id}")]
@@ -120,8 +123,10 @@ namespace HotelManagementSystem.Controllers
             var bookings = await _bookService.GetBookingByIdAsync(id);
             if (bookings != null)
             {
+                _notyf.Success(bookings.Message, 3);
                 return View(bookings.Data);
             }
+            _notyf.Error(bookings?.Message);
             return RedirectToAction("Bookings");
         }
 

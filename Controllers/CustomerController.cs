@@ -1,4 +1,5 @@
-﻿using HotelManagementSystem.Dto;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
@@ -9,9 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace HMS.Controllers
 {
 
-    public class CustomerController(ICustomerServices customerServices) : Controller
+    public class CustomerController(ICustomerServices customerServices, INotyfService notyf) : Controller
     {
         private readonly ICustomerServices _customerServices = customerServices;
+        private readonly INotyfService _notyf = notyf;
 
         [HttpGet("get-customer")]
         public async Task<IActionResult> Customers()
@@ -32,14 +34,14 @@ namespace HMS.Controllers
         }
 
 
-       
+
 
 
         [HttpGet("edit-customer/{id}")]
         public async Task<IActionResult> EditCustomer([FromRoute] string id)
         {
             var customer = await _customerServices.GetCustomerAsync(id);
-
+            _notyf.Success(customer.Message, 3);
             return View(customer.Data);
         }
 
@@ -49,8 +51,10 @@ namespace HMS.Controllers
             var customer = await _customerServices.UpdateCustomer(request.Id.ToString(), request);
             if (customer.Success)
             {
+                _notyf.Success(customer.Message, 3);
                 return RedirectToAction("Customers");
             }
+            _notyf.Error(customer.Message);
             return BadRequest();
         }
 
@@ -60,7 +64,7 @@ namespace HMS.Controllers
             return View();
         }
 
-       
+
 
 
         [HttpGet("delete-customer/{id}")]
@@ -69,9 +73,10 @@ namespace HMS.Controllers
             var customer = await _customerServices.DeleteCustomerAsync(Id);
             if (customer.Success)
             {
+                _notyf.Success(customer.Message, 3);
                 return RedirectToAction("Customers", "Customer");
             }
-
+            _notyf.Error(customer.Message);
             return BadRequest(customer);
 
         }
@@ -99,9 +104,10 @@ namespace HMS.Controllers
             var customer = await _customerServices.GetCustomerByIdAsync(id);
             if (customer.Success)
             {
+                _notyf.Success(customer.Message, 3);
                 return View(customer.Data);
             }
-
+            _notyf.Error(customer.Message);
             return RedirectToAction("Customers");
 
         }

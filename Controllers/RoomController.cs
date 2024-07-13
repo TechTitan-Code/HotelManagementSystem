@@ -1,4 +1,5 @@
-﻿using HMS.Implementation.Interface;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using HMS.Implementation.Interface;
 using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
@@ -13,11 +14,13 @@ namespace HotelManagementSystem.Controllers
 
         private readonly IRoomService _roomService;
         private readonly IAmenityService _amenityService;
+        private readonly INotyfService _notyf;
 
-        public RoomController(IRoomService roomService, IAmenityService amenityService)
+        public RoomController(IRoomService roomService, IAmenityService amenityService, INotyfService notyf)
         {
             _roomService = roomService;
             _amenityService = amenityService;
+            _notyf = notyf;
         }
 
         [HttpGet("get-rooms")]
@@ -48,8 +51,10 @@ namespace HotelManagementSystem.Controllers
             var room = await _roomService.CreateRoom(request);
             if (room.Success)
             {
+                _notyf.Success(room.Message, 3);
                 return RedirectToAction("Rooms");
             }
+            _notyf.Error(room.Message, 3);
             return BadRequest();
 
         }
@@ -68,10 +73,11 @@ namespace HotelManagementSystem.Controllers
             var room = await _roomService.UpdateRoom(request.Id, request);
             if (room.Success)
             {
+                _notyf.Success(room.Message, 3);
                 return RedirectToAction("Rooms");
 
             }
-
+            _notyf.Error(room.Message, 3);
             return View(request);
         }
 
@@ -83,8 +89,10 @@ namespace HotelManagementSystem.Controllers
             var room = await _roomService.DeleteRoomAsync(Id);
             if (room.Success)
             {
+                _notyf.Success(room.Message, 3);
                 return RedirectToAction("Rooms", "Room");
             }
+            _notyf.Error(room.Message, 3);
             return BadRequest(room);
         }
 
@@ -104,10 +112,12 @@ namespace HotelManagementSystem.Controllers
         public async Task<IActionResult> GetRoomsById(Guid id)
         {
             var rooms = await _roomService.GetRoomsByIdAsync(id);
-            if (rooms!= null)
+            if (rooms != null)
             {
+                _notyf.Success(rooms.Message, 3);
                 return View(rooms.Data);
             }
+            _notyf.Error(rooms?.Message);
             return RedirectToAction("Rooms");
         }
     }

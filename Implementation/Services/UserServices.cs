@@ -381,6 +381,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                         }
 
                         status.StatusCode = 1;
+                        status.Success = true;
                         status.Message = "Logged in successfully";
                     }
                     else if (signInResult.IsLockedOut)

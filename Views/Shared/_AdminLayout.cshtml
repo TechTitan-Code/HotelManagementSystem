@@ -71,9 +71,12 @@
     <script src="~/Admin/lib/tempusdominus/js/moment.min.js"></script>
     <script src="~/Admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="~/Admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
+   
     <!-- Template Javascript -->
     <script src="~/Admin/js/main.js"></script>
+    <script src="~Admin/js/site.js" asp-append-version="true"></script>
+    @await Component.InvokeAsync("Notyf")
+    @RenderSection("Scripts", required: false)
 </body>
 
 </html>

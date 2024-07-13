@@ -1,4 +1,5 @@
-﻿using HotelManagementSystem.Dto.RequestModel;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -10,11 +11,12 @@ namespace HotelManagementSystem.Controllers
     public class UserController : Controller
     {
         private readonly IUserServices _userServices;
-       
+        private readonly INotyfService _notyf;
 
-        public UserController(IUserServices  userService)
+        public UserController(IUserServices  userService , INotyfService notyf)
         {
             _userServices = userService;
+            _notyf = notyf;
         }
 
         [AllowAnonymous]
@@ -48,8 +50,10 @@ namespace HotelManagementSystem.Controllers
          var user = await   _userServices.CreateUser(request);
             if (user.Success)
             {
+                _notyf.Success(user.Message, 3);
                 return RedirectToAction("Login");
             }
+            _notyf.Error(user.Message);
             return BadRequest();
         }
 
@@ -69,8 +73,10 @@ namespace HotelManagementSystem.Controllers
            var user = await _userServices.UpdateUser(request.Id, request);
             if (user.Success)
             {
+                _notyf.Success(user.Message, 3);
                 return RedirectToAction("Users");
             }
+            _notyf.Error(user.Message, 3);
             return View(user);
         }
 
@@ -81,8 +87,10 @@ namespace HotelManagementSystem.Controllers
             var user = await _userServices.DeleteUserAsync(id);
             if (user.Success)
             {
+                _notyf.Success(user.Message, 3);
                 return RedirectToAction("Users", "User");
             }
+            _notyf.Error(user.Message, 3);
             return BadRequest(user);
         }
 
@@ -94,6 +102,7 @@ namespace HotelManagementSystem.Controllers
             var users = await _userServices.GetAllUserAsync();
             if (users.Success)
             {
+                _notyf.Success(users.Message, 3);
                 return RedirectToAction("Users");
             }
             return View(users);
@@ -102,24 +111,13 @@ namespace HotelManagementSystem.Controllers
 
 
 
-        //[HttpGet("get-user-by-id/{id}")]
-        //public async Task<IActionResult> GetUserById(Guid id)
-        //{
-        //    var user = await _userServices.GetUserByIdAsync(id);
-        //    if (user.Success)
-        //    {
-        //        return RedirectToAction("Users");
-        //    }
-        //    return View(user);
-        //}
-
-
         [HttpGet("get-user-by-id/{id}")]
         public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userServices.GetUserByIdAsync(id);
             if (user.Success && user.Data != null)
             {
+                _notyf.Success(user.Message, 3);
                 return View(user.Data); 
             }
             return RedirectToAction("Users"); 
@@ -140,11 +138,13 @@ namespace HotelManagementSystem.Controllers
             var result = await _userServices.LoginAsync(model);
             if (result.StatusCode == 1)
             {
+                _notyf.Success(result.Message, 3);
                 return RedirectToAction("Index", "Admin" );
             }
             else
             {
                 TempData["msg"] = result.Message;
+                _notyf.Error(result.Message, 4);
                 return RedirectToAction(nameof(Login));
             }
         }

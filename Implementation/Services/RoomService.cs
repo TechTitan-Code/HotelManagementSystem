@@ -85,9 +85,8 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<List<RoomDto>> GetRoom()
         {
-            return _dbContext.Rooms
+            return await _dbContext.Rooms
                 .Include(x => x.Amenities)
-                //.Include(x => x.RoomType)
                 .Select(x => new RoomDto()
                 {
                     Id = x.Id,
@@ -102,25 +101,33 @@ namespace HotelManagementSystem.Implementation.Services
                     //Amenity = x.Amenity
 
 
-                }).ToList();
+                }).ToListAsync();
         }
+
 
 
         public async Task<BaseResponse<Guid>> DeleteRoomAsync(Guid Id)
         {
             try
             {
-                var room = await _dbContext.Rooms.FirstOrDefaultAsync();
-                if (room != null)
+                var room = await _dbContext.Rooms.FirstOrDefaultAsync(r => r.Id == Id);
+                if (room == null)
                 {
-                    _dbContext.Rooms.Remove(room);
+                    return new BaseResponse<Guid>
+                    {
+                        Success = false,
+                        Message = $"Room with ID {Id} not found."
+                    };
                 }
+
+                _dbContext.Rooms.Remove(room);
                 if (await _dbContext.SaveChangesAsync() > 0)
                 {
                     return new BaseResponse<Guid>
                     {
                         Success = true,
-                        Message = $"Room  Number {Id} has been deleted succesfully "
+                        Message = $"Room with ID {Id} has been deleted successfully.",
+                        Data = Id
                     };
                 }
                 else
@@ -128,19 +135,22 @@ namespace HotelManagementSystem.Implementation.Services
                     return new BaseResponse<Guid>
                     {
                         Success = false,
-                        Message = $"Failed to delete room with {Id}.The room may not exist or there was an error in the deletion process."
+                        Message = $"Failed to delete room with ID {Id}. There was an error in the deletion process."
                     };
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new BaseResponse<Guid>
                 {
                     Success = false,
-                    Message = $"Failed to delete room with {Id}.The room may not exist or there was an error in the deletion process."
+                    Message = $"An error occurred while deleting the room with ID {Id}: {ex.Message}"
                 };
             }
         }
+
+
+
         public async Task<BaseResponse<RoomDto>> GetRoomAsync(Guid Id)
         {
             var room = await _dbContext.Rooms.FirstOrDefaultAsync(x => x.Id == Id);

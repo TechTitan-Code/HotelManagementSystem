@@ -1,4 +1,5 @@
-﻿using HMS.Implementation.Services;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using HMS.Implementation.Services;
 using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
@@ -13,10 +14,12 @@ namespace HotelManagementSystem.Controllers
     public class CustomerStatusController : Controller
     {
         private readonly ICustomerStatusServices _customerStatusServices;
+        private readonly INotyfService _notyf;
 
-        public CustomerStatusController(ICustomerStatusServices customerStatusServices) 
+        public CustomerStatusController(ICustomerStatusServices customerStatusServices , INotyfService notyf) 
         {
             _customerStatusServices = customerStatusServices;
+            _notyf = notyf;
         }
 
         [HttpGet("get-customerStatus")]
@@ -41,10 +44,12 @@ namespace HotelManagementSystem.Controllers
             var response = await _customerStatusServices.CheckIn(customerId, bookingId);
             if (response.Success)
             {
+                _notyf.Success(response.Message, 3);
                 return RedirectToAction("CustomerStatus");
             }
 
             ModelState.AddModelError(string.Empty, response.Message);
+            _notyf.Error(response.Message);
             return View();
         }
 
@@ -62,9 +67,10 @@ namespace HotelManagementSystem.Controllers
             var response = await _customerStatusServices.CheckOut(customerId, bookingId);
             if (response.Success)
             {
+                _notyf.Success(response.Message, 3);
                 return RedirectToAction("CustomerStatus");
             }
-
+            _notyf.Error(response.Message);
             return BadRequest();
         }
     }

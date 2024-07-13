@@ -204,31 +204,82 @@ namespace HotelManagementSystem.Implementation.Services
         }
 
 
-        public async Task<BaseResponse<ProductDto>> UpdateProduct(Guid Id, UpdateProduct request)
+        //public async Task<BaseResponse<ProductDto>> UpdateProduct(Guid Id, UpdateProduct request)
+        //{
+        //    try
+        //    {
+        //        var item = await _dbContext.Products.FirstOrDefaultAsync();
+        //        if (item == null)
+        //        {
+        //            return new BaseResponse<ProductDto>
+        //            {
+        //                Success = false,
+        //                Message = "Failed to Update Product ,there was an error in the updating process.",
+        //                Hasherror = true
+        //            };
+        //        }
+
+        //        //item.Id = request.Id;
+        //        item.Name = request.Name;
+        //        item.Price = request.Price;
+        //        _dbContext.Products.Update(item);
+        //        if (await _dbContext.SaveChangesAsync() > 0)
+        //        {
+        //            return new BaseResponse<ProductDto>
+        //            {
+        //                Success = true,
+        //                Message = $"Product with ID {Id} Updated successfully."
+        //            };
+        //        }
+        //        else
+        //        {
+        //            return new BaseResponse<ProductDto>
+        //            {
+        //                Success = false,
+        //                Message = "Failed to Update Product ,there was an error in the updating process.",
+        //                Hasherror = true
+        //            };
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new BaseResponse<ProductDto>
+        //        {
+        //            Success = false,
+        //            Message = "Failed to Update Product ,there was an error in the updating process.",
+        //            Hasherror = true
+        //        };
+        //    }
+
+
+        //}
+
+
+        public async Task<BaseResponse<ProductDto>> UpdateProduct(Guid id, UpdateProduct request)
         {
             try
             {
-                var item = await _dbContext.Products.FirstOrDefaultAsync();
+                var item = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
                 if (item == null)
                 {
                     return new BaseResponse<ProductDto>
                     {
                         Success = false,
-                        Message = "Failed to Update Product ,there was an error in the updating process.",
+                        Message = "Product not found.",
                         Hasherror = true
                     };
                 }
 
-                //item.Id = request.Id;
                 item.Name = request.Name;
                 item.Price = request.Price;
+
                 _dbContext.Products.Update(item);
                 if (await _dbContext.SaveChangesAsync() > 0)
                 {
                     return new BaseResponse<ProductDto>
                     {
                         Success = true,
-                        Message = $"Product with ID {Id} Updated successfully."
+                        Message = $"Product with ID {id} updated successfully."
                     };
                 }
                 else
@@ -236,7 +287,7 @@ namespace HotelManagementSystem.Implementation.Services
                     return new BaseResponse<ProductDto>
                     {
                         Success = false,
-                        Message = "Failed to Update Product ,there was an error in the updating process.",
+                        Message = "Failed to update product.",
                         Hasherror = true
                     };
                 }
@@ -246,15 +297,11 @@ namespace HotelManagementSystem.Implementation.Services
                 return new BaseResponse<ProductDto>
                 {
                     Success = false,
-                    Message = "Failed to Update Product ,there was an error in the updating process.",
+                    Message = "An error occurred while updating the product.",
                     Hasherror = true
                 };
             }
-
-
         }
-
-
 
     }
 }
