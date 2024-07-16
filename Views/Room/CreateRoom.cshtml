@@ -50,7 +50,7 @@
                     <div class="row">
                         <div class="col mb-3">
                             <label class="form-label">Room Amenities</label>
-                            <select asp-for="RoomId" class="form-select" asp-items="@(ViewData["SelectAmenity"] as IEnumerable<SelectListItem>)" required>
+                            <select asp-for="AmenityId" class="form-select" asp-items="@(ViewData["SelectAmenity"] as IEnumerable<SelectListItem>)" required>
                                 <option value="">Select RoomAmenity</option>
                             </select>
                         </div>

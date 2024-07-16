@@ -24,12 +24,9 @@ namespace HotelManagementSystem.Implementation.Services
                 if (request != null)
                 {
                     // Check if the room already exists
-                    var existingRoom = _dbContext.Rooms.FirstOrDefault(x =>
-                        x.RoomName == request.RoomName &&
-                        x.RoomNumber == request.RoomNumber &&
-                        x.RoomType == request.RoomType &&
-                        x.RoomStatus == request.RoomStatus);
-
+                    var existingRoom = await _dbContext.Rooms.FirstOrDefaultAsync(x =>
+                        x.Id == request.RoomId);
+                        
                     if (existingRoom != null)
                     {
                         // Room already exists
@@ -39,10 +36,21 @@ namespace HotelManagementSystem.Implementation.Services
                             Message = $"Room {request.RoomName} already exists.",
                             Hasherror = true
                         };
-
                     }
 
-                    //create a new one
+           
+                    var amenity = await _dbContext.Amenities.FirstOrDefaultAsync(a => a.Id == request.AmenityId);
+                    if (amenity == null)
+                    {
+                        return new BaseResponse<Guid>
+                        {
+                            Success = false,
+                            Message = $"Amenity with ID {request.AmenityId} does not exist.",
+                            Hasherror = true
+                        };
+                    }
+
+                    // Create a new room
                     var room = new Room
                     {
                         RoomName = request.RoomName,
@@ -51,33 +59,38 @@ namespace HotelManagementSystem.Implementation.Services
                         RoomRate = request.RoomRate,
                         RoomStatus = request.RoomStatus,
                         BedType = request.BedType,
-                        //RoomId = request.RoomId,
                         RoomType = request.RoomType,
                         MaxOccupancy = request.MaxOccupancy,
-                        //Amenities = request.AmenityName,
+                        AmenityId = request.AmenityId,
+                        RoomId = request.RoomId,
+                        Amenity = request.Amenity
                     };
 
                     await _dbContext.Rooms.AddAsync(room);
-                    _dbContext.SaveChanges();
+                    await _dbContext.SaveChangesAsync();
+
+                    return new BaseResponse<Guid>
+                    {
+                        Success = true,
+                        Message = $"Room {request.RoomName} created successfully.",
+                        Data = room.RoomId
+                    };
                 }
+
                 return new BaseResponse<Guid>
                 {
-                    Success = true,
-                    Message = $"Room {request.RoomName} Created failed"
-
+                    Success = false,
+                    Message = "Invalid request."
                 };
             }
             catch (Exception ex)
             {
                 return new BaseResponse<Guid>
                 {
-
-                    Success = true,
-                    Message = $"Room {request.RoomName} Created Failed"
-
+                    Success = false,
+                    Message = $"Room creation failed: {ex.Message}"
                 };
             }
-
         }
 
 
@@ -86,7 +99,7 @@ namespace HotelManagementSystem.Implementation.Services
         public async Task<List<RoomDto>> GetRoom()
         {
             return await _dbContext.Rooms
-                .Include(x => x.Amenities)
+                .Include(x => x.Amenity)
                 .Select(x => new RoomDto()
                 {
                     Id = x.Id,
@@ -98,9 +111,7 @@ namespace HotelManagementSystem.Implementation.Services
                     RoomNumber = x.RoomNumber,
                     RoomRate = x.RoomRate,
                     RoomStatus = x.RoomStatus,
-                    //Amenity = x.Amenity
-
-
+                    AmenityName = x.Amenity.AmenityName
                 }).ToListAsync();
         }
 

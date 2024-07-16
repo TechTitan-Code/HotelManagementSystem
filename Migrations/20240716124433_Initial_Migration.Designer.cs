@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240629234235_remove amenity")]
-    partial class removeamenity
+    [Migration("20240716124433_Initial_Migration")]
+    partial class Initial_Migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,53 +84,6 @@ namespace HotelManagementSystem.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Bookings");
-                });
-
-            modelBuilder.Entity("HotelManagementSystem.Model.Entity.Customer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.CustomerReview", b =>
@@ -262,13 +215,7 @@ namespace HotelManagementSystem.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
-
                     b.Property<int>("MaxOccupancy")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoomCount")
                         .HasColumnType("int");
 
                     b.Property<Guid>("RoomId")
@@ -318,8 +265,9 @@ namespace HotelManagementSystem.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CustomerName")
                         .IsRequired()
@@ -362,9 +310,15 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fb0ea989-3765-4609-a67a-ac1f50e81e2a",
+                            Id = "8ec63826-99d4-4b9c-9bea-9c5d7b6db1b7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "38f5ebda-4c7f-4b8d-98bf-28388222227a",
+                            Name = "Customer",
+                            NormalizedName = "Customer"
                         });
                 });
 
@@ -531,8 +485,8 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "50f66729-61d6-4057-bada-dbcdcce90fab",
-                            RoleId = "fb0ea989-3765-4609-a67a-ac1f50e81e2a"
+                            UserId = "8c00d29c-a8c9-4a17-97e4-9e82813a6761",
+                            RoleId = "8ec63826-99d4-4b9c-9bea-9c5d7b6db1b7"
                         });
                 });
 
@@ -562,6 +516,10 @@ namespace HotelManagementSystem.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AgeRange")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
@@ -585,21 +543,22 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "50f66729-61d6-4057-bada-dbcdcce90fab",
+                            Id = "8c00d29c-a8c9-4a17-97e4-9e82813a6761",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "09846967-72da-4c57-8674-2e4fccbb1edf",
+                            ConcurrencyStamp = "84ef7d62-0125-4c94-b4c6-ae364eb42e81",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGp22bek7TuHZ/Lcf/4+ZMJa8ME3og7Ku12NJiRzxRyAKE3QZ8nNx6sK+qM3hcgVcA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOg9MNS78JvXtAR1rtQpkqG1533PvTHNX61Z6glH7TSf36+Nnrdvzn54+vmZc/l6BQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
                             UserName = "Admin",
+                            AgeRange = "20-40",
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateOfBirth = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Gender = 1,
                             Name = "Ahmad Korede",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),

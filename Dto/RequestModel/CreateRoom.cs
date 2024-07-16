@@ -23,7 +23,7 @@ namespace HotelManagementSystem.Dto.RequestModel
         public Guid RoomId { get; set; }
         public RoomStatus RoomStatus { get; set; }
         public Amenity Amenity { get; set; }
-        public int AmenityId { get; set; }
+        public Guid AmenityId { get; set; }
         [Required(ErrorMessage = "RoomAvailability is required")]
         public RoomAvailability Availability { get; set; }
 

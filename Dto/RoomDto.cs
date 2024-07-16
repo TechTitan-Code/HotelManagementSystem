@@ -14,7 +14,8 @@ namespace HotelManagementSystem.Dto
         public int MaxOccupancy { get; set; }
         public decimal RoomRate { get; set; }
         public RoomStatus? RoomStatus { get; set; }
-        public Amenity Amenities { get; set; } 
+        public Amenity Amenities { get; set; }
+        public Guid AmenityId { get; set; }
         public string AmenityName { get; set; } 
         public RoomAvailability Availability { get; set; }
 
