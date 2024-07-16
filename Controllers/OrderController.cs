@@ -57,6 +57,8 @@ namespace HotelManagementSystem.Controllers
         public async Task<IActionResult> EditOrder([FromRoute] Guid id)
         {
             var order = await _orderServices.GetOrderAsync(id);
+            var products = _orderServices.GetProductSelect();
+            ViewBag.Products = new SelectList(products, "Id", "ProductName");
 
             return View(order.Data);
         }

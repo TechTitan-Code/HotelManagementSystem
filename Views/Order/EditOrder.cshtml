@@ -1,4 +1,4 @@
-﻿@model HotelManagementSystem.Dto.RequestModel.UpdateOrder
+﻿@model HotelManagementSystem.Dto.OrderDto
 
 @{
     Layout = "_AdminLayout";
@@ -9,7 +9,7 @@
     <div class="row g-4">
         <div class="col-12 col-12">
             <div class="bg-secondary rounded h-100 p-4">
-                <h6 class="mb-4">Create Order</h6>
+                <h6 class="mb-4">Edit Order</h6>
                 <form asp-controller="Order" asp-action="EditOrder">
                     <div class="row">
                         <div class="col mb-6">
@@ -17,17 +17,10 @@
                             <select class="form-select" asp-for="ProductId" asp-items="@(ViewBag.Products as SelectList)" required>
                                 <option value="">Select Product</option>
                             </select>
-
-                            <div class="col mb-3">
-                                @*  <label class="form-label">Room Amenities</label>
-                                <select asp-for="RoomId" class="form-select" asp-items="@(ViewData["SelectAmenity"] as IEnumerable<SelectListItem>)" required>
-                                <option value="">Select RoomAmenity</option>
-                                </select *@>
-                            </div>
                         </div>
                         <div class="col mb-12">
                             <label class="form-label">Order Date</label>
-                            <input type="date" class="form-control" name="OrderDate">
+                            <input type="date" class="form-control" name="OrderDate" value="@Model.OrderDate">
                         </div>
                     </div>
                     <div class="mt-3">

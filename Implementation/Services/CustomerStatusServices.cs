@@ -20,7 +20,7 @@ namespace HotelManagementSystem.Implementation.Services
             _bookingServices = bookingServices;
         }
 
-        public async Task<BaseResponse<Guid>> CheckIn(Guid customerId, Guid bookingId)
+        public async Task<BaseResponse<Guid>> CheckIn(string customerId, Guid bookingId)
         {
             try
             {
@@ -82,24 +82,22 @@ namespace HotelManagementSystem.Implementation.Services
 
         }
 
-        public async Task<BaseResponse<Guid>> CheckOut(Guid customerId, Guid bookingId)
+        public async Task<BaseResponse<Guid>> CheckOut(string customerId, Guid bookingId)
         {
             try
             {
-                var customerStatus = await _dbContext.CustomerStatuses
-                               .FirstOrDefaultAsync(cs => cs.CustomerId == customerId && cs.BookingId == bookingId);
-
+                var customerStatus = await _dbContext.CustomerStatuses.FindAsync(customerId);
                 if (customerStatus == null)
                 {
                     return new BaseResponse<Guid>
                     {
                         Success = false,
-                        Message = "Customer status not found."
+                        Message = "Customer not found."
                     };
                 }
 
                 customerStatus.CheckOutDate = DateTime.Now;
-                _dbContext.CustomerStatuses.Update(customerStatus);
+               // _dbContext.CustomerStatuses.Update(customerStatus);
                 await _dbContext.SaveChangesAsync();
 
                 //var booking = await _dbContext.Bookings.FindAsync(bookingId);
@@ -114,7 +112,7 @@ namespace HotelManagementSystem.Implementation.Services
                 {
                     Success = true,
                     Message = "Check-out successful.",
-                    Data = customerStatus.BookingId
+                   // Data = customerStatus.CustomerId
                 };
 
             }
@@ -133,7 +131,7 @@ namespace HotelManagementSystem.Implementation.Services
             return _dbContext.CustomerStatuses
                 .Select(x => new CustomerStatusDto()
                 {
-
+                    Id = x.Id,
                     CheckInDate = x.CheckInDate,
                     //IsPaid = x.IsPaid,
                     CheckOutDate = x.CheckOutDate,

@@ -39,7 +39,7 @@ namespace HotelManagementSystem.Controllers
         }
 
         [HttpPost("check-in")]
-        public async Task<IActionResult> CheckIn(Guid customerId, Guid bookingId)
+        public async Task<IActionResult> CheckIn(string customerId, Guid bookingId)
         {
             var response = await _customerStatusServices.CheckIn(customerId, bookingId);
             if (response.Success)
@@ -62,7 +62,7 @@ namespace HotelManagementSystem.Controllers
         }
 
         [HttpPost("check-out")]
-        public async Task<IActionResult> CheckOut(Guid customerId, Guid bookingId)
+        public async Task<IActionResult> CheckOut(string customerId, Guid bookingId)
         {
             var response = await _customerStatusServices.CheckOut(customerId, bookingId);
             if (response.Success)

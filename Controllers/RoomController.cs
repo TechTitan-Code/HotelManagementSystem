@@ -64,7 +64,11 @@ namespace HotelManagementSystem.Controllers
         {
             var room = await _roomService.GetRoomAsync(id);
 
+            var selectAmenity = _roomService.GetAmenitySelect();
+            ViewData["SelectAmenity"] = new SelectList(selectAmenity, "Id", "AmenityName");
+
             return View(room.Data);
+
         }
 
         [HttpPost("Update-room")]

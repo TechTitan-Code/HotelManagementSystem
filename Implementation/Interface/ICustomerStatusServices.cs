@@ -6,10 +6,10 @@ namespace HotelManagementSystem.Implementation.Interface
 {
     public interface ICustomerStatusServices
     {
-        Task<BaseResponse<Guid>> CheckIn(Guid customerId ,Guid bookingId);
+        Task<BaseResponse<Guid>> CheckIn(string customerId ,Guid bookingId);
         Task<List<CustomerStatusDto>> GetCustomerStatus();
         List<SelectCustomerDto> GetCustomerSelect();
         List<SelectBookingDto> GetBookingSelect();
-        Task<BaseResponse<Guid>> CheckOut(Guid customerId, Guid bookingId);
+        Task<BaseResponse<Guid>> CheckOut(string customerId, Guid bookingId);
     }
 }
