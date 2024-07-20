@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HotelManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_Migration : Migration
+    public partial class Initial_migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,6 @@ namespace HotelManagementSystem.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AmenityName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AmenityType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -150,7 +149,6 @@ namespace HotelManagementSystem.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoomName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoomNumber = table.Column<int>(type: "int", nullable: false),
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoomType = table.Column<int>(type: "int", nullable: false),
                     BedType = table.Column<int>(type: "int", nullable: false),
                     MaxOccupancy = table.Column<int>(type: "int", nullable: false),
@@ -324,24 +322,43 @@ namespace HotelManagementSystem.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Images_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "38f5ebda-4c7f-4b8d-98bf-28388222227a", null, "Customer", "Customer" },
-                    { "8ec63826-99d4-4b9c-9bea-9c5d7b6db1b7", null, "Admin", "ADMIN" }
+                    { "8a57794a-8902-48ab-ba69-eb86061dba5d", null, "Customer", "Customer" },
+                    { "f547126a-68ab-4a70-b19e-ea4987752692", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "Address", "AgeRange", "ConcurrencyStamp", "CreatedTime", "DateOfBirth", "Discriminator", "Email", "EmailConfirmed", "Gender", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedTime", "UserName", "UserRole" },
-                values: new object[] { "8c00d29c-a8c9-4a17-97e4-9e82813a6761", 0, null, "20-40", "84ef7d62-0125-4c94-b4c6-ae364eb42e81", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "User", "admin@gmail.com", true, 1, false, null, "Ahmad Korede", "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEOg9MNS78JvXtAR1rtQpkqG1533PvTHNX61Z6glH7TSf36+Nnrdvzn54+vmZc/l6BQ==", null, false, "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 1 });
+                values: new object[] { "2f1e9519-dcf2-4ba9-9c52-63b03c268733", 0, null, "20-40", "104f0c94-54d2-4e59-a145-287c7e32d67d", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "User", "admin@gmail.com", true, 1, false, null, "Ahmad Korede", "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEDmwv/Cv1xCc/0UOUcngrYwdxK6zjZ+Spw43ocT80At1JobzAGHPD7mHwHaGfa2m+Q==", null, false, "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 1 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "8ec63826-99d4-4b9c-9bea-9c5d7b6db1b7", "8c00d29c-a8c9-4a17-97e4-9e82813a6761" });
+                values: new object[] { "f547126a-68ab-4a70-b19e-ea4987752692", "2f1e9519-dcf2-4ba9-9c52-63b03c268733" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -388,6 +405,11 @@ namespace HotelManagementSystem.Migrations
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Images_RoomId",
+                table: "Images",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_ProductId",
                 table: "Orders",
                 column: "ProductId");
@@ -424,6 +446,9 @@ namespace HotelManagementSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "CustomerStatuses");
+
+            migrationBuilder.DropTable(
+                name: "Images");
 
             migrationBuilder.DropTable(
                 name: "Orders");

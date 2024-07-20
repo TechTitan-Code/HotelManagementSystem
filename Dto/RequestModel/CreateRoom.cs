@@ -26,6 +26,8 @@ namespace HotelManagementSystem.Dto.RequestModel
         public Guid AmenityId { get; set; }
         [Required(ErrorMessage = "RoomAvailability is required")]
         public RoomAvailability Availability { get; set; }
+        [Required(ErrorMessage = "Please upload at least one image for the room.")]
+        public List<IFormFile> Images { get; set; } = new List<IFormFile>();
 
 
     }

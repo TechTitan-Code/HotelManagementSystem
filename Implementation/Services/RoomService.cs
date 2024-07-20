@@ -11,12 +11,15 @@ namespace HotelManagementSystem.Implementation.Services
     public class RoomService : IRoomService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IImageService _imageService;
 
-        public RoomService(ApplicationDbContext dbContext)
+        public RoomService(ApplicationDbContext dbContext, IImageService imageService)
         {
 
             _dbContext = dbContext;
+            _imageService = imageService;
         }
+
         public async Task<BaseResponse<Guid>> CreateRoom(CreateRoom request)
         {
             try
@@ -26,7 +29,7 @@ namespace HotelManagementSystem.Implementation.Services
                     // Check if the room already exists
                     var existingRoom = await _dbContext.Rooms.FirstOrDefaultAsync(x =>
                         x.Id == request.RoomId);
-                        
+
                     if (existingRoom != null)
                     {
                         // Room already exists
@@ -38,7 +41,6 @@ namespace HotelManagementSystem.Implementation.Services
                         };
                     }
 
-           
                     var amenity = await _dbContext.Amenities.FirstOrDefaultAsync(a => a.Id == request.AmenityId);
                     if (amenity == null)
                     {
@@ -62,18 +64,21 @@ namespace HotelManagementSystem.Implementation.Services
                         RoomType = request.RoomType,
                         MaxOccupancy = request.MaxOccupancy,
                         AmenityId = request.AmenityId,
-                        RoomId = request.RoomId,
-                        Amenity = request.Amenity
+                        Amenity = request.Amenity,
                     };
 
                     await _dbContext.Rooms.AddAsync(room);
-                    await _dbContext.SaveChangesAsync();
+                    var result = await _dbContext.SaveChangesAsync();
 
+                    if (result > 0)
+                    {
+                        await _imageService.AddImagesAsync(request.Images, room.Id);
+                    }
                     return new BaseResponse<Guid>
                     {
                         Success = true,
                         Message = $"Room {request.RoomName} created successfully.",
-                        Data = room.RoomId
+                        Data = room.Id
                     };
                 }
 
@@ -92,30 +97,6 @@ namespace HotelManagementSystem.Implementation.Services
                 };
             }
         }
-
-
-
-
-        public async Task<List<RoomDto>> GetRoom()
-        {
-            return await _dbContext.Rooms
-                .Include(x => x.Amenity)
-                .Select(x => new RoomDto()
-                {
-                    Id = x.Id,
-                    RoomType = x.RoomType,
-                    RoomName = x.RoomName,
-                    Availability = x.Availability,
-                    MaxOccupancy = x.MaxOccupancy,
-                    BedType = x.BedType,
-                    RoomNumber = x.RoomNumber,
-                    RoomRate = x.RoomRate,
-                    RoomStatus = x.RoomStatus,
-                    AmenityName = x.Amenity.AmenityName
-                }).ToListAsync();
-        }
-
-
 
         public async Task<BaseResponse<Guid>> DeleteRoomAsync(Guid Id)
         {
@@ -183,7 +164,6 @@ namespace HotelManagementSystem.Implementation.Services
                         RoomName = room.RoomName,
                         RoomStatus = room.RoomStatus,
                         RoomType = room.RoomType,
-                        // Amenity  = room.Amenity
                     }
 
                 };
@@ -214,9 +194,11 @@ namespace HotelManagementSystem.Implementation.Services
         }
 
 
-        public async Task<BaseResponse<IList<RoomDto>>> GetAllRoomsCreatedAsync()
+        public async Task<List<RoomDto>> GetAllRoomsCreatedAsync()
         {
-            var rooms = await _dbContext.Rooms
+            return await _dbContext.Rooms
+              .Include(x => x.Amenity)
+              .Include(x => x.Images)
              .Select(x => new RoomDto()
              {
                  Id = x.Id,
@@ -228,19 +210,14 @@ namespace HotelManagementSystem.Implementation.Services
                  BedType = x.BedType,
                  RoomType = x.RoomType,
                  MaxOccupancy = x.MaxOccupancy,
-                 // Amenity = x.Amenity
+                 AmenityName = x.Amenity.AmenityName,
+                 Images = x.Images.Select(x => new Dto.ImageDto
+                 {
+                     Id = x.Id,
+                     ImagePath = x.ImagePath,
+                 }).ToList()
              }).ToListAsync();
-
-
-            return new BaseResponse<IList<RoomDto>>
-            {
-                Success = true,
-                Message = "Rooms Succesfully Retrieved",
-                Data = rooms
-            };
         }
-
-
 
 
         public async Task<BaseResponse<RoomDto>> GetRoomsByIdAsync(Guid Id)
@@ -259,7 +236,12 @@ namespace HotelManagementSystem.Implementation.Services
                  BedType = x.BedType,
                  RoomType = x.RoomType,
                  MaxOccupancy = x.MaxOccupancy,
-                 // Amenity = x.Amenity
+                 AmenityName = x.Amenity.AmenityName,
+                 Images = x.Images.Select(x => new Dto.ImageDto
+                 {
+                     Id = x.Id,
+                     ImagePath = x.ImagePath,
+                 }).ToList()
              }).FirstOrDefaultAsync();
             if (rooms != null)
             {

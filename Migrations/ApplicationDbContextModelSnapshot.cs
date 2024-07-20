@@ -32,10 +32,6 @@ namespace HotelManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("AmenityType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
@@ -215,9 +211,6 @@ namespace HotelManagementSystem.Migrations
                     b.Property<int>("MaxOccupancy")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("RoomName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -278,6 +271,26 @@ namespace HotelManagementSystem.Migrations
                     b.ToTable("CustomerStatuses");
                 });
 
+            modelBuilder.Entity("HotelManagementSystem.Models.Entity.Images", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -307,13 +320,13 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8ec63826-99d4-4b9c-9bea-9c5d7b6db1b7",
+                            Id = "f547126a-68ab-4a70-b19e-ea4987752692",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "38f5ebda-4c7f-4b8d-98bf-28388222227a",
+                            Id = "8a57794a-8902-48ab-ba69-eb86061dba5d",
                             Name = "Customer",
                             NormalizedName = "Customer"
                         });
@@ -482,8 +495,8 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "8c00d29c-a8c9-4a17-97e4-9e82813a6761",
-                            RoleId = "8ec63826-99d4-4b9c-9bea-9c5d7b6db1b7"
+                            UserId = "2f1e9519-dcf2-4ba9-9c52-63b03c268733",
+                            RoleId = "f547126a-68ab-4a70-b19e-ea4987752692"
                         });
                 });
 
@@ -540,15 +553,15 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8c00d29c-a8c9-4a17-97e4-9e82813a6761",
+                            Id = "2f1e9519-dcf2-4ba9-9c52-63b03c268733",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "84ef7d62-0125-4c94-b4c6-ae364eb42e81",
+                            ConcurrencyStamp = "104f0c94-54d2-4e59-a145-287c7e32d67d",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOg9MNS78JvXtAR1rtQpkqG1533PvTHNX61Z6glH7TSf36+Nnrdvzn54+vmZc/l6BQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDmwv/Cv1xCc/0UOUcngrYwdxK6zjZ+Spw43ocT80At1JobzAGHPD7mHwHaGfa2m+Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -594,6 +607,17 @@ namespace HotelManagementSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Amenity");
+                });
+
+            modelBuilder.Entity("HotelManagementSystem.Models.Entity.Images", b =>
+                {
+                    b.HasOne("HotelManagementSystem.Model.Entity.Room", "Room")
+                        .WithMany("Images")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -645,6 +669,11 @@ namespace HotelManagementSystem.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HotelManagementSystem.Model.Entity.Room", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

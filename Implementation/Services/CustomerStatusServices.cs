@@ -13,11 +13,13 @@ namespace HotelManagementSystem.Implementation.Services
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IBookingServices _bookingServices;
+        private readonly IUserServices _userServices;
 
-        public CustomerStatusServices(ApplicationDbContext dbContext, IBookingServices bookingServices)
+        public CustomerStatusServices(ApplicationDbContext dbContext, IBookingServices bookingServices,IUserServices userServices)
         {
             _dbContext = dbContext;
             _bookingServices = bookingServices;
+            _userServices = userServices;
         }
 
         public async Task<BaseResponse<Guid>> CheckIn(string customerId, Guid bookingId)
@@ -82,11 +84,11 @@ namespace HotelManagementSystem.Implementation.Services
 
         }
 
-        public async Task<BaseResponse<Guid>> CheckOut(string customerId, Guid bookingId)
+        public async Task<BaseResponse<Guid>> CheckOut(Guid customerId)
         {
             try
             {
-                var customerStatus = await _dbContext.CustomerStatuses.FindAsync(customerId);
+                var customerStatus = await _dbContext.CustomerStatuses.FirstOrDefaultAsync(x => x.Id == customerId);
                 if (customerStatus == null)
                 {
                     return new BaseResponse<Guid>
@@ -95,24 +97,15 @@ namespace HotelManagementSystem.Implementation.Services
                         Message = "Customer not found."
                     };
                 }
-
                 customerStatus.CheckOutDate = DateTime.Now;
-               // _dbContext.CustomerStatuses.Update(customerStatus);
+
+                _dbContext.CustomerStatuses.Update(customerStatus);
                 await _dbContext.SaveChangesAsync();
-
-                //var booking = await _dbContext.Bookings.FindAsync(bookingId);
-                //if (booking != null)
-                //{
-                //    booking.Rooms.IsAvailable = true;
-                //    _dbContext.Rooms.Update(booking.Rooms);
-                //    await _dbContext.SaveChangesAsync();
-                //}
-
                 return new BaseResponse<Guid>
                 {
                     Success = true,
                     Message = "Check-out successful.",
-                   // Data = customerStatus.CustomerId
+                   Data = customerStatus.Id
                 };
 
             }
@@ -133,9 +126,10 @@ namespace HotelManagementSystem.Implementation.Services
                 {
                     Id = x.Id,
                     CheckInDate = x.CheckInDate,
-                    //IsPaid = x.IsPaid,
                     CheckOutDate = x.CheckOutDate,
-                    CustomerName = x.CustomerName
+                    CustomerName = x.CustomerName,
+                    CustomerId = x.Id
+
 
                 }).ToList();
         }
@@ -173,17 +167,17 @@ namespace HotelManagementSystem.Implementation.Services
 
             return result;
         }
-        public List<SelectBookingDto> GetBookingSelect()
+        public List<SelectCustomerCheckedInDto> GetSelectCustomerCheckedIn()
         {
-            var bookings = _dbContext.Bookings.ToList();
-            var result = new List<SelectBookingDto>();
+            var customerStatus = _dbContext.CustomerStatuses.ToList();
+            var result = new List<SelectCustomerCheckedInDto>();
 
-            if (bookings.Count > 0)
+            if (customerStatus.Count > 0)
             {
-                result = bookings.Select(x => new SelectBookingDto()
+                result = customerStatus.Select(x => new SelectCustomerCheckedInDto()
                 {
                     Id = x.Id,
-                    Email = x.Email
+                    Name = x.CustomerName,
                 }).ToList();
             }
 

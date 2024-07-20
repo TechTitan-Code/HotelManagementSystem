@@ -19,7 +19,7 @@ namespace HotelManagementSystem.Controllers
             _notyf = notyf;
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("get-user")]
         public async Task<IActionResult> Users()
         {
@@ -148,10 +148,12 @@ namespace HotelManagementSystem.Controllers
                 return RedirectToAction(nameof(Login));
             }
         }
-        public async Task<IActionResult> ChangePassword([FromForm] ChangePasswordModel changePasswordModelDto, string username)
+        [AllowAnonymous]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromForm] ChangePasswordModel changePasswordModelDto, string UserName)
         {
 
-            var result = await _userServices.ChangePasswordAsync(changePasswordModelDto, username);
+            var result = await _userServices.ChangePasswordAsync(changePasswordModelDto, UserName);
             return RedirectToAction(nameof(Login));
 
         }

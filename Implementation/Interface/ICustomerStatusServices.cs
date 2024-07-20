@@ -9,7 +9,7 @@ namespace HotelManagementSystem.Implementation.Interface
         Task<BaseResponse<Guid>> CheckIn(string customerId ,Guid bookingId);
         Task<List<CustomerStatusDto>> GetCustomerStatus();
         List<SelectCustomerDto> GetCustomerSelect();
-        List<SelectBookingDto> GetBookingSelect();
-        Task<BaseResponse<Guid>> CheckOut(string customerId, Guid bookingId);
+        List<SelectCustomerCheckedInDto> GetSelectCustomerCheckedIn();
+        Task<BaseResponse<Guid>> CheckOut(Guid customerId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Model.Entity;
 using HotelManagementSystem.Model.Entity.Enum;
+using HotelManagementSystem.Models.Entity;
 
 namespace HotelManagementSystem.Dto
 {
@@ -18,8 +19,15 @@ namespace HotelManagementSystem.Dto
         public Guid AmenityId { get; set; }
         public string AmenityName { get; set; } 
         public RoomAvailability Availability { get; set; }
-
+        public List<ImageDto> Images { get; set; }
+    }
+    public class ImageDto
+    {
+        public Guid Id { get; set; }
+        public string ImagePath { get; set; }
     }
 
-
 }
+
+
+

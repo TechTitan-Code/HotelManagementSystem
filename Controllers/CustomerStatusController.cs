@@ -53,18 +53,18 @@ namespace HotelManagementSystem.Controllers
             return View();
         }
 
-        [HttpGet("check-out")]
+        [HttpGet("check-out/{customerId}")]
         public IActionResult CheckOut()
         {
-            var customers = _customerStatusServices.GetCustomerSelect();
-            ViewBag.Customers = new SelectList(customers, "Id", "Name");
+            var customerStatus = _customerStatusServices.GetSelectCustomerCheckedIn();
+            ViewBag.CustomerStatus = new SelectList(customerStatus, "Id", "Name");
             return View();
         }
 
-        [HttpPost("check-out")]
-        public async Task<IActionResult> CheckOut(string customerId, Guid bookingId)
+        [HttpPost("check-out/{customerId}")]
+        public async Task<IActionResult> CheckOut([FromRoute] Guid customerId)
         {
-            var response = await _customerStatusServices.CheckOut(customerId, bookingId);
+            var response = await _customerStatusServices.CheckOut(customerId);
             if (response.Success)
             {
                 _notyf.Success(response.Message, 3);

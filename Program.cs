@@ -32,7 +32,8 @@ builder.Services.AddTransient<ICustomerReviewService, CustomerReviewService>();
 builder.Services.AddTransient<IAmenityService , AmenityService>();
 builder.Services.AddTransient<IPaymentServices , PaymentServices>();
 builder.Services.AddTransient<ICustomerStatusServices , CustomerStatusServices>();
-
+builder.Services.AddTransient<IImageService  , ImageService>();
+builder.Services.AddTransient<IFileService  , FileService>();
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 5;

@@ -25,7 +25,6 @@ namespace HMS.Implementation.Services
                     var roomAmenity = new Amenity
                     {
                         AmenityName = request.AmenityName,
-                        AmenityType = request.AmenityType,
                     };
                     _dbContext.Amenities.Add(roomAmenity);
                 }
@@ -112,7 +111,6 @@ namespace HMS.Implementation.Services
                 {
                     Id = x.Id,
                     AmenityName = x.AmenityName,
-                    AmenityType = x.AmenityType,
 
                 }).ToList();
         }
@@ -127,7 +125,6 @@ namespace HMS.Implementation.Services
                             .Select(x => new AmenityDto
                             {
                                 AmenityName = x.AmenityName,
-                                AmenityType = x.AmenityType,
 
                             }).FirstOrDefaultAsync();
                 if (amenity != null)
@@ -177,7 +174,6 @@ namespace HMS.Implementation.Services
                         Data = new AmenityDto
                         {
                             AmenityName = roomAmenity.AmenityName,
-                            AmenityType = roomAmenity.AmenityType
                         }
 
                     };
@@ -211,7 +207,6 @@ namespace HMS.Implementation.Services
                            .Select(x => new AmenityDto
                            {
                                AmenityName = x.AmenityName,
-                               AmenityType = x.AmenityType,
 
                            }).ToListAsync();
                 if (amenity != null)
@@ -259,7 +254,6 @@ namespace HMS.Implementation.Services
                 }
 
                 amenity.AmenityName = request.AmenityName;
-                amenity.AmenityType = request.AmenityType;
                 _dbContext.Amenities.Update(amenity);
                 if (await _dbContext.SaveChangesAsync() > 0)
                 {

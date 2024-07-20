@@ -323,11 +323,11 @@ namespace HotelManagementSystem.Dto.Implementation.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<Status> ChangePasswordAsync(ChangePasswordModel model, string username)
+        public async Task<Status> ChangePasswordAsync(ChangePasswordModel model, string UserName)
         {
             var status = new Status();
 
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByNameAsync(UserName);
             if (user == null)
             {
                 status.Message = "User does not exist";

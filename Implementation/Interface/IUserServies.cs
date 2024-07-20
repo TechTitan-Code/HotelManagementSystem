@@ -14,7 +14,7 @@ namespace HotelManagementSystem.Implementation.Interface
         Task<List<UserDto>> GetUser();
         Task<Status> LoginAsync(LoginModel loginModel);
         Task LogOutAsync();
-        Task<Status> ChangePasswordAsync(ChangePasswordModel changePasswordModel,string username);
+        Task<Status> ChangePasswordAsync(ChangePasswordModel changePasswordModel,string UserName);
         Task<BaseResponse<IList<UserDto>>> UpdateUser(string Id, UpdateUser request);
     }
 }

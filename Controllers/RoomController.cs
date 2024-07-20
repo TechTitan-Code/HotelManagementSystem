@@ -1,6 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using HMS.Implementation.Interface;
-using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +9,6 @@ namespace HotelManagementSystem.Controllers
 {
     public class RoomController : Controller
     {
-
-
         private readonly IRoomService _roomService;
         private readonly IAmenityService _amenityService;
         private readonly INotyfService _notyf;
@@ -26,7 +23,7 @@ namespace HotelManagementSystem.Controllers
         [HttpGet("get-rooms")]
         public async Task<IActionResult> Rooms()
         {
-            var room = await _roomService.GetRoom();
+            var room = await _roomService.GetAllRoomsCreatedAsync();
             return View(room);
         }
 
@@ -86,31 +83,21 @@ namespace HotelManagementSystem.Controllers
         }
 
 
-
-        [HttpGet("delete-room/{id}")]
-        public async Task<IActionResult> DeleteRoom([FromRoute] Guid Id)
+        [HttpDelete("delete-room/{id}")]
+        public async Task<IActionResult> DeleteRoom([FromRoute] Guid id)
         {
-            var room = await _roomService.DeleteRoomAsync(Id);
-            if (room.Success)
+            var response = await _roomService.DeleteRoomAsync(id);
+            if (response.Success)
             {
-                _notyf.Success(room.Message, 3);
+                _notyf.Success(response.Message, 3);
                 return RedirectToAction("Rooms", "Room");
             }
-            _notyf.Error(room.Message, 3);
-            return BadRequest(room);
+
+            _notyf.Error(response.Message, 3);
+            return RedirectToAction("Error", new { message = response.Message });
         }
 
 
-        [HttpGet("rooms")]
-        public async Task<IActionResult> GetAllRoomsCreatedAsync()
-        {
-            var rooms = await _roomService.GetAllRoomsCreatedAsync();
-            if (rooms.Success)
-            {
-                return View(rooms);
-            }
-            return BadRequest(rooms);
-        }
 
         [HttpGet("room/{id}")]
         public async Task<IActionResult> GetRoomsById(Guid id)
@@ -125,11 +112,4 @@ namespace HotelManagementSystem.Controllers
             return RedirectToAction("Rooms");
         }
     }
-
-
-
-
 }
-
-
-

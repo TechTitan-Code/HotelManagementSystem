@@ -62,6 +62,7 @@ namespace HotelManagementSystem.Model.Entity
         public DbSet<Room> Rooms { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
+        public DbSet<Images> Images { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
