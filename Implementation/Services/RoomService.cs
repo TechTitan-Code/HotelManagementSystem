@@ -108,7 +108,7 @@ namespace HotelManagementSystem.Implementation.Services
                     return new BaseResponse<Guid>
                     {
                         Success = false,
-                        Message = $"Room with ID {Id} not found."
+                        Message = $"Room not found."
                     };
                 }
 
@@ -118,7 +118,7 @@ namespace HotelManagementSystem.Implementation.Services
                     return new BaseResponse<Guid>
                     {
                         Success = true,
-                        Message = $"Room with ID {Id} has been deleted successfully.",
+                        Message = $"Room  has been deleted successfully.",
                         Data = Id
                     };
                 }
@@ -127,7 +127,7 @@ namespace HotelManagementSystem.Implementation.Services
                     return new BaseResponse<Guid>
                     {
                         Success = false,
-                        Message = $"Failed to delete room with ID {Id}. There was an error in the deletion process."
+                        Message = $"Failed to delete room.There was an error in the deletion process."
                     };
                 }
             }
@@ -136,7 +136,7 @@ namespace HotelManagementSystem.Implementation.Services
                 return new BaseResponse<Guid>
                 {
                     Success = false,
-                    Message = $"An error occurred while deleting the room with ID {Id}: {ex.Message}"
+                    Message = $"An error occurred while deleting the room : {ex.Message}"
                 };
             }
         }
@@ -248,7 +248,7 @@ namespace HotelManagementSystem.Implementation.Services
                 return new BaseResponse<RoomDto>
                 {
                     Success = true,
-                    Message = $"Room {Id} Retrieved succesfully",
+                    Message = $"Room Retrieved succesfully",
                     Data = rooms
 
                 };
@@ -258,7 +258,7 @@ namespace HotelManagementSystem.Implementation.Services
                 return new BaseResponse<RoomDto>
                 {
                     Success = false,
-                    Message = $"Room {Id} Retrieval Failed"
+                    Message = $"Room Retrieval Failed"
                 };
             }
 
@@ -296,7 +296,7 @@ namespace HotelManagementSystem.Implementation.Services
                     return new BaseResponse<RoomDto>
                     {
                         Success = true,
-                        Message = $"Room {request.Id} Updated Succesfully",
+                        Message = $"Room {request.RoomName} Updated Succesfully",
                     };
 
                 }
@@ -305,7 +305,7 @@ namespace HotelManagementSystem.Implementation.Services
                     return new BaseResponse<RoomDto>
                     {
                         Success = false,
-                        Message = $"Room {request.Id} Update failed",
+                        Message = $"Room {request.RoomName} Update failed",
                         Hasherror = true
                     };
                 }
