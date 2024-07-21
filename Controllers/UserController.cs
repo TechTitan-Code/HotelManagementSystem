@@ -140,7 +140,7 @@ namespace HotelManagementSystem.Controllers
             {
                 _notyf.Success(result.Message, 3);
                 return RedirectToAction("Index", "Admin" );
-            }
+            } 
             else
             {
                 TempData["msg"] = result.Message;
