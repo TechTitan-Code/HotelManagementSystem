@@ -83,7 +83,7 @@ namespace HotelManagementSystem.Controllers
         }
 
 
-        [HttpDelete("delete-room/{id}")]
+        [HttpGet("delete-room/{id}")]
         public async Task<IActionResult> DeleteRoom([FromRoute] Guid id)
         {
             var response = await _roomService.DeleteRoomAsync(id);
