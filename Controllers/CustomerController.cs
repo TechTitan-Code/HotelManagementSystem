@@ -5,11 +5,12 @@ using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
 using HotelManagementSystem.Model.Entity;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HMS.Controllers
+namespace HotelManagementSystem.Controllers
 {
-
+    [Authorize]
     public class CustomerController(ICustomerServices customerServices, INotyfService notyf) : Controller
     {
         private readonly ICustomerServices _customerServices = customerServices;

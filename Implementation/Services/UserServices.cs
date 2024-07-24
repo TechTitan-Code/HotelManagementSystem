@@ -50,7 +50,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
                     var result = await _userManager.CreateAsync(user, request.Password);
 
-                    if (result.Succeeded)
+                    if (result.Succeeded) 
                     {
                         var addUserRole = await _userManager.AddToRoleAsync(user, UserRole.Customer.ToString());
 

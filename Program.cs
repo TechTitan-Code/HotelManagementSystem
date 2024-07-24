@@ -26,7 +26,7 @@ builder.Services.AddTransient<IRoomService, RoomService>();
 builder.Services.AddTransient<IBookingServices, BookingService>();
 builder.Services.AddScoped<IUserServices, UserService>();
 builder.Services.AddTransient<ICustomerServices, CustomerServices>();
-builder.Services.AddTransient<IOrderServices, OrderServices>();
+builder.Services.AddTransient< IOrderServices, OrderServices>();
 builder.Services.AddTransient<IProductServices, ProductServices>();
 builder.Services.AddTransient<ICustomerReviewService, CustomerReviewService>();
 builder.Services.AddTransient<IAmenityService , AmenityService>();
@@ -34,6 +34,7 @@ builder.Services.AddTransient<IPaymentServices , PaymentServices>();
 builder.Services.AddTransient<ICustomerStatusServices , CustomerStatusServices>();
 builder.Services.AddTransient<IImageService  , ImageService>();
 builder.Services.AddTransient<IFileService  , FileService>();
+builder.Services.ConfigureApplicationCookie(config => config.LoginPath = "/Login");
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 5;
