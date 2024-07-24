@@ -1,10 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
-using HotelManagementSystem.Implementation.Services;
-using HotelManagementSystem.Model.Entity;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
