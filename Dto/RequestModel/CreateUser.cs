@@ -12,6 +12,7 @@ namespace HotelManagementSystem.Dto.RequestModel
         public DateTime DateOfBirth { get; set; }
         public string? Password { get; set; }
         public Gender Gender { get; set; }
-        public UserRole UserRole { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

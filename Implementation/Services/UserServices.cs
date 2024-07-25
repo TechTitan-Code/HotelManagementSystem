@@ -45,7 +45,9 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                         Email = request.Email,
                         Gender = request.Gender,
                         PhoneNumber = request.PhoneNumber,
-                        UserRole = UserRole.Customer
+                        UserRole = UserRole.Customer,
+                        FirstName = request.FirstName,
+                        LastName = request.LastName,
                     };
 
                     var result = await _userManager.CreateAsync(user, request.Password);

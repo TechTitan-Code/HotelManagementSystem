@@ -11,14 +11,14 @@ namespace HotelManagementSystem.Controllers
     {
         private readonly ICustomerServices _customerServices = customerServices;
         private readonly INotyfService _notyf = notyf;
-
+        [AllowAnonymous]
         [HttpGet("get-customer")]
         public async Task<IActionResult> Customers()
         {
             var customer = await _customerServices.GetCustomer();
             return View(customer);
         }
-
+        [AllowAnonymous]
         [HttpGet("create-customer")]
         public async Task<IActionResult> CreateCustomer()
         {

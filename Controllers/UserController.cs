@@ -1,9 +1,11 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Azure;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HotelManagementSystem.Controllers
 {
@@ -12,11 +14,13 @@ namespace HotelManagementSystem.Controllers
     {
         private readonly IUserServices _userServices;
         private readonly INotyfService _notyf;
+        private readonly IEmailService _emailService;
 
-        public UserController(IUserServices  userService , INotyfService notyf)
+        public UserController(IUserServices  userService , INotyfService notyf,IEmailService emailService)
         {
             _userServices = userService;
             _notyf = notyf;
+            _emailService = emailService;
         }
 
         [Authorize]
@@ -41,21 +45,36 @@ namespace HotelManagementSystem.Controllers
         }
 
 
-
         [AllowAnonymous]
         [HttpPost("create-user")]
-        public async Task<IActionResult> CreateUser(CreateUser request)
+        public async Task<IActionResult> CreateUser(CreateUser request , CreateUser profile)
         {
-            
-         var user = await   _userServices.CreateUser(request);
-            if (user.Success)
+            var userResponse = await _userServices.CreateUser(request);
+
+            if (userResponse.Success)
             {
-                _notyf.Success(user.Message, 3);
-                return RedirectToAction("Login");
+                var emailResponse = await _emailService.SendNotificationToUserAsync(profile);
+
+                if (emailResponse.Success)
+                {
+                    _notyf.Success(userResponse.Message, 3);
+                    _notyf.Success(emailResponse.Message, 3);
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    _notyf.Success(userResponse.Message, 3);
+                    _notyf.Warning("User created but failed to send welcome email.", 3);
+                    return RedirectToAction("Login"); 
+                }
             }
-            _notyf.Error(user.Message);
-            return BadRequest();
+            else
+            {
+                _notyf.Error(userResponse.Message, 3);
+                return BadRequest(userResponse);
+            }
         }
+
 
 
         [HttpGet("edit-user/{id}")]

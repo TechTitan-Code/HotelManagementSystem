@@ -13,5 +13,7 @@ namespace HotelManagementSystem.Model.Entity
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
         public string AgeRange { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using HotelManagementSystem.Dto.Implementation.Services;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
 using HotelManagementSystem.Model.Entity;
+using HotelManagementSystem.Models.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("SMTPConfig"));
+
 builder.Services.AddIdentity<User, IdentityRole>(opt =>
 {
 
@@ -35,6 +38,7 @@ builder.Services.AddTransient<ICustomerStatusServices , CustomerStatusServices>(
 builder.Services.AddTransient<IImageService  , ImageService>();
 builder.Services.AddTransient<IFileService  , FileService>();
 builder.Services.ConfigureApplicationCookie(config => config.LoginPath = "/Login");
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 5;

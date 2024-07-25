@@ -47,7 +47,9 @@ namespace HotelManagementSystem.Model.Entity
                     UserRole = UserRole.Admin,
                     Name = "Ahmad Korede",
                     AgeRange = "20-40",
-                    Gender = Gender.Male
+                    Gender = Gender.Male,
+                    FirstName = "Ahmad",
+                    LastName = "oseni"
                 }
             );
 

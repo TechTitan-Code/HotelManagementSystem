@@ -4,6 +4,7 @@ using HotelManagementSystem.Model.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240725213918_added lastname and fiestname to user")]
+    partial class addedlastnameandfiestnametouser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +43,7 @@ namespace HotelManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Amenities", (string)null);
+                    b.ToTable("Amenities");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Booking", b =>
@@ -76,7 +79,7 @@ namespace HotelManagementSystem.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("Bookings", (string)null);
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.CustomerReview", b =>
@@ -100,7 +103,7 @@ namespace HotelManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerReviews", (string)null);
+                    b.ToTable("CustomerReviews");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Order", b =>
@@ -128,7 +131,7 @@ namespace HotelManagementSystem.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Payment", b =>
@@ -163,7 +166,7 @@ namespace HotelManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("payments", (string)null);
+                    b.ToTable("payments");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Product", b =>
@@ -187,7 +190,7 @@ namespace HotelManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Model.Entity.Room", b =>
@@ -234,7 +237,7 @@ namespace HotelManagementSystem.Migrations
 
                     b.HasIndex("AmenityId");
 
-                    b.ToTable("Rooms", (string)null);
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Models.Entity.CustomerStatus", b =>
@@ -268,7 +271,7 @@ namespace HotelManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerStatuses", (string)null);
+                    b.ToTable("CustomerStatuses");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Models.Entity.Images", b =>
@@ -288,7 +291,7 @@ namespace HotelManagementSystem.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
