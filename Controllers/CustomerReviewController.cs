@@ -1,10 +1,12 @@
 ﻿using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HMS.Controllers
 {
+    [Authorize]
     public class CustomerReviewController : Controller
     {
         private readonly ICustomerReviewService _customerReviewService;

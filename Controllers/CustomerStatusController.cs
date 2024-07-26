@@ -5,12 +5,14 @@ using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Implementation.Services;
 using HotelManagementSystem.Model.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.Controllers
 {
+    [Authorize]
     public class CustomerStatusController : Controller
     {
         private readonly ICustomerStatusServices _customerStatusServices;

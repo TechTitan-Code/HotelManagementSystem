@@ -2,10 +2,12 @@
 using HMS.Implementation.Interface;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+[Authorize]
 public class AmenityController : Controller
 {
+
     private readonly IAmenityService _amenityService;
     private readonly INotyfService _notyf;
 

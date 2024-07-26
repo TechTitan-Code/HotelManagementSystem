@@ -3,11 +3,13 @@ using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HotelManagementSystem.Controllers
 {
+    [Authorize]
     public class BookingController : Controller
     {
         private readonly IBookingServices _bookService;

@@ -1,12 +1,13 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HotelManagementSystem.Controllers
 {
-
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IOrderServices _orderServices;
