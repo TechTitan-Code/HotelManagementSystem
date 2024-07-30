@@ -25,9 +25,9 @@ namespace HotelManagementSystem.Implementation.Services
             _apiKey = configuration.GetValue<string>("MailConfig:mailApikey");
         }
 
-        public async Task<BaseResponse<MailRecieverDto>> SendNotificationToUserAsync(CreateUser user)
+        public async Task<BaseResponse<MailReceiverDto>> SendMessageToUserAsync(CreateUser user)
         {
-            var mailRecieverRequestDto = new MailRecieverDto
+            var mailRecieverRequest = new MailReceiverDto
             {
                 Email = user.Email,
                 Name = user.FirstName + " " + user.LastName,
@@ -57,17 +57,17 @@ namespace HotelManagementSystem.Implementation.Services
 
             try
             {
-                await SendEmailAsync(mailRecieverRequestDto, mailRequest);
-                return new BaseResponse<MailRecieverDto>
+                await SendEmailAsync(mailRecieverRequest, mailRequest);
+                return new BaseResponse<MailReceiverDto>
                 {
                     Message = "Email sent successfully",
                     Success = true,
-                     Data = mailRecieverRequestDto
+                     Data = mailRecieverRequest
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<MailRecieverDto>
+                return new BaseResponse<MailReceiverDto>
                 {
                     Message = $"Failed to send notification: {ex.Message}",
                     Success = false,
@@ -98,7 +98,7 @@ namespace HotelManagementSystem.Implementation.Services
                 {
                     Console.WriteLine("Inside email client");
                     client.Connect(_emailConfiguration.SMTPServerAddress, _emailConfiguration.SMTPServerPort, true);
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    //client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.Authenticate(_emailConfiguration.EmailSenderAddress, _emailConfiguration.EmailSenderPassword);
                     client.Send(message);
                 }
@@ -115,7 +115,7 @@ namespace HotelManagementSystem.Implementation.Services
             }
         }
 
-        public async Task<bool> SendEmailAsync(MailRecieverDto model, MailRequests request)
+        public async Task<bool> SendEmailAsync(MailReceiverDto model, MailRequests request)
         {
             try
             {

@@ -9,7 +9,7 @@
         public string Title { get; set; }
         public string Body { get; set; }
     }
-    public class MailRecieverDto
+    public class MailReceiverDto
     {
         public string Name { get; set; }
         public string Email { get; set; }

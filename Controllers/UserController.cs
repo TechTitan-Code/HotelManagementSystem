@@ -53,7 +53,7 @@ namespace HotelManagementSystem.Controllers
 
             if (userResponse.Success)
             {
-                var emailResponse = await _emailService.SendNotificationToUserAsync(profile);
+                var emailResponse = await _emailService.SendMessageToUserAsync(profile);
 
                 if (emailResponse.Success)
                 {

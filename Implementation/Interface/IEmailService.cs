@@ -8,7 +8,7 @@ namespace HotelManagementSystem.Implementation.Interface
     public interface IEmailService
     {
         Task SendEmailClient(string msg, string title, string email);
-        Task<BaseResponse<MailRecieverDto>> SendNotificationToUserAsync(CreateUser profile);
-        Task<bool> SendEmailAsync(MailRecieverDto model, MailRequests request);
+        Task<BaseResponse<MailReceiverDto>> SendMessageToUserAsync(CreateUser profile);
+        Task<bool> SendEmailAsync(MailReceiverDto model, MailRequests request);
     }
 }
