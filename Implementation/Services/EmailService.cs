@@ -3,11 +3,6 @@ using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Models.Entity;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Net.Mail;
 using HotelManagementSystem.Implementation.Interface;
 
 namespace HotelManagementSystem.Implementation.Services

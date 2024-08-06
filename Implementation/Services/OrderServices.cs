@@ -5,7 +5,6 @@ using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace HMS.Implementation.Services
 {

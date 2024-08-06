@@ -1,9 +1,4 @@
 ﻿using HotelManagementSystem.Implementation.Interface;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.IO;
-using System;
-using System.Threading.Tasks;
 
 namespace HotelManagementSystem.Implementation.Services
 {

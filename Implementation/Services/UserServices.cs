@@ -1,12 +1,10 @@
-﻿using HotelManagementSystem.Dto;
-using HotelManagementSystem.Dto.RequestModel;
+﻿using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
 using HotelManagementSystem.Model.Entity.Enum;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 
 namespace HotelManagementSystem.Dto.Implementation.Services
