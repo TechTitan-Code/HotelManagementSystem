@@ -3,10 +3,8 @@ using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
-using HotelManagementSystem.Model.Entity.Enum;
 using HotelManagementSystem.Models.Entity;
 using Microsoft.EntityFrameworkCore;
-
 namespace HotelManagementSystem.Implementation.Services
 {
     public class CustomerStatusServices : ICustomerStatusServices
@@ -14,37 +12,31 @@ namespace HotelManagementSystem.Implementation.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly IBookingServices _bookingServices;
         private readonly IUserServices _userServices;
+        private readonly ILogger<CustomerStatusServices> _logger;
 
-        public CustomerStatusServices(ApplicationDbContext dbContext, IBookingServices bookingServices,IUserServices userServices)
+        public CustomerStatusServices(ApplicationDbContext dbContext, IBookingServices bookingServices, IUserServices userServices, ILogger<CustomerStatusServices> logger)
         {
             _dbContext = dbContext;
             _bookingServices = bookingServices;
             _userServices = userServices;
+            _logger = logger;
         }
 
         public async Task<BaseResponse<Guid>> CheckIn(string customerId, Guid bookingId)
         {
+            _logger.LogInformation("CheckIn called with customerId: {customerId}, bookingId: {bookingId}", customerId, bookingId);
             try
             {
                 var customer = await _dbContext.Users.FindAsync(customerId);
                 if (customer == null)
                 {
+                    _logger.LogWarning("Customer not found with Id: {customerId}", customerId);
                     return new BaseResponse<Guid>
                     {
                         Success = false,
                         Message = "Customer not found."
                     };
                 }
-
-                //var booking = await _dbContext.Bookings.FindAsync(bookingId);
-                //if (booking == null)
-                //{
-                //    return new BaseResponse<Guid>
-                //    {
-                //        Success = false,
-                //        Message = "Booking not found."
-                //    };
-                //}
 
                 var customerStatus = new CustomerStatus
                 {
@@ -57,40 +49,34 @@ namespace HotelManagementSystem.Implementation.Services
                 _dbContext.CustomerStatuses.Add(customerStatus);
                 await _dbContext.SaveChangesAsync();
 
-                // Assume Rooms is a related entity in Booking and you want to update its availability
-                //booking.Rooms.IsAvailable = false;
-                //_dbContext.Rooms.Update(booking.Rooms);
-                //await _dbContext.SaveChangesAsync();
-
+                _logger.LogInformation("Check-in successful for customerId: {customerId}", customerId);
                 return new BaseResponse<Guid>
                 {
                     Success = true,
                     Message = "Check-in successful.",
                     Data = customerStatus.BookingId
                 };
-
             }
-
-
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Exception occurred during check-in for customerId: {customerId}", customerId);
                 return new BaseResponse<Guid>
                 {
-                    Success = true,
+                    Success = false,
                     Message = "Check-in failed.",
-
                 };
             }
-
         }
 
         public async Task<BaseResponse<Guid>> CheckOut(Guid customerId)
         {
+            _logger.LogInformation("CheckOut called with customerId: {customerId}", customerId);
             try
             {
                 var customerStatus = await _dbContext.CustomerStatuses.FirstOrDefaultAsync(x => x.Id == customerId);
                 if (customerStatus == null)
                 {
+                    _logger.LogWarning("CustomerStatus not found with Id: {customerId}", customerId);
                     return new BaseResponse<Guid>
                     {
                         Success = false,
@@ -101,27 +87,30 @@ namespace HotelManagementSystem.Implementation.Services
 
                 _dbContext.CustomerStatuses.Update(customerStatus);
                 await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation("Check-out successful for customerId: {customerId}", customerId);
                 return new BaseResponse<Guid>
                 {
                     Success = true,
                     Message = "Check-out successful.",
-                   Data = customerStatus.Id
+                    Data = customerStatus.Id
                 };
-
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Exception occurred during check-out for customerId: {customerId}", customerId);
                 return new BaseResponse<Guid>
                 {
-                    Success = true,
+                    Success = false,
                     Message = "Check-out failed.",
                 };
             }
         }
-          
+
         public async Task<List<CustomerStatusDto>> GetCustomerStatus()
         {
-            return _dbContext.CustomerStatuses
+            _logger.LogInformation("GetCustomerStatus called");
+            return await _dbContext.CustomerStatuses
                 .Select(x => new CustomerStatusDto()
                 {
                     Id = x.Id,
@@ -129,13 +118,12 @@ namespace HotelManagementSystem.Implementation.Services
                     CheckOutDate = x.CheckOutDate,
                     CustomerName = x.CustomerName,
                     CustomerId = x.Id
-
-
-                }).ToList();
+                }).ToListAsync();
         }
 
         public List<SelectCustomerDto> GetCustomerSelect()
         {
+            _logger.LogInformation("GetCustomerSelect called");
             var customers = _dbContext.Users.ToList();
             var result = new List<SelectCustomerDto>();
 
@@ -151,24 +139,9 @@ namespace HotelManagementSystem.Implementation.Services
             return result;
         }
 
-        public List<SelectProductDto> GetProductSelect()
-        {
-            var products = _dbContext.Products.ToList();
-            var result = new List<SelectProductDto>();
-
-            if (products.Count > 0)
-            {
-                result = products.Select(x => new SelectProductDto()
-                {
-                    Id = x.Id,
-                    ProductName = x.Name,
-                }).ToList();
-            }
-
-            return result;
-        }
         public List<SelectCustomerCheckedInDto> GetSelectCustomerCheckedIn()
         {
+            _logger.LogInformation("GetSelectCustomerCheckedIn called");
             var customerStatus = _dbContext.CustomerStatuses.ToList();
             var result = new List<SelectCustomerCheckedInDto>();
 

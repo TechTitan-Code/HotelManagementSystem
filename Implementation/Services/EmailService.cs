@@ -2,12 +2,12 @@
 using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Models.Entity;
 using Microsoft.Extensions.Options;
-using MailKit.Net.Smtp;
+using MimeKit;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Net.Mail;
-
-using HotelManagementSystem.Model.Entity;
-using MimeKit;
 using HotelManagementSystem.Implementation.Interface;
 
 namespace HotelManagementSystem.Implementation.Services
@@ -17,17 +17,21 @@ namespace HotelManagementSystem.Implementation.Services
         private readonly IWebHostEnvironment _hostenv;
         private readonly EmailConfiguration _emailConfiguration;
         private readonly string _apiKey;
+        private readonly ILogger<EmailService> _logger;
 
-        public EmailService(IWebHostEnvironment hostenv, IOptions<EmailConfiguration> emailConfiguration, IConfiguration configuration)
+        public EmailService(IWebHostEnvironment hostenv, IOptions<EmailConfiguration> emailConfiguration, IConfiguration configuration, ILogger<EmailService> logger)
         {
             _hostenv = hostenv;
             _emailConfiguration = emailConfiguration.Value;
             _apiKey = configuration.GetValue<string>("MailConfig:mailApikey");
+            _logger = logger;
         }
 
         public async Task<BaseResponse<MailReceiverDto>> SendMessageToUserAsync(CreateUser user)
         {
-            var mailRecieverRequest = new MailReceiverDto
+            _logger.LogInformation("SendMessageToUserAsync called for user: {UserName}", user.FirstName + " " + user.LastName);
+
+            var mailReceiverRequest = new MailReceiverDto
             {
                 Email = user.Email,
                 Name = user.FirstName + " " + user.LastName,
@@ -57,16 +61,18 @@ namespace HotelManagementSystem.Implementation.Services
 
             try
             {
-                await SendEmailAsync(mailRecieverRequest, mailRequest);
+                await SendEmailAsync(mailReceiverRequest, mailRequest);
+                _logger.LogInformation("Email sent successfully to: {Email}", mailReceiverRequest.Email);
                 return new BaseResponse<MailReceiverDto>
                 {
                     Message = "Email sent successfully",
                     Success = true,
-                     Data = mailRecieverRequest
+                    Data = mailReceiverRequest
                 };
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to send email to: {Email}", mailReceiverRequest.Email);
                 return new BaseResponse<MailReceiverDto>
                 {
                     Message = $"Failed to send notification: {ex.Message}",
@@ -77,8 +83,11 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task SendEmailClient(string msg, string title, string email)
         {
+            _logger.LogInformation("SendEmailClient called with email: {Email}, subject: {Title}", email, title);
+
             if (string.IsNullOrEmpty(msg))
             {
+                _logger.LogError("Email message content cannot be null or empty");
                 throw new ArgumentNullException(nameof(msg), "Email message content cannot be null or empty");
             }
 
@@ -96,15 +105,15 @@ namespace HotelManagementSystem.Implementation.Services
             {
                 try
                 {
-                    Console.WriteLine("Inside email client");
+                    _logger.LogInformation("Connecting to SMTP server at {SMTPServerAddress}", _emailConfiguration.SMTPServerAddress);
                     client.Connect(_emailConfiguration.SMTPServerAddress, _emailConfiguration.SMTPServerPort, true);
-                    //client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.Authenticate(_emailConfiguration.EmailSenderAddress, _emailConfiguration.EmailSenderPassword);
                     client.Send(message);
+                    _logger.LogInformation("Email sent successfully to: {Email}", email);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error occurred in email client: {ex.Message}");
+                    _logger.LogError(ex, "Error occurred while sending email to: {Email}", email);
                     throw;
                 }
                 finally
@@ -117,25 +126,25 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<bool> SendEmailAsync(MailReceiverDto model, MailRequests request)
         {
+            _logger.LogInformation("SendEmailAsync called for email: {Email}", model.Email);
+
             try
             {
-                Console.WriteLine("Calling email client");
-                string buildContent = $"Dear {model.Name},<p>{request.Body}</p>";
-
                 if (string.IsNullOrWhiteSpace(request.HtmlContent))
                 {
+                    _logger.LogError("Email content cannot be null or empty");
                     throw new ArgumentNullException(nameof(request.HtmlContent), "Email content cannot be null or empty");
                 }
 
                 await SendEmailClient(request.HtmlContent, request.Title, model.Email);
+                _logger.LogInformation("Email content sent successfully to: {Email}", model.Email);
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error while sending email: {ex.Message}");
+                _logger.LogError(ex, "Error while sending email to: {Email}", model.Email);
                 throw new Exception("There was an error while sending email", ex);
             }
         }
     }
 }
-

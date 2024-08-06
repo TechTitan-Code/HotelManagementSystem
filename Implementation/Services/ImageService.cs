@@ -5,6 +5,11 @@ using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
 using HotelManagementSystem.Models.Entity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace HotelManagementSystem.Implementation.Services
 {
@@ -12,14 +17,19 @@ namespace HotelManagementSystem.Implementation.Services
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IFileService _fileService;
+        private readonly ILogger<ImageService> _logger;
 
-        public ImageService(ApplicationDbContext dbContext, IFileService fileService)
+        public ImageService(ApplicationDbContext dbContext, IFileService fileService, ILogger<ImageService> logger)
         {
             _dbContext = dbContext;
             _fileService = fileService;
+            _logger = logger;
         }
+
         public async Task<BaseResponse<ImageDto>> AddImageAsync(CreateImage request)
         {
+            _logger.LogInformation("AddImageAsync called with RoomId: {RoomId}", request.RoomId);
+
             try
             {
                 if (request != null)
@@ -29,13 +39,16 @@ namespace HotelManagementSystem.Implementation.Services
                         ImagePath = _fileService.GeneratePhoto(request.ImageFile),
                         RoomId = request.RoomId,
                     };
+
                     await _dbContext.Images.AddAsync(image);
                     await _dbContext.SaveChangesAsync();
+
+                    _logger.LogInformation("Image created successfully with Id: {ImageId}", image.Id);
 
                     return new BaseResponse<ImageDto>
                     {
                         Success = true,
-                        Message = $"Image created successfully.",
+                        Message = "Image created successfully.",
                         Data = new ImageDto
                         {
                             Id = image.Id,
@@ -44,6 +57,7 @@ namespace HotelManagementSystem.Implementation.Services
                     };
                 }
 
+                _logger.LogWarning("Invalid request received in AddImageAsync.");
                 return new BaseResponse<ImageDto>
                 {
                     Success = false,
@@ -52,28 +66,30 @@ namespace HotelManagementSystem.Implementation.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Image creation failed for RoomId: {RoomId}", request.RoomId);
                 return new BaseResponse<ImageDto>
                 {
                     Success = false,
                     Message = $"Image creation failed: {ex.Message}"
                 };
             }
-
-
         }
 
         public async Task<BaseResponse<int>> AddImagesAsync(List<IFormFile> requestPhotoFiles, Guid roomId)
         {
+            _logger.LogInformation("AddImagesAsync called with RoomId: {RoomId} and {PhotoCount} photos", roomId, requestPhotoFiles.Count);
+
             var response = new BaseResponse<int>();
 
             try
             {
-
                 var images = new List<Images>();
                 int saveChangesRows = 0;
-                if (requestPhotoFiles.Count != 0)
+
+                if (requestPhotoFiles.Count > 0)
                 {
                     var photoFiles = _fileService.GeneratePhotos(requestPhotoFiles);
+
                     foreach (var file in photoFiles)
                     {
                         var image = new Images
@@ -83,6 +99,7 @@ namespace HotelManagementSystem.Implementation.Services
                         };
                         images.Add(image);
                     }
+
                     if (images.Count > 0)
                     {
                         await _dbContext.Images.AddRangeAsync(images);
@@ -90,20 +107,23 @@ namespace HotelManagementSystem.Implementation.Services
 
                         if (saveChangesRows > 0)
                         {
-                            return response = new BaseResponse<int>
+                            _logger.LogInformation("{PhotoCount} images created successfully for RoomId: {RoomId}", images.Count, roomId);
+                            return new BaseResponse<int>
                             {
                                 Success = true,
-                                Message = $"Image creation successful.",
+                                Message = "Image creation successful.",
                                 Data = saveChangesRows,
                             };
                         }
                     }
                 }
 
+                _logger.LogWarning("No images added for RoomId: {RoomId}", roomId);
             }
             catch (Exception ex)
             {
-                return response = new BaseResponse<int>
+                _logger.LogError(ex, "Image creation failed for RoomId: {RoomId}", roomId);
+                return new BaseResponse<int>
                 {
                     Success = false,
                     Message = $"Image creation failed: {ex.Message}"
@@ -111,51 +131,6 @@ namespace HotelManagementSystem.Implementation.Services
             }
 
             return response;
-
-
         }
-
-        //public async Task<BaseResponse<Guid>> DeleteImageAsync(Guid Id)
-        //{
-        //    try
-        //    {
-        //        var image = await _dbContext.Images.FirstOrDefaultAsync(r => r.Id == Id);
-        //        if (image == null)
-        //        {
-        //            return new BaseResponse<Guid>
-        //            {
-        //                Success = false,
-        //                Message = $"Image  not found."
-        //            };
-        //        }
-
-        //        _dbContext.Images.Remove(image);
-        //        if (await _dbContext.SaveChangesAsync() > 0)
-        //        {
-        //            return new BaseResponse<Guid>
-        //            {
-        //                Success = true,
-        //                Message = $"Image has been deleted successfully.",
-        //                Data = Id
-        //            };
-        //        }
-        //        else
-        //        {
-        //            return new BaseResponse<Guid>
-        //            {
-        //                Success = false,
-        //                Message = $"Failed to delete image There was an error in the deletion process."
-        //            };
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new BaseResponse<Guid>
-        //        {
-        //            Success = false,
-        //            Message = $"An error occurred while deleting the image: {ex.Message}"
-        //        };
-        //    }
-        //}
     }
 }

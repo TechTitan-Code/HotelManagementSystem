@@ -5,6 +5,11 @@ using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
 using HotelManagementSystem.Model.Entity.Enum;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HotelManagementSystem.Implementation.Services
 {
@@ -12,16 +17,19 @@ namespace HotelManagementSystem.Implementation.Services
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IBookingServices _bookingServices;
+        private readonly ILogger<PaymentServices> _logger;
 
-        public PaymentServices(ApplicationDbContext dbContext, IBookingServices bookingServices)
+        public PaymentServices(ApplicationDbContext dbContext, IBookingServices bookingServices, ILogger<PaymentServices> logger)
         {
             _dbContext = dbContext;
             _bookingServices = bookingServices;
+            _logger = logger;
         }
-
 
         public async Task<BaseResponse<Guid>> CreatePayment(CreatePayment request)
         {
+            _logger.LogInformation("CreatePayment called with BookingId: {BookingId}", request.BookingId);
+
             try
             {
                 var payment = new Payment
@@ -36,31 +44,39 @@ namespace HotelManagementSystem.Implementation.Services
 
                 _dbContext.payments.Add(payment);
                 await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation("Payment created successfully with Id: {PaymentId}", payment.Id);
+
                 return new BaseResponse<Guid>
                 {
                     Success = true,
-                    Message = $"payment Successfully"
-
+                    Message = "Payment created successfully.",
+                    Data = payment.Id
                 };
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Payment creation failed for BookingId: {BookingId}", request.BookingId);
                 return new BaseResponse<Guid>
                 {
-                    Success = true,
-                    Message = $"payment Failed"
-
+                    Success = false,
+                    Message = "Payment creation failed."
                 };
             }
         }
 
         public async Task<PaymentDto> GetPaymentById(Guid paymentId)
         {
+            _logger.LogInformation("GetPaymentById called with PaymentId: {PaymentId}", paymentId);
+
             var payment = await _dbContext.payments.FindAsync(paymentId);
             if (payment == null)
             {
+                _logger.LogWarning("Payment not found with Id: {PaymentId}", paymentId);
                 return null;
             }
+
+            _logger.LogInformation("Payment retrieved successfully with Id: {PaymentId}", paymentId);
 
             return new PaymentDto
             {
@@ -76,8 +92,10 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<List<PaymentDto>> GetPayment()
         {
-            return _dbContext.payments
-                .Select(x => new PaymentDto()
+            _logger.LogInformation("GetPayment called.");
+
+            var payments = await _dbContext.payments
+                .Select(x => new PaymentDto
                 {
                     Amount = x.Amount,
                     Balance = x.Balance,
@@ -86,31 +104,36 @@ namespace HotelManagementSystem.Implementation.Services
                     PaymentId = x.Id,
                     PaymentMethod = x.PaymentMethod,
                     PaymentStatus = x.PaymentStatus
+                }).ToListAsync();
 
+            _logger.LogInformation("Payments retrieved successfully, count: {Count}", payments.Count);
 
-                }).ToList();
+            return payments;
         }
 
         public async Task<BaseResponse<IList<PaymentDto>>> GetAllPaymentAsync()
         {
-            var payment = await _dbContext.payments
-             .Select(x => new PaymentDto()
-             {
-                 Amount = x.Amount,
-                 Balance = x.Balance,
-                 BookingId = x.BookingId,
-                 PaymentDate = x.PaymentDate,
-                 PaymentId = x.Id,
-                 PaymentMethod = x.PaymentMethod,
-                 PaymentStatus = x.PaymentStatus
-             }).ToListAsync();
+            _logger.LogInformation("GetAllPaymentAsync called.");
 
+            var payments = await _dbContext.payments
+                .Select(x => new PaymentDto
+                {
+                    Amount = x.Amount,
+                    Balance = x.Balance,
+                    BookingId = x.BookingId,
+                    PaymentDate = x.PaymentDate,
+                    PaymentId = x.Id,
+                    PaymentMethod = x.PaymentMethod,
+                    PaymentStatus = x.PaymentStatus
+                }).ToListAsync();
+
+            _logger.LogInformation("All payments retrieved successfully, count: {Count}", payments.Count);
 
             return new BaseResponse<IList<PaymentDto>>
             {
                 Success = true,
-                Message = "Payment Succesfully Retrieved",
-                Data = payment
+                Message = "Payments successfully retrieved.",
+                Data = payments
             };
         }
     }

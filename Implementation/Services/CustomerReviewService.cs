@@ -5,27 +5,30 @@ using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
 using HotelManagementSystem.Model.Entity.Enum;
 using Microsoft.EntityFrameworkCore;
-
 namespace HotelManagementSystem.Implementation.Services
 {
     public class CustomerReviewService : ICustomerReviewService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ICustomerServices _customerServices;
+        private readonly ILogger<CustomerReviewService> _logger;
 
-        public CustomerReviewService(ApplicationDbContext dbContext, ICustomerServices customerServices)
+        public CustomerReviewService(ApplicationDbContext dbContext, ICustomerServices customerServices, ILogger<CustomerReviewService> logger)
         {
             _dbContext = dbContext;
             _customerServices = customerServices;
+            _logger = logger;
         }
 
         public async Task<BaseResponse<Guid>> CreateReview(CreateReview request, string Id)
         {
+            _logger.LogInformation("CreateReview called with customer Id: {Id}", Id);
             try
             {
                 var customer = await _customerServices.GetCustomerByIdAsync(Id);
                 if (customer == null)
                 {
+                    _logger.LogWarning("Customer not found with Id: {Id}", Id);
                     return new BaseResponse<Guid>
                     {
                         Success = false,
@@ -35,24 +38,22 @@ namespace HotelManagementSystem.Implementation.Services
                 }
                 var review = new CustomerReview
                 {
-                    // CustomerId = request.Id,
                     Comment = request.Comment,
                     Rating = request.Rating,
-
-
                 };
                 _dbContext.CustomerReviews.Add(review);
                 if (await _dbContext.SaveChangesAsync() > 0)
                 {
+                    _logger.LogInformation("Review created successfully for customer Id: {Id}", Id);
                     return new BaseResponse<Guid>
                     {
                         Success = true,
-                        Message = "Succesfully Commented on Review"
+                        Message = "Successfully Commented on Review"
                     };
                 }
-
                 else
                 {
+                    _logger.LogWarning("Failed to create review for customer Id: {Id}", Id);
                     return new BaseResponse<Guid>
                     {
                         Success = false,
@@ -60,10 +61,9 @@ namespace HotelManagementSystem.Implementation.Services
                     };
                 }
             }
-
             catch (Exception ex)
             {
-
+                _logger.LogError(ex, "Exception occurred while creating review for customer Id: {Id}", Id);
                 return new BaseResponse<Guid>
                 {
                     Success = false,
@@ -74,45 +74,54 @@ namespace HotelManagementSystem.Implementation.Services
 
         public async Task<List<CustomerReviewDto>> GetReview()
         {
-            return _dbContext.CustomerReviews
-                //.Include(x => x.Id)
-                //.Include(x => x.RoomType)
+            _logger.LogInformation("GetReview called");
+            return await _dbContext.CustomerReviews
                 .Select(x => new CustomerReviewDto()
                 {
                     Comment = x.Comment,
                     Rating = x.Rating
-
-
-                }).ToList();
+                }).ToListAsync();
         }
 
         public async Task<BaseResponse<IList<CustomerReviewDto>>> GetAllReviewAsync()
         {
-
-
-
-            var review = await _dbContext.CustomerReviews
-               .Where(x => (int)x.Rating == (int)Review.Excellent ||
-                    (int)x.Rating == (int)Review.Good ||
-                    (int)x.Rating == (int)Review.Bad)
-                .Select(x => new CustomerReviewDto
-                {
-                   
-                    Comment = x.Comment,
-                })
-                .ToListAsync();
-
-            if (review != null )
+            _logger.LogInformation("GetAllReviewAsync called");
+            try
             {
-                return new BaseResponse<IList<CustomerReviewDto>>
+                var review = await _dbContext.CustomerReviews
+                    .Where(x => (int)x.Rating == (int)Review.Excellent ||
+                                (int)x.Rating == (int)Review.Good ||
+                                (int)x.Rating == (int)Review.Bad)
+                    .Select(x => new CustomerReviewDto
+                    {
+                        Comment = x.Comment,
+                    })
+                    .ToListAsync();
+
+                if (review != null)
                 {
-                    Success = true,
-                    Message = "Review Retrieved Successfully",
-                    Data = review
-                };
+                    _logger.LogInformation("Reviews retrieved successfully");
+                    return new BaseResponse<IList<CustomerReviewDto>>
+                    {
+                        Success = true,
+                        Message = "Review Retrieved Successfully",
+                        Data = review
+                    };
+                }
+                else
+                {
+                    _logger.LogWarning("No reviews found");
+                    return new BaseResponse<IList<CustomerReviewDto>>
+                    {
+                        Success = false,
+                        Message = "Failed to retrieve reviews",
+                        Hasherror = true
+                    };
+                }
             }
-            else
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Exception occurred while retrieving reviews");
                 return new BaseResponse<IList<CustomerReviewDto>>
                 {
                     Success = false,
@@ -122,6 +131,4 @@ namespace HotelManagementSystem.Implementation.Services
             }
         }
     }
-
 }
-
