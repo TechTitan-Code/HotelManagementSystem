@@ -20,12 +20,6 @@ namespace HotelManagementSystem.Dto.RequestModel
         public Guid RoomId { get; set; }
         [Required(ErrorMessage = "CustomerId is required")]
         public Guid CustomerId { get; set; }
-       
-
-        public class RoomDto
-        {
-            public Guid RoomId { get; set; }
-        }
     }
 }
 
