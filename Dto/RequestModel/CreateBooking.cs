@@ -1,13 +1,10 @@
-﻿using HotelManagementSystem.Model.Entity;
-using HotelManagementSystem.Model.Entity.Enum;
+﻿using HotelManagementSystem.Model.Entity.Enum;
 using System.ComponentModel.DataAnnotations;
 
 namespace HotelManagementSystem.Dto.RequestModel
 {
     public class CreateBooking
     {
-        public DateTime CheckIn { get; set; }
-        public DateTime Checkout { get; set; }
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
         [Required(ErrorMessage = "PhoneNumber is required")]
