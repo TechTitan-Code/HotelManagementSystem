@@ -44,7 +44,6 @@ builder.Services.AddTransient<IPaymentServices , PaymentServices>();
 builder.Services.AddTransient<ICustomerStatusServices , CustomerStatusServices>();
 builder.Services.AddTransient<IImageService  , ImageService>();
 builder.Services.AddTransient<IFileService  , FileService>();
-builder.Services.ConfigureApplicationCookie(config => config.LoginPath = "/Login");
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddNotyf(config =>
 {
@@ -53,6 +52,11 @@ builder.Services.AddNotyf(config =>
     config.Position = NotyfPosition.TopRight;
 }
 );
+builder.Services.ConfigureApplicationCookie(config =>
+{
+    config.LoginPath = "/User/Login";
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
