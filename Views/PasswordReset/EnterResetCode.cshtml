@@ -1,7 +1,7 @@
-﻿@model HotelManagementSystem.Dto.RequestModel.LoginModel
+﻿@model HotelManagementSystem.Dto.ValidateResetCodeRequest
 @{
-    ViewData["Title"] = "Login";
     Layout = null;
+    ViewData["Title"] = "Enter Reset Code";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -54,31 +54,23 @@
                             <a href="index.html" class="">
                                 <h3 class="text-primary"><i class="fa fa-hotel me-2"></i>HMS</h3>
                             </a>
-                            <h3>Sign In</h3>
                         </div>
-                        <form asp-action="Login" asp-controller="User"> 
-                            <div class="col mb-3">
-                                <label class="form-label">UserName</label>
-                                <input type="text" class="form-control" name="UserName" required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">UserName Is required.</div>
+                        <form asp-action="EnterResetCode" method="post">
+                            <div class="form-group">
+                                <label for="ResetCode">Reset Code</label>
+                                <input asp-for="ResetCode" class="form-control" placeholder="Enter your reset code" />
+                                <span asp-validation-for="ResetCode" class="text-danger"></span>
                             </div>
-                            <div class="col mb-3">
-                                <label class="form-label">PassWord</label>
-                                <input type="password" class="form-control" name="PassWord" required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">PassWord is Required.</div>
+
+                            <div class="form-group">
+                                <label for="NewPassword">New Password</label>
+                                <input asp-for="NewPassword" type="password" class="form-control" placeholder="Enter new password" />
+                                <span asp-validation-for="NewPassword" class="text-danger"></span>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                                </div>
-                                <a href="@Url.Action("RequestPasswordReset", "PasswordReset")">Forgot Password</a>
-                            </div>
-                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
-                            <p class="text-center mb-0">Don't have an Account? <a href="@Url.Action("CreateCustomer", "Customer")">Sign Up</a></p>
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
+
 
 
                     </div>

@@ -71,6 +71,8 @@ namespace HotelManagementSystem.Model.Entity
         public DbSet<Payment> payments { get; set; }
         public DbSet<CustomerReview> CustomerReviews  { get; set; }
         public DbSet<CustomerStatus> CustomerStatuses { get; set; }
+        public DbSet<RequestPasswordReset> RequestPasswordResets { get; set; }
+
        
     }
 }

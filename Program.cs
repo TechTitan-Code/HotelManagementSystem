@@ -45,6 +45,7 @@ builder.Services.AddTransient<ICustomerStatusServices , CustomerStatusServices>(
 builder.Services.AddTransient<IImageService  , ImageService>();
 builder.Services.AddTransient<IFileService  , FileService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddTransient<IRequestPasswordResetService , RequestPasswordResetService>();
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 5;
