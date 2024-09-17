@@ -1,0 +1,26 @@
+﻿@model HotelManagementSystem.Dto.RequestModel.InitializePaymentRequestDto
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Initialize Payment";
+}
+
+<h2>Payment Initialization</h2>
+
+<form asp-action="InitiatePayment" asp-route-userId="@Model.UserId" asp-route-bookingId="@Model.BookingId" method="post">
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <!-- Hidden fields to pass userId, bookingId, and orderId -->
+    <input type="hidden" name="userId" value="@Model.UserId" />
+    <input type="hidden" name="bookingId" value="@Model.BookingId" />
+
+    <button type="submit" class="btn btn-primary">Submit Payment</button>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

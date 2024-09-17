@@ -26,6 +26,12 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("SMTPConfig"));
+builder.Services.AddHttpClient<PaystackService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.paystack.co/");
+    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["Paystack:SecretKey"]}");
+});
+
 
 builder.Services.AddIdentity<User, IdentityRole>(opt =>
 {
@@ -40,7 +46,7 @@ builder.Services.AddTransient< IOrderServices, OrderServices>();
 builder.Services.AddTransient<IProductServices, ProductServices>();
 builder.Services.AddTransient<ICustomerReviewService, CustomerReviewService>();
 builder.Services.AddTransient<IAmenityService , AmenityService>();
-builder.Services.AddTransient<IPaymentServices , PaymentServices>();
+builder.Services.AddTransient<IPaystackService , PaystackService>();
 builder.Services.AddTransient<ICustomerStatusServices , CustomerStatusServices>();
 builder.Services.AddTransient<IImageService  , ImageService>();
 builder.Services.AddTransient<IFileService  , FileService>();

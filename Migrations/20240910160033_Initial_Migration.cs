@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HotelManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_migration : Migration
+    public partial class Initial_Migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,6 +55,8 @@ namespace HotelManagementSystem.Migrations
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Gender = table.Column<int>(type: "int", nullable: true),
                     AgeRange = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -114,11 +116,12 @@ namespace HotelManagementSystem.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PaymentMethod = table.Column<int>(type: "int", nullable: true),
-                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaymentStatus = table.Column<int>(type: "int", nullable: true),
+                    TransactionReference = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateRequested = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -140,6 +143,25 @@ namespace HotelManagementSystem.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RequestPasswordResets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResetCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RequestedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
+                    UsedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequestPasswordResets", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -346,19 +368,19 @@ namespace HotelManagementSystem.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "8a57794a-8902-48ab-ba69-eb86061dba5d", null, "Customer", "Customer" },
-                    { "f547126a-68ab-4a70-b19e-ea4987752692", null, "Admin", "ADMIN" }
+                    { "2af7320e-8846-4d74-a137-1daefb0e9e47", null, "Admin", "ADMIN" },
+                    { "6545edee-ddfb-4247-827c-f7b9af0ba49b", null, "Customer", "Customer" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "Address", "AgeRange", "ConcurrencyStamp", "CreatedTime", "DateOfBirth", "Discriminator", "Email", "EmailConfirmed", "Gender", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedTime", "UserName", "UserRole" },
-                values: new object[] { "2f1e9519-dcf2-4ba9-9c52-63b03c268733", 0, null, "20-40", "104f0c94-54d2-4e59-a145-287c7e32d67d", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "User", "admin@gmail.com", true, 1, false, null, "Ahmad Korede", "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEDmwv/Cv1xCc/0UOUcngrYwdxK6zjZ+Spw43ocT80At1JobzAGHPD7mHwHaGfa2m+Q==", null, false, "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 1 });
+                columns: new[] { "Id", "AccessFailedCount", "Address", "AgeRange", "ConcurrencyStamp", "CreatedTime", "DateOfBirth", "Discriminator", "Email", "EmailConfirmed", "FirstName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedTime", "UserName", "UserRole" },
+                values: new object[] { "04923d33-4fa1-4e5c-9cc9-1f45b09670e3", 0, null, "20-40", "b764d0c3-5d04-4a74-808e-ebb944fa5d16", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "User", "admin@gmail.com", true, "Ahmad", 1, "oseni", false, null, "Ahmad Korede", "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAENSY8/2bMvHn65vfJE6kgPi6cKA8IuiexACivhwD+OedcOj56MsQi/+bRsZXPK6gEA==", null, false, "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 1 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "f547126a-68ab-4a70-b19e-ea4987752692", "2f1e9519-dcf2-4ba9-9c52-63b03c268733" });
+                values: new object[] { "2af7320e-8846-4d74-a137-1daefb0e9e47", "04923d33-4fa1-4e5c-9cc9-1f45b09670e3" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -455,6 +477,9 @@ namespace HotelManagementSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "payments");
+
+            migrationBuilder.DropTable(
+                name: "RequestPasswordResets");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

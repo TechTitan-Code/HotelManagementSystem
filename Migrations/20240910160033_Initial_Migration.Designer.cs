@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240719171617_Initial_migration")]
-    partial class Initial_migration
+    [Migration("20240910160033_Initial_Migration")]
+    partial class Initial_Migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -143,23 +143,29 @@ namespace HotelManagementSystem.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<Guid>("BookingId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("PaymentDate")
+                    b.Property<DateTime>("DateRequested")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("PaymentMethod")
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PaymentStatus")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionReference")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("datetime2");
@@ -294,6 +300,44 @@ namespace HotelManagementSystem.Migrations
                     b.ToTable("Images");
                 });
 
+            modelBuilder.Entity("HotelManagementSystem.Models.Entity.RequestPasswordReset", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("RequestedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ResetCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UsedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RequestPasswordResets");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -323,13 +367,13 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f547126a-68ab-4a70-b19e-ea4987752692",
+                            Id = "2af7320e-8846-4d74-a137-1daefb0e9e47",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8a57794a-8902-48ab-ba69-eb86061dba5d",
+                            Id = "6545edee-ddfb-4247-827c-f7b9af0ba49b",
                             Name = "Customer",
                             NormalizedName = "Customer"
                         });
@@ -498,8 +542,8 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "2f1e9519-dcf2-4ba9-9c52-63b03c268733",
-                            RoleId = "f547126a-68ab-4a70-b19e-ea4987752692"
+                            UserId = "04923d33-4fa1-4e5c-9cc9-1f45b09670e3",
+                            RoleId = "2af7320e-8846-4d74-a137-1daefb0e9e47"
                         });
                 });
 
@@ -539,8 +583,16 @@ namespace HotelManagementSystem.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -556,15 +608,15 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2f1e9519-dcf2-4ba9-9c52-63b03c268733",
+                            Id = "04923d33-4fa1-4e5c-9cc9-1f45b09670e3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "104f0c94-54d2-4e59-a145-287c7e32d67d",
+                            ConcurrencyStamp = "b764d0c3-5d04-4a74-808e-ebb944fa5d16",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDmwv/Cv1xCc/0UOUcngrYwdxK6zjZ+Spw43ocT80At1JobzAGHPD7mHwHaGfa2m+Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENSY8/2bMvHn65vfJE6kgPi6cKA8IuiexACivhwD+OedcOj56MsQi/+bRsZXPK6gEA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -572,7 +624,9 @@ namespace HotelManagementSystem.Migrations
                             AgeRange = "20-40",
                             CreatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Ahmad",
                             Gender = 1,
+                            LastName = "oseni",
                             Name = "Ahmad Korede",
                             UpdatedTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserRole = 1

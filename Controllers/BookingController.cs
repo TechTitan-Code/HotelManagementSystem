@@ -3,9 +3,11 @@ using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
+using MailKit.Search;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 
 namespace HotelManagementSystem.Controllers
 {
@@ -49,15 +51,28 @@ namespace HotelManagementSystem.Controllers
         [HttpPost("create-booking")]
         public async Task<IActionResult> CreateBooking(CreateBooking request)
         {
-            var booking = await _bookService.CreateBooking(request);
-            if (booking.Success)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (Guid.TryParse(userId, out var customerId))
             {
-                _notyf.Success(booking.Message, 3);
-                return RedirectToAction("Bookings");
+                request.UserId = customerId;
+
+                var booking = await _bookService.CreateBooking(request);
+                if (booking.Success)
+                {
+                    _notyf.Success(booking.Message, 3);
+                    var bookingId = booking.Data;
+                    return RedirectToAction("InitiatePaymentForm", "Payment", new { userId = customerId, bookingId });
+                }
+
+                _notyf.Error(booking.Message);
+                return BadRequest();
             }
-            _notyf.Error(booking.Message);
+
+            _notyf.Error("User not found.");
             return BadRequest();
         }
+
 
 
 

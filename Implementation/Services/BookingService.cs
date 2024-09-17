@@ -40,7 +40,7 @@ namespace HotelManagementSystem.Implementation.Services
                 var booking = new Booking()
                 {
                     RoomId = request.RoomId,
-                    CustomerId = request.CustomerId,
+                    CustomerId = request.UserId,
                     Email = request.Email,
                     PhoneNumber = request.PhoneNumber,
                     TotalCost = room.RoomRate,

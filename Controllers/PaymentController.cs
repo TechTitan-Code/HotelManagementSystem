@@ -6,54 +6,95 @@ using HotelManagementSystem.Model.Entity;
 using HotelManagementSystem.Model.Entity.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace HotelManagementSystem.Controllers
 {
     public class PaymentController : Controller
     {
-        private readonly IPaymentServices _paymentServices;
+        private readonly IPaystackService _paystackService;
         private readonly ApplicationDbContext _dbContext;
 
-        public PaymentController(IPaymentServices paymentServices ,ApplicationDbContext dbContext)
+        public PaymentController(IPaystackService paystackService, ApplicationDbContext dbContext)
         {
-            _paymentServices = paymentServices;
+            _paystackService = paystackService;
             _dbContext = dbContext;
         }
 
-        [HttpGet("get-payment")]
-        public async Task<IActionResult> Payments()
+        [HttpGet("initiate-payment-form")]
+        public IActionResult InitiatePaymentForm(string userId, Guid bookingId)
         {
-            var payment = await _paymentServices.GetPayment();
-            return View(payment);
+            // Prepare the model with userId and bookingId
+            var model = new InitializePaymentRequestDto
+            {
+                UserId = userId,
+                BookingId = bookingId
+            };
+
+            return View(model);
+        }
+
+        [HttpPost("payment/initiate/{userId}/{bookingId}/{orderId}")]
+        public async Task<IActionResult> InitiatePayment(InitializePaymentRequestDto requestDto, [FromRoute] string userId, [FromRoute] Guid bookingId)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Pass back the userId, bookingId, and orderId on failure
+                requestDto.UserId = userId;
+                requestDto.BookingId = bookingId;
+                return View("InitiatePaymentForm", requestDto);
+            }
+
+            var result = await _paystackService.InitializePaymentAsync(requestDto, userId, bookingId);
+
+            if (result.Success)
+            {
+                return Redirect(result.Data.AuthorizationUrl);
+            }
+
+            ModelState.AddModelError(string.Empty, result.Message);
+            return View("InitiatePaymentForm", requestDto);
         }
 
 
-
-        [HttpGet("create-payment")]
-        public async Task<IActionResult> CreatePayment()
+        [HttpGet("VerifyPayment")]
+        public IActionResult VerifyPaymentForm()
         {
-            var response = await _paymentServices.GetAllPaymentAsync();
-            if (response.Success)
+            // Render a view that contains a form for entering the payment reference
+            return View();
+        }
+
+        [HttpGet("PaymentCallback")]
+        public async Task<IActionResult> PaymentCallback(string reference)
+        {
+            if (string.IsNullOrEmpty(reference))
             {
-                return View();
+                return RedirectToAction("InitiatePayment"); // Redirect to the payment initiation if no reference is provided
             }
-            return BadRequest();
+
+            // Call the service to verify the payment using the reference
+            var result = await _paystackService.VerifyPaymentAsync(reference);
+
+            if (result.Success)
+            {
+                // Payment successful, display the success view
+                ViewBag.Reference = reference;
+                return View("PaymentSuccess");
+            }
+            else
+            {
+                // Payment failed, display an error or handle as needed
+                ModelState.AddModelError(string.Empty, "Payment verification failed. Please try again.");
+                return View("PaymentFailed");
+            }
         }
 
 
-        [HttpPost("create-payment")]
-        public async Task<IActionResult> CreatePayment(CreatePayment request)
+        public IActionResult PaymentSuccess(string reference)
         {
-
-            var payment = await _paymentServices.CreatePayment(request);
-            if (payment.Success)
-            {
-                return RedirectToAction("Payments");
-            }
-
-            return BadRequest();
-
-
+            // You can show the payment success page
+            ViewBag.Reference = reference;
+            return View();
         }
     }
 }

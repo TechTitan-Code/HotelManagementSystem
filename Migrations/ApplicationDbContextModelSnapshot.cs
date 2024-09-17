@@ -140,23 +140,29 @@ namespace HotelManagementSystem.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<Guid>("BookingId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("PaymentDate")
+                    b.Property<DateTime>("DateRequested")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("PaymentMethod")
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PaymentStatus")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionReference")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("datetime2");
@@ -358,13 +364,13 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "26a2e35b-5e2e-41e7-afe2-050bc2166a20",
+                            Id = "2af7320e-8846-4d74-a137-1daefb0e9e47",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "cb448f04-4f8d-4f7d-bb2b-b869161b125a",
+                            Id = "6545edee-ddfb-4247-827c-f7b9af0ba49b",
                             Name = "Customer",
                             NormalizedName = "Customer"
                         });
@@ -533,8 +539,8 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "a6cef9b3-e93a-4890-8888-18ecbb29d952",
-                            RoleId = "26a2e35b-5e2e-41e7-afe2-050bc2166a20"
+                            UserId = "04923d33-4fa1-4e5c-9cc9-1f45b09670e3",
+                            RoleId = "2af7320e-8846-4d74-a137-1daefb0e9e47"
                         });
                 });
 
@@ -599,15 +605,15 @@ namespace HotelManagementSystem.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a6cef9b3-e93a-4890-8888-18ecbb29d952",
+                            Id = "04923d33-4fa1-4e5c-9cc9-1f45b09670e3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "28a1b78a-722c-4815-8b51-c5e9d3312c9a",
+                            ConcurrencyStamp = "b764d0c3-5d04-4a74-808e-ebb944fa5d16",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEK9k4NvkNX4efoq5oG9stA3nBR12ct8auwI1LRgGfaR4lwlVjXTLyenby5oQAhbJqQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENSY8/2bMvHn65vfJE6kgPi6cKA8IuiexACivhwD+OedcOj56MsQi/+bRsZXPK6gEA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,

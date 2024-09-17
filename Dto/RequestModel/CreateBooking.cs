@@ -16,7 +16,8 @@ namespace HotelManagementSystem.Dto.RequestModel
         [Required(ErrorMessage = "RoomId is required")]
         public Guid RoomId { get; set; }
         [Required(ErrorMessage = "CustomerId is required")]
-        public Guid CustomerId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid BookingId { get; set; }
     }
 }
 
