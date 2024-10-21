@@ -46,7 +46,7 @@ namespace HotelManagementSystem.Dto.Implementation.Services
                         Email = request.Email,
                         Gender = request.Gender,
                         PhoneNumber = request.PhoneNumber,
-                        UserRole = UserRole.Customer,
+                        UserRole = request.Role,
                         FirstName = request.FirstName,
                         LastName = request.LastName,
                     };
@@ -55,15 +55,16 @@ namespace HotelManagementSystem.Dto.Implementation.Services
 
                     if (result.Succeeded)
                     {
-                        var addUserRole = await _userManager.AddToRoleAsync(user, UserRole.Customer.ToString());
+
+                        var addUserRole = await _userManager.AddToRoleAsync(user, request.Role.ToString());
 
                         if (addUserRole.Succeeded)
                         {
-                            _logger.LogInformation("User created successfully with username: {UserName}", request.UserName);
                             return new BaseResponse<Guid>
                             {
                                 Success = true,
-                                Message = "User Created Successfully"
+                                Message = $"{request.Role} created successfully",
+                                Data = Guid.Parse(user.Id)
                             };
                         }
                     }
