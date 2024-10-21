@@ -3,6 +3,7 @@ using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Dto.ResponseModel;
 using HotelManagementSystem.Implementation.Interface;
 using HotelManagementSystem.Model.Entity;
+using HotelManagementSystem.Model.Entity.Enum;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -322,6 +323,101 @@ namespace HotelManagementSystem.Implementation.Services
                 };
             }
         }
+
+        public async Task<PaginatedResponse<List<RoomDto>>> GetAllRoomsCreatedAsync(
+                                                        int pageNumber,
+                                                        int pageSize,
+                                                        string searchAmenity,
+                                                        string available,
+                                                        decimal roomRate,
+                                                        string searchTerm = null)
+        {
+            _logger.LogInformation("Retrieving all rooms with pagination");
+
+            try
+            {
+                IQueryable<Room> query = _dbContext.Rooms.Include(x => x.Amenity).Include(x => x.Images);
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    query = query.Where(x =>
+                        x.RoomName.Contains(searchTerm) ||
+                        x.Amenity.AmenityName.Contains(searchTerm) ||
+                        x.RoomNumber.Equals(searchTerm));
+                        
+                }
+
+                if (roomRate > 0)
+                {
+                    query = query.Where(x => x.RoomRate == roomRate);
+                }
+                if (Enum.TryParse(typeof(RoomAvailability), available, true, out var parsedAvailability))
+                {
+                    query = query.Where(x => x.Availability == (RoomAvailability)parsedAvailability);
+                }
+                if (!string.IsNullOrWhiteSpace(searchAmenity))
+                {
+                    query = query.Where(x => x.Amenity.AmenityName.Equals(searchAmenity, StringComparison.OrdinalIgnoreCase));
+                }
+                var totalRecords = await query.CountAsync();
+                if (totalRecords == 0)
+                {
+                    _logger.LogInformation("No rooms found matching the search criteria.");
+                    return new PaginatedResponse<List<RoomDto>>
+                    {
+                        Success = true,
+                        Message = "No rooms found matching the search criteria.",
+                        Data = new List<RoomDto>(),
+                        PageNumber = pageNumber,
+                        PageSize = pageSize,
+                        TotalRecords = 0
+                    };
+                }
+                var rooms = await query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(x => new RoomDto
+                    {
+                        Id = x.Id,
+                        RoomName = x.RoomName,
+                        RoomNumber = x.RoomNumber,
+                        Availability = x.Availability,
+                        RoomRate = x.RoomRate,
+                        RoomStatus = x.RoomStatus,
+                        BedType = x.BedType,
+                        RoomType = x.RoomType,
+                        MaxOccupancy = x.MaxOccupancy,
+                        AmenityName = x.Amenity.AmenityName,
+                        Images = x.Images.Select(img => new Dto.ImageDto
+                        {
+                            Id = img.Id,
+                            ImagePath = img.ImagePath,
+                        }).ToList()
+                    })
+                    .ToListAsync();
+
+                _logger.LogInformation("Rooms retrieved successfully with pagination");
+
+                return new PaginatedResponse<List<RoomDto>>
+                {
+                    Success = true,
+                    Message = "Rooms retrieved successfully.",
+                    Data = rooms,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalRecords = totalRecords
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving rooms with pagination");
+                return new PaginatedResponse<List<RoomDto>>
+                {
+                    Success = false,
+                    Message = $"An error occurred: {ex.Message}"
+                };
+            }
+        }
+
 
         public async Task<BaseResponse<RoomDto>> UpdateRoom(Guid Id, UpdateRoom request)
         {

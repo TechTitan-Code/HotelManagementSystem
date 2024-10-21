@@ -14,6 +14,12 @@
                 <a href="@Url.Action("CreateRoom","Room")" class="mb-0">Create Room</a>
             </div>
         }
+
+        <div class="mb-4">
+            <form action="@Url.Action("GetRooms", "Room")" method="get" class="d-inline">
+                <button type="submit" class="btn btn-primary">View Paginated Rooms</button>
+            </form>
+        </div>
         @if (Model != null && Model.Any())
         {
             <div class="table-responsive">

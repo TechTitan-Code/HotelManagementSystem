@@ -6,9 +6,12 @@
     <a href="#" class="sidebar-toggler flex-shrink-0">
         <i class="fa fa-bars"></i>
     </a>
-    <form class="d-none d-md-flex ms-4">
-        <input class="form-control bg-dark border-0" type="search" placeholder="Search">
+    <form class="d-none d-md-flex ms-4" action="@Url.Action("GetRooms", "Room")" method="get">
+        <input class="form-control bg-dark border-0" name="searchTerm" type="search" placeholder="Search by Room Name or Number">
+        <button class="btn btn-primary ms-2" type="submit">Search</button>
     </form>
+
+
     <div class="navbar-nav align-items-center ms-auto">
         <!-- Messages Dropdown (visible to all users) -->
         <div class="nav-item dropdown">

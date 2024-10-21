@@ -1,0 +1,80 @@
+﻿@model HotelManagementSystem.Model.Entity.PaginatedList<HotelManagementSystem.Dto.RoomDto>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Rooms";
+}
+
+<h2 class="text-center">Rooms</h2>
+
+<!-- Search Form -->
+<form class="d-flex justify-content-center mb-4" action="@Url.Action("GetRooms", "Room")" method="get">
+    <input class="form-control bg-dark border-0" name="searchTerm" type="search" placeholder="Search by Room Name or Number" value="@Context.Request.Query["searchTerm"]">
+    <button class="btn btn-primary ms-2" type="submit">Search</button>
+</form>
+
+<!-- Room Cards -->
+<div class="row justify-content-center">
+    @if (Model.Items.Any())
+    {
+        foreach (var room in Model.Items)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title">@room.RoomName (@room.RoomNumber)</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Availability: @room.Availability</h6>
+                        <p><strong>Rate:</strong> @room.RoomRate</p>
+                        <p><strong>Status:</strong> @room.RoomStatus</p>
+                        <p><strong>Bed Type:</strong> @room.BedType</p>
+                        <p><strong>Room Type:</strong> @room.RoomType</p>
+                        <p><strong>Max Occupancy:</strong> @room.MaxOccupancy</p>
+                        <p><strong>Amenities:</strong> @room.AmenityName</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        @if (room.Images.Any())
+                        {
+                            <div class="d-flex justify-content-center">
+                                @foreach (var image in room.Images.Take(3))
+                                {
+                                    <img src="~/RoomImages/@image.ImagePath" alt="Room Image" class="img-thumbnail mx-1" style="width:70px;height:70px;" />
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p>No images available</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="alert alert-warning text-center">
+                No rooms found.
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Pagination -->
+<div class="d-flex justify-content-between mt-4">
+    <div>
+        <span>Page @(Model.PageNumber) of @(Model.TotalPages)</span>
+    </div>
+    <div>
+        @if (Model.HasPreviousPage)
+        {
+            <a class="btn btn-primary" asp-action="GetRooms" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-pageSize="@Model.PageSize" asp-route-searchTerm="@Context.Request.Query["searchTerm"]">Previous</a>
+        }
+        @if (Model.HasNextPage)
+        {
+            <a class="btn btn-primary" asp-action="GetRooms" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-pageSize="@Model.PageSize" asp-route-searchTerm="@Context.Request.Query["searchTerm"]">Next</a>
+        }
+    </div>
+</div>

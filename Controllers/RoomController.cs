@@ -1,10 +1,13 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using HMS.Implementation.Interface;
+using HotelManagementSystem.Dto;
 using HotelManagementSystem.Dto.RequestModel;
 using HotelManagementSystem.Implementation.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using HotelManagementSystem.Models;
+using HotelManagementSystem.Model.Entity;
 
 namespace HotelManagementSystem.Controllers
 {
@@ -97,6 +100,19 @@ namespace HotelManagementSystem.Controllers
 
             _notyf.Error(response.Message, 3);
             return RedirectToAction("Error", new { message = response.Message });
+        }
+
+        [HttpGet("get-rooms-by-pagination")]
+        public async Task<IActionResult> GetRooms(int pageNumber = 1, int pageSize = 3, string searchAmenity = null, string available = null, decimal roomRate = 0, string searchTerm = null)
+        {
+            var roomResponse = await _roomService.GetAllRoomsCreatedAsync(pageNumber, pageSize, searchAmenity, available, roomRate, searchTerm);
+            if (roomResponse.Success)
+            {
+                var paginatedList = new PaginatedList<RoomDto>(roomResponse.Data, roomResponse.TotalRecords, pageNumber, pageSize);
+                return View(paginatedList);
+            }
+            _notyf.Error(roomResponse.Message, 3);
+            return View(new PaginatedList<RoomDto>(new List<RoomDto>(), 0, pageNumber, pageSize));
         }
 
 
