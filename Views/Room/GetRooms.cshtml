@@ -7,13 +7,11 @@
 
 <h2 class="text-center">Rooms</h2>
 
-<!-- Search Form -->
 <form class="d-flex justify-content-center mb-4" action="@Url.Action("GetRooms", "Room")" method="get">
     <input class="form-control bg-dark border-0" name="searchTerm" type="search" placeholder="Search by Room Name or Number" value="@Context.Request.Query["searchTerm"]">
     <button class="btn btn-primary ms-2" type="submit">Search</button>
 </form>
 
-<!-- Room Cards -->
 <div class="row justify-content-center">
     @if (Model.Items.Any())
     {
@@ -47,6 +45,9 @@
                         {
                             <p>No images available</p>
                         }
+                        <div class="mt-3">
+                            <a asp-controller="Room" asp-route-id="@room.Id" asp-action="GetRoomsById" class="btn btn-info">View Details</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,7 +63,6 @@
     }
 </div>
 
-<!-- Pagination -->
 <div class="d-flex justify-content-between mt-4">
     <div>
         <span>Page @(Model.PageNumber) of @(Model.TotalPages)</span>

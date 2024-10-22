@@ -86,7 +86,11 @@
                 </div>
 
                 <div class="d-flex justify-content-between mt-3">
-                    <a href="@Url.Action("Rooms", "Room")" class="btn btn-primary">Back to List</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="@Url.Action("Rooms", "Room")" class="btn btn-primary">Back to List </a>
+                    }
+                    <a href="@Url.Action("GetRooms", "Room")" class="btn btn-primary">Back to List</a>
                     <a href="@Url.Action("CreateBooking","Booking")" class="btn btn-primary">Book Now</a>
                 </div>
             }
